@@ -8,8 +8,7 @@ interface ProgressBarProps {
 export default function ProgressBar({ currentStep, totalSteps }: ProgressBarProps) {
   return (
     <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border px-6 py-4">
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold text-foreground">PartiPay</h1>
+      <div className="flex items-center justify-center mb-4">
         <img 
           src={logoPath} 
           alt="PartiPay Logo" 
