@@ -30,14 +30,14 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
   const [selectedItems, setSelectedItems] = useState<Record<number, boolean>>({});
 
   const banks = [
-    { id: 'ing', name: 'ING Bank', deeplink: 'ing://payment' },
-    { id: 'rabo', name: 'Rabobank', deeplink: 'rabobank://payment' },
-    { id: 'abn', name: 'ABN AMRO', deeplink: 'abnamro://payment' },
-    { id: 'sns', name: 'SNS Bank', deeplink: 'sns://payment' },
-    { id: 'regiobank', name: 'RegioBank', deeplink: 'regiobank://payment' },
-    { id: 'asn', name: 'ASN Bank', deeplink: 'asn://payment' },
-    { id: 'bunq', name: 'bunq', deeplink: 'bunq://payment' },
-    { id: 'revolut', name: 'Revolut', deeplink: 'revolut://payment' }
+    { id: 'kbc', name: 'KBC Bank', logo: '🏦', deeplink: 'kbc://payment' },
+    { id: 'belfius', name: 'Belfius Bank', logo: '🔷', deeplink: 'belfius://payment' },
+    { id: 'ing', name: 'ING België', logo: '🧡', deeplink: 'ing://payment' },
+    { id: 'bnp', name: 'BNP Paribas Fortis', logo: '🟢', deeplink: 'bnpparibas://payment' },
+    { id: 'argenta', name: 'Argenta', logo: '🔵', deeplink: 'argenta://payment' },
+    { id: 'axa', name: 'AXA Bank Belgium', logo: '🅰️', deeplink: 'axa://payment' },
+    { id: 'crelan', name: 'Crelan', logo: '🟡', deeplink: 'crelan://payment' },
+    { id: 'vdk', name: 'VDK Bank', logo: '🏛️', deeplink: 'vdk://payment' }
   ];
 
   const handleItemToggle = (index: number) => {
@@ -100,40 +100,71 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
         
         <div>
           <Label className="block text-sm font-medium text-gray-700 mb-2">Kies je bank</Label>
-          <Select value={selectedBank} onValueChange={setSelectedBank}>
-            <SelectTrigger className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[hsl(24,_95%,_53%)] focus:border-transparent" data-testid="select-bank">
-              <SelectValue placeholder="Selecteer je bank" />
-            </SelectTrigger>
-            <SelectContent>
-              {banks.map(bank => (
-                <SelectItem key={bank.id} value={bank.id}>
-                  {bank.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {selectedBank && (
-            <div className="mt-2">
-              <Button
+          <div className="grid grid-cols-2 gap-3">
+            {banks.map(bank => (
+              <button
+                key={bank.id}
                 type="button"
-                variant="outline"
-                size="sm"
-                className="text-xs px-3 py-1 border-[hsl(24,_95%,_53%)] text-[hsl(24,_95%,_53%)] hover:bg-orange-50"
-                onClick={() => {
-                  const bank = banks.find(b => b.id === selectedBank);
-                  if (bank) {
-                    // Try to open bank app, fallback to web version
-                    window.location.href = bank.deeplink;
-                  }
-                }}
-                data-testid="button-open-bank-app"
+                className={`p-3 rounded-xl border-2 transition-all ${
+                  selectedBank === bank.id
+                    ? 'border-[hsl(24,_95%,_53%)] bg-orange-50 text-[hsl(24,_95%,_53%)]'
+                    : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
+                }`}
+                onClick={() => setSelectedBank(bank.id)}
+                data-testid={`button-select-${bank.id}`}
               >
-                <i className="fas fa-external-link-alt mr-1"></i>
-                Open {banks.find(b => b.id === selectedBank)?.name} app
-              </Button>
+                <div className="text-center">
+                  <div className="text-2xl mb-1">{bank.logo}</div>
+                  <div className="text-sm font-medium">{bank.name}</div>
+                </div>
+              </button>
+            ))}
+          </div>
+          {selectedBank && (
+            <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <span className="text-lg">{banks.find(b => b.id === selectedBank)?.logo}</span>
+                  <span className="text-sm font-medium text-green-800">
+                    {banks.find(b => b.id === selectedBank)?.name} geselecteerd
+                  </span>
+                </div>
+                <Button
+                  type="button"
+                  size="sm"
+                  className="bg-[hsl(24,_95%,_53%)] hover:bg-[hsl(24,_95%,_48%)] text-white px-3 py-1 text-xs"
+                  onClick={() => {
+                    const bank = banks.find(b => b.id === selectedBank);
+                    if (bank) {
+                      // Try to open bank app with fallback
+                      const userAgent = navigator.userAgent.toLowerCase();
+                      if (userAgent.includes('iphone') || userAgent.includes('ipad')) {
+                        // iOS: try deep link, fallback to app store
+                        window.location.href = bank.deeplink;
+                        setTimeout(() => {
+                          window.location.href = `https://apps.apple.com/search?term=${bank.name}`;
+                        }, 2000);
+                      } else if (userAgent.includes('android')) {
+                        // Android: try deep link, fallback to play store
+                        window.location.href = bank.deeplink;
+                        setTimeout(() => {
+                          window.location.href = `https://play.google.com/store/search?q=${bank.name}`;
+                        }, 2000);
+                      } else {
+                        // Desktop/other: show message
+                        alert(`Open je ${bank.name} app op je telefoon om te betalen.`);
+                      }
+                    }
+                  }}
+                  data-testid="button-open-bank-app"
+                >
+                  <i className="fas fa-mobile-alt mr-1"></i>
+                  Open app
+                </Button>
+              </div>
             </div>
           )}
-          <p className="text-xs text-gray-500 mt-1">Voor directe betalingen via je bankapp</p>
+          <p className="text-xs text-gray-500 mt-2">Selecteer je bank voor snelle betalingen</p>
         </div>
       </div>
 

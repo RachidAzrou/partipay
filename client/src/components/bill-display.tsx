@@ -29,7 +29,7 @@ export default function BillDisplay({ billData, expanded, onToggleExpand }: Bill
       >
         <div>
           <h3 className="font-semibold text-gray-900">Rekening #{today.getDate().toString().padStart(2, '0')}{(today.getMonth() + 1).toString().padStart(2, '0')}{today.getFullYear().toString().slice(-2)}01</h3>
-          <p className="text-sm text-gray-600">Restaurant De Gouden Leeuw • Tafel 7</p>
+          <p className="text-sm text-gray-600">Restaurant De Blauwe Kater • Tafel 12</p>
           <p className="text-lg font-bold text-[hsl(24,_95%,_53%)] mt-1">€ {billData.totalAmount}</p>
         </div>
         <i className={`fas fa-chevron-down text-gray-400 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}></i>
@@ -39,10 +39,10 @@ export default function BillDisplay({ billData, expanded, onToggleExpand }: Bill
         <div className="border-t border-gray-100 p-4 space-y-1 font-mono text-sm" data-testid="bill-details">
           {/* POS Header */}
           <div className="text-center mb-4 border-b border-gray-200 pb-3">
-            <h4 className="font-bold text-gray-900">DE GOUDEN LEEUW</h4>
-            <p className="text-xs text-gray-600">Grote Markt 15, 1234 AB Amsterdam</p>
-            <p className="text-xs text-gray-600">Tel: 020-123-4567</p>
-            <p className="text-xs text-gray-600 mt-1">Tafel: 7 • {today.toLocaleDateString('nl-NL')} {today.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })}</p>
+            <h4 className="font-bold text-gray-900">DE BLAUWE KATER</h4>
+            <p className="text-xs text-gray-600">Grote Markt 8, 9000 Gent</p>
+            <p className="text-xs text-gray-600">Tel: 09-123-45-67</p>
+            <p className="text-xs text-gray-600 mt-1">Tafel: 12 • {today.toLocaleDateString('nl-BE')} {today.toLocaleTimeString('nl-BE', { hour: '2-digit', minute: '2-digit' })}</p>
           </div>
           
           {/* Items */}

@@ -27,8 +27,8 @@ export default function Home() {
   const loadBillMutation = useMutation({
     mutationFn: async () => {
       const res = await apiRequest('POST', '/api/scan-qr', {
-        tableNumber: "7",
-        restaurantName: "De Gouden Leeuw"
+        tableNumber: "12",
+        restaurantName: "De Blauwe Kater"
       });
       return res.json();
     },
@@ -78,8 +78,8 @@ export default function Home() {
     if (!billData || !splitMode) return;
 
     const sessionData = {
-      restaurantName: "De Gouden Leeuw",
-      tableNumber: "7",
+      restaurantName: "De Blauwe Kater",
+      tableNumber: "12",
       splitMode,
       totalAmount: billData.totalAmount,
       isActive: true,
@@ -118,7 +118,7 @@ export default function Home() {
                 </div>
                 <div>
                   <h2 className="text-xl font-semibold text-gray-900 mb-2">Rekening gevonden!</h2>
-                  <p className="text-sm text-gray-600">Restaurant De Gouden Leeuw, Tafel 7</p>
+                  <p className="text-sm text-gray-600">Restaurant De Blauwe Kater, Tafel 12</p>
                 </div>
               </div>
               

@@ -169,14 +169,16 @@ export class DatabaseStorage implements IStorage {
   async getMockBillData(tableNumber: string, restaurantName: string): Promise<{ items: Omit<InsertBillItem, 'sessionId'>[], totalAmount: string } | null> {
     // Mock POS system data - in real implementation this would call an external API
     const mockBills: Record<string, { items: Omit<InsertBillItem, 'sessionId'>[], totalAmount: string }> = {
-      "De Gouden Leeuw-7": {
+      "De Blauwe Kater-12": {
         items: [
-          { name: "Margherita Pizza", price: "12.00", quantity: 2, availableQuantity: 2 },
-          { name: "Caesar Salade", price: "16.50", quantity: 1, availableQuantity: 1 },
-          { name: "Biefstuk medium", price: "28.50", quantity: 1, availableQuantity: 1 },
-          { name: "Wijn (glas)", price: "6.17", quantity: 3, availableQuantity: 3 },
+          { name: "Gentse Waterzooi", price: "18.50", quantity: 1, availableQuantity: 1 },
+          { name: "Vlaamse Stoofpot", price: "22.00", quantity: 1, availableQuantity: 1 },
+          { name: "Frieten met Mayo", price: "6.50", quantity: 2, availableQuantity: 2 },
+          { name: "Duvel (33cl)", price: "4.20", quantity: 2, availableQuantity: 2 },
+          { name: "Jupiler (25cl)", price: "3.50", quantity: 1, availableQuantity: 1 },
+          { name: "Belgische Wafels", price: "8.00", quantity: 1, availableQuantity: 1 },
         ],
-        totalAmount: "87.50"
+        totalAmount: "75.40"
       }
     };
 

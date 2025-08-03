@@ -53,7 +53,7 @@ export default function QRScanner({ onScan, isScanning, scannedSuccess }: QRScan
         <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center" data-testid="scan-success">
           <i className="fas fa-check-circle text-green-500 text-2xl mb-2"></i>
           <p className="text-green-800 font-medium">QR-code gescand!</p>
-          <p className="text-green-600 text-sm">Restaurant De Gouden Leeuw, Tafel 7</p>
+          <p className="text-green-600 text-sm">Restaurant De Blauwe Kater, Tafel 12</p>
         </div>
       )}
     </div>
