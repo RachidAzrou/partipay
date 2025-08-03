@@ -1,3 +1,5 @@
+import logoPath from "@assets/Scherm­afbeelding 2025-07-27 om 01.39.50_1754260283738.png";
+
 interface ProgressBarProps {
   currentStep: number;
   totalSteps: number;
@@ -9,7 +11,7 @@ export default function ProgressBar({ currentStep, totalSteps }: ProgressBarProp
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold text-foreground">PartiPay</h1>
         <img 
-          src="/attached_assets/Scherm­afbeelding 2025-07-27 om 01.39.50_1754260283738.png" 
+          src={logoPath} 
           alt="PartiPay Logo" 
           className="h-8 w-auto"
         />
