@@ -16,12 +16,14 @@ export default function Session() {
 
   if (isLoading) {
     return (
-      <div className="max-w-sm mx-auto bg-white min-h-screen shadow-xl relative overflow-hidden">
-        <ProgressBar currentStep={3} totalSteps={3} />
-        <div className="flex items-center justify-center min-h-[50vh]">
-          <div className="text-center space-y-4">
-            <div className="w-12 h-12 border-4 border-[hsl(24,_95%,_53%)] border-t-transparent rounded-full animate-spin mx-auto"></div>
-            <p className="text-gray-600">Sessie laden...</p>
+      <div className="max-w-sm mx-auto bg-white min-h-screen shadow-xl relative overflow-hidden partipay-pattern">
+        <div className="partipay-pattern-overlay min-h-screen">
+          <ProgressBar currentStep={3} totalSteps={3} />
+          <div className="flex items-center justify-center min-h-[50vh]">
+            <div className="text-center space-y-4">
+              <div className="w-12 h-12 border-4 border-[hsl(24,_95%,_53%)] border-t-transparent rounded-full animate-spin mx-auto"></div>
+              <p className="text-gray-600">Sessie laden...</p>
+            </div>
           </div>
         </div>
       </div>
@@ -47,9 +49,11 @@ export default function Session() {
   }
 
   return (
-    <div className="max-w-sm mx-auto bg-white min-h-screen shadow-xl relative overflow-hidden">
-      <ProgressBar currentStep={3} totalSteps={3} />
-      <SharingDashboard sessionData={sessionData} />
+    <div className="max-w-sm mx-auto bg-white min-h-screen shadow-xl relative overflow-hidden partipay-pattern">
+      <div className="partipay-pattern-overlay min-h-screen">
+        <ProgressBar currentStep={3} totalSteps={3} />
+        <SharingDashboard sessionData={sessionData} />
+      </div>
     </div>
   );
 }

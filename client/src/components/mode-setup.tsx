@@ -105,10 +105,10 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
               <button
                 key={bank.id}
                 type="button"
-                className={`p-3 rounded-xl border-2 transition-all ${
+                className={`p-3 rounded-xl border-2 transition-all backdrop-blur-sm ${
                   selectedBank === bank.id
-                    ? 'border-[hsl(24,_95%,_53%)] bg-orange-50 text-[hsl(24,_95%,_53%)]'
-                    : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
+                    ? 'border-[hsl(24,_95%,_53%)] partipay-gradient text-white shadow-lg'
+                    : 'border-gray-200 bg-white/80 text-gray-700 hover:border-gray-300 hover:bg-white/90'
                 }`}
                 onClick={() => setSelectedBank(bank.id)}
                 data-testid={`button-select-${bank.id}`}
@@ -121,7 +121,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
             ))}
           </div>
           {selectedBank && (
-            <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+            <div className="mt-4 p-3 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-lg shadow-sm">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <span className="text-lg">{banks.find(b => b.id === selectedBank)?.logo}</span>

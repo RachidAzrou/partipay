@@ -141,12 +141,16 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
   if (sessionCompleted) {
     return (
       <div className="px-4 py-6">
-        <div className="bg-green-50 border border-green-200 rounded-xl p-6 text-center" data-testid="success-state">
-          <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-            <i className="fas fa-check text-white text-2xl"></i>
+        <div className="bg-white/90 backdrop-blur-sm border border-green-200 rounded-xl p-6 text-center shadow-lg" data-testid="success-state">
+          <div className="w-20 h-20 partipay-gradient rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+            <img 
+              src="/attached_assets/Scherm­afbeelding 2025-07-27 om 01.39.50_1754259385873.png" 
+              alt="PartiPay" 
+              className="h-12 w-auto filter brightness-0 invert"
+            />
           </div>
-          <h3 className="text-lg font-semibold text-green-900 mb-2">Alle betalingen voltooid!</h3>
-          <p className="text-sm text-green-800 mb-4">Bedankt voor het gebruik van PartiPay</p>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">Alle betalingen voltooid!</h3>
+          <p className="text-sm text-gray-700 mb-4">Bedankt voor het gebruik van PartiPay</p>
           <Button 
             className="bg-green-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-700"
             onClick={() => window.location.href = '/'}
@@ -166,7 +170,7 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
         <p className="text-sm text-gray-600 mt-1">Laat anderen deze QR-code scannen</p>
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-xl p-6 text-center shadow-sm">
+      <div className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-xl p-6 text-center shadow-lg">
         {qrCodeUrl ? (
           <img 
             src={qrCodeUrl} 
@@ -194,7 +198,7 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
         <h3 className="font-semibold text-gray-900">Deelnemers ({paidCount}/{totalCount})</h3>
         
         {sessionData.participants.map((participant) => (
-          <div key={participant.id} className="bg-white border border-gray-200 rounded-lg p-4 flex items-center justify-between">
+          <div key={participant.id} className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-lg p-4 flex items-center justify-between shadow-sm">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-gradient-to-r from-[hsl(24,_95%,_53%)] to-[hsl(38,_92%,_50%)] rounded-full flex items-center justify-center">
                 <span className="text-white font-semibold text-sm">
@@ -237,7 +241,7 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
         ))}
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-xl p-4">
+      <div className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-xl p-4 shadow-lg">
         <div className="flex items-center justify-between mb-3">
           <h4 className="font-semibold text-gray-900">Betalingsvoortgang</h4>
           <span className="text-sm text-gray-600">
