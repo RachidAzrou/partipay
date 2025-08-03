@@ -130,24 +130,20 @@ export default function Home() {
               
               <div className="space-y-3">
                 <Button 
-                  className="w-full bg-gradient-to-r from-[hsl(24,_95%,_53%)] to-[hsl(38,_92%,_50%)] text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all"
+                  className="w-full bg-[hsl(24,_95%,_53%)] text-white font-medium py-3 px-6 rounded-lg hover:bg-[hsl(24,_95%,_48%)] transition-colors"
                   onClick={() => handleModeSelect('equal')}
                   data-testid="button-split-bill"
                 >
-                  <i className="fas fa-users mr-3"></i>
-                  Split the Bill
-                  <p className="text-xs text-orange-100 mt-1">Verdeel gelijk over alle deelnemers</p>
+                  Verdeel gelijk
                 </Button>
                 
                 <Button 
                   variant="outline"
-                  className="w-full bg-white border-2 border-[hsl(24,_95%,_53%)] text-[hsl(24,_95%,_53%)] font-semibold py-4 px-6 rounded-xl hover:bg-orange-50 transition-all"
+                  className="w-full border-2 border-[hsl(24,_95%,_53%)] text-[hsl(24,_95%,_53%)] font-medium py-3 px-6 rounded-lg hover:bg-orange-50 transition-colors"
                   onClick={() => handleModeSelect('items')}
                   data-testid="button-pay-part"
                 >
-                  <i className="fas fa-receipt mr-3"></i>
-                  Pay Your Part
-                  <p className="text-xs text-[hsl(24,_95%,_53%)] opacity-75 mt-1">Kies je eigen items van de rekening</p>
+                  Selecteer items
                 </Button>
               </div>
             </>
