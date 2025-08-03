@@ -166,7 +166,7 @@ export class DatabaseStorage implements IStorage {
     return updated || undefined;
   }
 
-  async getMockBillData(tableNumber: string, restaurantName: string): Promise<{ items: InsertBillItem[], totalAmount: string } | null> {
+  async getMockBillData(tableNumber: string, restaurantName: string): Promise<{ items: Omit<InsertBillItem, 'sessionId'>[], totalAmount: string } | null> {
     // Mock POS system data - in real implementation this would call an external API
     const mockBills: Record<string, { items: Omit<InsertBillItem, 'sessionId'>[], totalAmount: string }> = {
       "De Gouden Leeuw-7": {

@@ -1,10 +1,10 @@
 import { useState } from "react";
+import React from "react";
 import { useLocation } from "wouter";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import ProgressBar from "@/components/progress-bar";
-import QRScanner from "@/components/qr-scanner";
 import BillDisplay from "@/components/bill-display";
 import ModeSetup from "@/components/mode-setup";
 import { Button } from "@/components/ui/button";
@@ -22,16 +22,19 @@ export default function Home() {
   const [billData, setBillData] = useState<BillData | null>(null);
   const [billExpanded, setBillExpanded] = useState(false);
   const [splitMode, setSplitMode] = useState<'equal' | 'items' | null>(null);
-  const [scannedSuccess, setScannedSuccess] = useState(false);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
-  const scanQRMutation = useMutation({
-    mutationFn: async (data: { tableNumber: string; restaurantName: string }) => {
-      const res = await apiRequest('POST', '/api/scan-qr', data);
+  const loadBillMutation = useMutation({
+    mutationFn: async () => {
+      const res = await apiRequest('POST', '/api/scan-qr', {
+        tableNumber: "7",
+        restaurantName: "De Gouden Leeuw"
+      });
       return res.json();
     },
     onSuccess: (data: BillData) => {
       setBillData(data);
-      setScannedSuccess(true);
+      setDataLoaded(true);
     },
     onError: () => {
       toast({
@@ -59,13 +62,12 @@ export default function Home() {
     },
   });
 
-  const handleQRScan = () => {
-    // Mock QR scan - in real app this would use camera
-    scanQRMutation.mutate({
-      tableNumber: "7",
-      restaurantName: "De Gouden Leeuw"
-    });
-  };
+  // Auto-load bill data when component mounts (simulating QR scan at table)
+  React.useEffect(() => {
+    if (!dataLoaded && !loadBillMutation.isPending) {
+      loadBillMutation.mutate();
+    }
+  }, [dataLoaded, loadBillMutation]);
 
   const handleModeSelect = (mode: 'equal' | 'items') => {
     setSplitMode(mode);
@@ -96,14 +98,30 @@ export default function Home() {
       
       {currentStep === 1 && (
         <div className="px-4 py-6 space-y-6">
-          <QRScanner 
-            onScan={handleQRScan}
-            isScanning={scanQRMutation.isPending}
-            scannedSuccess={scannedSuccess}
-          />
+          {loadBillMutation.isPending && (
+            <div className="text-center space-y-4">
+              <div className="w-16 h-16 bg-gradient-to-r from-[hsl(24,_95%,_53%)] to-[hsl(38,_92%,_50%)] rounded-full flex items-center justify-center mx-auto">
+                <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold text-gray-900 mb-2">Rekening ophalen...</h2>
+                <p className="text-sm text-gray-600">Een moment geduld</p>
+              </div>
+            </div>
+          )}
           
-          {billData && (
+          {billData && dataLoaded && (
             <>
+              <div className="text-center space-y-4 mb-6">
+                <div className="w-16 h-16 bg-gradient-to-r from-[hsl(24,_95%,_53%)] to-[hsl(38,_92%,_50%)] rounded-full flex items-center justify-center mx-auto">
+                  <i className="fas fa-check text-2xl text-white"></i>
+                </div>
+                <div>
+                  <h2 className="text-xl font-semibold text-gray-900 mb-2">Rekening gevonden!</h2>
+                  <p className="text-sm text-gray-600">Restaurant De Gouden Leeuw, Tafel 7</p>
+                </div>
+              </div>
+              
               <BillDisplay 
                 billData={billData}
                 expanded={billExpanded}
