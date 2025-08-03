@@ -93,32 +93,32 @@ export default function Home() {
   };
 
   return (
-    <div className="max-w-sm mx-auto bg-white min-h-screen shadow-xl relative overflow-hidden">
+    <div className="parti-container bg-background flex flex-col">
       <ProgressBar currentStep={currentStep} totalSteps={3} />
       
       {currentStep === 1 && (
-        <div className="px-4 py-6 space-y-6">
+        <div className="flex-1 px-6 py-8 space-y-8 animate-fade-in">
           {loadBillMutation.isPending && (
-            <div className="text-center space-y-4">
-              <div className="w-16 h-16 bg-gradient-to-r from-[hsl(24,_95%,_53%)] to-[hsl(38,_92%,_50%)] rounded-full flex items-center justify-center mx-auto">
-                <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+            <div className="text-center space-y-6 py-16">
+              <div className="w-20 h-20 parti-gradient rounded-full flex items-center justify-center mx-auto parti-shadow-lg">
+                <div className="w-10 h-10 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-2">Rekening ophalen...</h2>
-                <p className="text-sm text-gray-600">Een moment geduld</p>
+                <h2 className="text-2xl font-bold text-foreground mb-3">Rekening ophalen...</h2>
+                <p className="text-base text-muted-foreground">Een moment geduld</p>
               </div>
             </div>
           )}
           
           {billData && dataLoaded && (
             <>
-              <div className="text-center space-y-4 mb-6">
-                <div className="w-16 h-16 bg-gradient-to-r from-[hsl(24,_95%,_53%)] to-[hsl(38,_92%,_50%)] rounded-full flex items-center justify-center mx-auto">
-                  <i className="fas fa-check text-2xl text-white"></i>
+              <div className="text-center space-y-6 mb-8 animate-slide-up">
+                <div className="w-20 h-20 parti-gradient rounded-full flex items-center justify-center mx-auto parti-shadow-lg">
+                  <i className="fas fa-check text-3xl text-white"></i>
                 </div>
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-900 mb-2">Rekening gevonden!</h2>
-                  <p className="text-sm text-gray-600">Restaurant De Blauwe Kater, Tafel 12</p>
+                  <h1 className="text-3xl font-bold text-foreground mb-3">Rekening gevonden!</h1>
+                  <p className="text-lg text-muted-foreground">Restaurant De Blauwe Kater, Tafel 12</p>
                 </div>
               </div>
               
@@ -128,23 +128,22 @@ export default function Home() {
                 onToggleExpand={() => setBillExpanded(!billExpanded)}
               />
               
-              <div className="space-y-3">
-                <Button 
-                  className="w-full bg-[hsl(24,_95%,_53%)] text-white font-medium py-3 px-6 rounded-lg hover:bg-[hsl(24,_95%,_48%)] transition-colors"
+              <div className="space-y-4 mt-auto animate-slide-up">
+                <button 
+                  className="w-full parti-button parti-button-primary touch-target"
                   onClick={() => handleModeSelect('equal')}
                   data-testid="button-split-bill"
                 >
                   Split the Bill
-                </Button>
+                </button>
                 
-                <Button 
-                  variant="outline"
-                  className="w-full border-2 border-[hsl(24,_95%,_53%)] text-[hsl(24,_95%,_53%)] font-medium py-3 px-6 rounded-lg hover:bg-orange-50 transition-colors"
+                <button 
+                  className="w-full parti-button parti-button-secondary touch-target"
                   onClick={() => handleModeSelect('items')}
                   data-testid="button-pay-part"
                 >
                   Pay Your Part
-                </Button>
+                </button>
               </div>
             </>
           )}

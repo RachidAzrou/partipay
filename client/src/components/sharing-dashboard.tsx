@@ -160,76 +160,76 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
   }
 
   return (
-    <div className="px-4 py-6 space-y-6">
-      <div className="text-center">
-        <h2 className="text-xl font-semibold text-gray-900">Deel met je vrienden</h2>
-        <p className="text-sm text-gray-600 mt-1">Laat anderen deze QR-code scannen</p>
+    <div className="parti-container bg-background flex flex-col">
+      <div className="flex-1 px-6 py-8 space-y-8">
+      <div className="text-center animate-fade-in">
+        <h1 className="text-3xl font-bold text-foreground">Deel met je vrienden</h1>
+        <p className="text-lg text-muted-foreground mt-2">Laat anderen deze QR-code scannen</p>
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-xl p-6 text-center shadow-sm">
+      <div className="parti-card-elevated p-8 text-center animate-slide-up">
         {qrCodeUrl ? (
           <img 
             src={qrCodeUrl} 
             alt="QR Code" 
-            className="w-48 h-48 mx-auto mb-4"
+            className="w-56 h-56 mx-auto mb-6 rounded-2xl parti-shadow"
             data-testid="qr-code"
           />
         ) : (
-          <div className="w-48 h-48 bg-gray-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
-            <div className="text-gray-400">QR-code laden...</div>
+          <div className="w-56 h-56 bg-muted rounded-2xl mx-auto mb-6 flex items-center justify-center">
+            <div className="text-muted-foreground text-lg">QR-code laden...</div>
           </div>
         )}
-        <p className="text-sm text-gray-600">Sessie: <span className="font-mono text-xs">{sessionData.session.id.slice(0, 8).toUpperCase()}</span></p>
-        <Button 
-          className="mt-3 px-4 py-2 bg-[hsl(24,_95%,_53%)] text-white text-sm rounded-lg hover:bg-[hsl(24,_95%,_48%)]"
+        <p className="text-base text-muted-foreground mb-4">Sessie: <span className="font-mono text-sm bg-muted px-2 py-1 rounded">{sessionData.session.id.slice(0, 8).toUpperCase()}</span></p>
+        <button 
+          className="parti-button parti-button-primary touch-target"
           onClick={handleShareQR}
           data-testid="button-share-qr"
         >
-          <i className="fas fa-share mr-2"></i>
+          <i className="fas fa-share mr-3"></i>
           Deel QR-code
-        </Button>
+        </button>
       </div>
 
-      <div className="space-y-4">
-        <h3 className="font-semibold text-gray-900">Deelnemers ({paidCount}/{totalCount})</h3>
+      <div className="space-y-6">
+        <h2 className="text-2xl font-bold text-foreground">Deelnemers ({paidCount}/{totalCount})</h2>
         
-        {sessionData.participants.map((participant) => (
-          <div key={participant.id} className="bg-white border border-gray-200 rounded-lg p-4 flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-[hsl(24,_95%,_53%)] to-[hsl(38,_92%,_50%)] rounded-full flex items-center justify-center">
-                <span className="text-white font-semibold text-sm">
+        {sessionData.participants.map((participant, index) => (
+          <div key={participant.id} className="parti-card p-6 flex items-center justify-between animate-slide-up" style={{animationDelay: `${index * 0.1}s`}}>
+            <div className="flex items-center space-x-4">
+              <div className="w-14 h-14 parti-gradient rounded-full flex items-center justify-center parti-shadow">
+                <span className="text-white font-bold text-lg">
                   {participant.name.split(' ').map(n => n[0]).join('').toUpperCase()}
                 </span>
               </div>
               <div>
-                <p className="font-medium text-gray-900">
+                <p className="text-lg font-semibold text-foreground">
                   {participant.name}
-                  {participant.isMainBooker && <span className="text-xs text-gray-500 ml-1">• Hoofdboeker</span>}
+                  {participant.isMainBooker && <span className="text-sm text-muted-foreground ml-2">• Hoofdboeker</span>}
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className="text-base text-muted-foreground mt-1">
                   € {participant.expectedAmount || (parseFloat(sessionData.session.totalAmount) / sessionData.participants.length).toFixed(2)}
                 </p>
               </div>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-3">
               {participant.hasPaid ? (
                 <>
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm font-medium text-green-600">Betaald</span>
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <span className="text-base font-semibold text-green-600">Betaald</span>
                 </>
               ) : (
                 <>
-                  <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
-                  <span className="text-sm font-medium text-yellow-600">Wachtend</span>
-                  <Button
-                    size="sm"
-                    className="ml-2 bg-[hsl(24,_95%,_53%)] hover:bg-[hsl(24,_95%,_48%)]"
+                  <div className="w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></div>
+                  <span className="text-base font-semibold text-yellow-600">Wachtend</span>
+                  <button
+                    className="ml-3 parti-button parti-button-primary text-sm px-4 py-2"
                     onClick={() => handleMockPayment(participant)}
                     disabled={paymentMutation.isPending}
                     data-testid={`button-pay-${participant.id}`}
                   >
                     Demo Betaal
-                  </Button>
+                  </button>
                 </>
               )}
             </div>
@@ -237,29 +237,30 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
         ))}
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-xl p-4">
-        <div className="flex items-center justify-between mb-3">
-          <h4 className="font-semibold text-gray-900">Betalingsvoortgang</h4>
-          <span className="text-sm text-gray-600">
+      <div className="parti-card-elevated p-6 animate-slide-up">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-xl font-bold text-foreground">Betalingsvoortgang</h3>
+          <span className="text-lg font-semibold text-muted-foreground">
             € {sessionData.participants.reduce((sum, p) => sum + parseFloat(p.paidAmount || '0'), 0).toFixed(2)} / € {sessionData.session.totalAmount}
           </span>
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-2 mb-3">
+        <div className="w-full bg-muted rounded-full h-3 mb-4">
           <div 
-            className="bg-gradient-to-r from-[hsl(24,_95%,_53%)] to-[hsl(38,_92%,_50%)] h-2 rounded-full transition-all duration-500"
+            className="parti-gradient h-3 rounded-full transition-all duration-700 ease-out"
             style={{ width: `${calculateProgress()}%` }}
             data-testid="progress-bar"
           ></div>
         </div>
-        <p className="text-xs text-gray-600 text-center">{paidCount} van {totalCount} personen hebben betaald</p>
+        <p className="text-base text-muted-foreground text-center">{paidCount} van {totalCount} personen hebben betaald</p>
       </div>
 
-      <div className="fixed bottom-4 right-4 flex items-center space-x-2">
-        <div className={`w-3 h-3 rounded-full shadow-lg ${connected ? 'bg-green-500' : 'bg-red-500'}`} 
+      <div className="fixed bottom-6 right-6 flex items-center space-x-3 parti-card px-4 py-3">
+        <div className={`w-4 h-4 rounded-full ${connected ? 'bg-green-500' : 'bg-red-500'}`} 
              title={connected ? 'Verbonden' : 'Niet verbonden'}
              data-testid="connection-status">
         </div>
-        <span className="text-xs text-gray-500">{connected ? 'Live' : 'Offline'}</span>
+        <span className="text-sm font-medium text-foreground">{connected ? 'Live' : 'Offline'}</span>
+      </div>
       </div>
     </div>
   );
