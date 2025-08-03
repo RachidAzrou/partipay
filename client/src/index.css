@@ -13,7 +13,7 @@
   --card-foreground: hsl(240, 10%, 3.9%);
   --border: hsl(240, 5.9%, 90%);
   --input: hsl(240, 5.9%, 90%);
-  --primary: hsl(262, 83%, 58%);
+  --primary: hsl(24, 95%, 53%);
   --primary-foreground: hsl(0, 0%, 100%);
   --secondary: hsl(0, 0%, 96%);
   --secondary-foreground: hsl(240, 5.9%, 10%);
@@ -21,13 +21,13 @@
   --accent-foreground: hsl(240, 5.9%, 10%);
   --destructive: hsl(0, 84.2%, 60.2%);
   --destructive-foreground: hsl(0, 0%, 98%);
-  --ring: hsl(262, 83%, 58%);
+  --ring: hsl(24, 95%, 53%);
   --radius: 1rem;
   
-  /* Revolut-inspired brand colors */
-  --parti-primary: hsl(262, 83%, 58%);
-  --parti-primary-light: hsl(267, 84%, 66%);
-  --parti-gradient: linear-gradient(135deg, hsl(262, 83%, 58%) 0%, hsl(267, 84%, 66%) 100%);
+  /* PartiPay oranje brand colors */
+  --parti-primary: hsl(24, 95%, 53%);
+  --parti-primary-light: hsl(38, 92%, 50%);
+  --parti-gradient: linear-gradient(135deg, hsl(24, 95%, 53%) 0%, hsl(38, 92%, 50%) 100%);
   --parti-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --parti-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   --parti-success: hsl(142, 71%, 45%);
@@ -47,7 +47,7 @@
   --card-foreground: hsl(0, 0%, 98%);
   --border: hsl(240, 3.7%, 15.9%);
   --input: hsl(240, 3.7%, 15.9%);
-  --primary: hsl(262, 83%, 58%);
+  --primary: hsl(24, 95%, 53%);
   --primary-foreground: hsl(0, 0%, 100%);
   --secondary: hsl(240, 3.7%, 15.9%);
   --secondary-foreground: hsl(0, 0%, 98%);
@@ -55,12 +55,12 @@
   --accent-foreground: hsl(0, 0%, 98%);
   --destructive: hsl(0, 62.8%, 30.6%);
   --destructive-foreground: hsl(0, 0%, 98%);
-  --ring: hsl(262, 83%, 58%);
+  --ring: hsl(24, 95%, 53%);
   
-  /* Dark mode Revolut colors */
-  --parti-primary: hsl(262, 83%, 58%);
-  --parti-primary-light: hsl(267, 84%, 66%);
-  --parti-gradient: linear-gradient(135deg, hsl(262, 83%, 58%) 0%, hsl(267, 84%, 66%) 100%);
+  /* Dark mode PartiPay oranje colors */
+  --parti-primary: hsl(24, 95%, 53%);
+  --parti-primary-light: hsl(38, 92%, 50%);
+  --parti-gradient: linear-gradient(135deg, hsl(24, 95%, 53%) 0%, hsl(38, 92%, 50%) 100%);
   --parti-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
   --parti-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
   --parti-success: hsl(142, 71%, 45%);
