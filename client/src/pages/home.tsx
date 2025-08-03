@@ -134,7 +134,7 @@ export default function Home() {
                   onClick={() => handleModeSelect('equal')}
                   data-testid="button-split-bill"
                 >
-                  Verdeel gelijk
+                  Split the Bill
                 </Button>
                 
                 <Button 
@@ -143,7 +143,7 @@ export default function Home() {
                   onClick={() => handleModeSelect('items')}
                   data-testid="button-pay-part"
                 >
-                  Selecteer items
+                  Pay Your Part
                 </Button>
               </div>
             </>
