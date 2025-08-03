@@ -12,7 +12,7 @@ export default function ProgressBar({ currentStep, totalSteps }: ProgressBarProp
         <img 
           src={logoPath} 
           alt="PartiPay Logo" 
-          className="h-8 w-auto"
+          className="h-16 w-auto"
         />
       </div>
       <div className="flex space-x-3">
