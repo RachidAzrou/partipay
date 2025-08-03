@@ -93,8 +93,7 @@ export default function Home() {
   };
 
   return (
-    <div className="max-w-sm mx-auto bg-white min-h-screen shadow-xl relative overflow-hidden partipay-pattern">
-      <div className="partipay-pattern-overlay min-h-screen">
+    <div className="max-w-sm mx-auto bg-white min-h-screen shadow-xl relative overflow-hidden">
       <ProgressBar currentStep={currentStep} totalSteps={3} />
       
       {currentStep === 1 && (
@@ -160,7 +159,6 @@ export default function Home() {
           onContinue={handleContinueToSharing}
         />
       )}
-      </div>
     </div>
   );
 }

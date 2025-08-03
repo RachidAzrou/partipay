@@ -99,22 +99,6 @@
   }
 }
 
-/* PartiPay hexagonal background pattern */
-.partipay-pattern {
-  background-image: url('/attached_assets/soft_hexagonal_mosaic_pattern_background_1754259524445.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.partipay-gradient {
-  background: linear-gradient(135deg, #E5742A 0%, #F4B942 100%);
-}
-
-.partipay-pattern-overlay {
-  background: linear-gradient(135deg, rgba(229, 116, 42, 0.9) 0%, rgba(244, 185, 66, 0.9) 100%);
-}
-
 /* Mobile optimizations */
 @media (max-width: 768px) {
   .max-w-sm {

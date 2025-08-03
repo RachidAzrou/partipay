@@ -7,13 +7,7 @@ export default function ProgressBar({ currentStep, totalSteps }: ProgressBarProp
   return (
     <div className="sticky top-0 z-50 bg-white border-b border-gray-100 px-4 py-3">
       <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center space-x-3">
-          <img 
-            src="/attached_assets/Scherm­afbeelding 2025-07-27 om 01.39.50_1754259385873.png" 
-            alt="PartiPay Logo" 
-            className="h-8 w-auto"
-          />
-        </div>
+        <h1 className="text-lg font-semibold text-gray-900">PartiPay</h1>
         <div className="w-6 h-6 bg-gradient-to-r from-[hsl(24,_95%,_53%)] to-[hsl(38,_92%,_50%)] rounded-full flex items-center justify-center">
           <span className="text-white text-xs font-bold">P</span>
         </div>

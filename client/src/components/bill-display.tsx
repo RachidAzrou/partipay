@@ -21,7 +21,7 @@ export default function BillDisplay({ billData, expanded, onToggleExpand }: Bill
   const today = new Date();
   
   return (
-    <div className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-lg overflow-hidden shadow-lg">
+    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
       <button 
         className="w-full p-4 text-left flex items-center justify-between"
         onClick={onToggleExpand}
