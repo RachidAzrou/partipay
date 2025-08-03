@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface BillItem {
   name: string;
@@ -24,9 +25,20 @@ interface ModeSetupProps {
 
 export default function ModeSetup({ splitMode, billData, onBack, onContinue }: ModeSetupProps) {
   const [name, setName] = useState("");
-  const [bankAccount, setBankAccount] = useState("");
+  const [selectedBank, setSelectedBank] = useState("");
   const [participantCount, setParticipantCount] = useState(4);
   const [selectedItems, setSelectedItems] = useState<Record<number, boolean>>({});
+
+  const banks = [
+    { id: 'ing', name: 'ING Bank', deeplink: 'ing://payment' },
+    { id: 'rabo', name: 'Rabobank', deeplink: 'rabobank://payment' },
+    { id: 'abn', name: 'ABN AMRO', deeplink: 'abnamro://payment' },
+    { id: 'sns', name: 'SNS Bank', deeplink: 'sns://payment' },
+    { id: 'regiobank', name: 'RegioBank', deeplink: 'regiobank://payment' },
+    { id: 'asn', name: 'ASN Bank', deeplink: 'asn://payment' },
+    { id: 'bunq', name: 'bunq', deeplink: 'bunq://payment' },
+    { id: 'revolut', name: 'Revolut', deeplink: 'revolut://payment' }
+  ];
 
   const handleItemToggle = (index: number) => {
     setSelectedItems(prev => ({
@@ -49,7 +61,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
 
     const userData = {
       name: name.trim(),
-      bankAccount: bankAccount.trim(),
+      selectedBank: selectedBank,
       ...(splitMode === 'equal' 
         ? { participantCount }
         : { selectedItems: Object.entries(selectedItems).filter(([_, selected]) => selected).map(([index]) => parseInt(index)) }
@@ -87,16 +99,41 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
         </div>
         
         <div>
-          <Label className="block text-sm font-medium text-gray-700 mb-2">Bankrekening (optioneel)</Label>
-          <Input
-            type="text"
-            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[hsl(24,_95%,_53%)] focus:border-transparent"
-            placeholder="NL12 ABCD 0123 4567 89"
-            value={bankAccount}
-            onChange={(e) => setBankAccount(e.target.value)}
-            data-testid="input-bank"
-          />
-          <p className="text-xs text-gray-500 mt-1">Voor simulatie doeleinden</p>
+          <Label className="block text-sm font-medium text-gray-700 mb-2">Kies je bank</Label>
+          <Select value={selectedBank} onValueChange={setSelectedBank}>
+            <SelectTrigger className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[hsl(24,_95%,_53%)] focus:border-transparent" data-testid="select-bank">
+              <SelectValue placeholder="Selecteer je bank" />
+            </SelectTrigger>
+            <SelectContent>
+              {banks.map(bank => (
+                <SelectItem key={bank.id} value={bank.id}>
+                  {bank.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {selectedBank && (
+            <div className="mt-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="text-xs px-3 py-1 border-[hsl(24,_95%,_53%)] text-[hsl(24,_95%,_53%)] hover:bg-orange-50"
+                onClick={() => {
+                  const bank = banks.find(b => b.id === selectedBank);
+                  if (bank) {
+                    // Try to open bank app, fallback to web version
+                    window.location.href = bank.deeplink;
+                  }
+                }}
+                data-testid="button-open-bank-app"
+              >
+                <i className="fas fa-external-link-alt mr-1"></i>
+                Open {banks.find(b => b.id === selectedBank)?.name} app
+              </Button>
+            </div>
+          )}
+          <p className="text-xs text-gray-500 mt-1">Voor directe betalingen via je bankapp</p>
         </div>
       </div>
 
