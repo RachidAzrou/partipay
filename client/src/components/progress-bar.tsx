@@ -8,9 +8,11 @@ export default function ProgressBar({ currentStep, totalSteps }: ProgressBarProp
     <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border px-6 py-4">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold text-foreground">PartiPay</h1>
-        <div className="w-10 h-10 parti-gradient rounded-full flex items-center justify-center parti-shadow">
-          <span className="text-white text-lg font-bold">P</span>
-        </div>
+        <img 
+          src="/attached_assets/Scherm­afbeelding 2025-07-27 om 01.39.50_1754260283738.png" 
+          alt="PartiPay Logo" 
+          className="h-8 w-auto"
+        />
       </div>
       <div className="flex space-x-3">
         {Array.from({ length: totalSteps }, (_, index) => (
