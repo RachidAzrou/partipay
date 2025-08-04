@@ -183,10 +183,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
   return (
     <div className="monarch-container flex flex-col">
       <div className="flex-1 px-6 py-8 space-y-8">
-        <div className="text-center animate-fade-in mb-8">
-          <h1 className="monarch-title text-2xl">Koppel je bankrekening</h1>
-          <p className="monarch-body text-lg">Koppel je bankrekening om deel te nemen aan de betaling</p>
-        </div>
+        
 
         <div className="space-y-6 animate-slide-up">
           
@@ -206,10 +203,6 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                     </h3>
                     <p className="monarch-body mb-4">
                       Automatisch je IBAN koppelen voor snelle betalingen van deelnemers.
-                    </p>
-                    
-                    <p className="monarch-caption">
-                      Veilig via Tink - Ondersteunt alle Belgische banken
                     </p>
                   </div>
                   
