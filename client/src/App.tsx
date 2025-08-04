@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Home from "@/pages/home";
 import Session from "@/pages/session";
 import TinkCallback from "@/pages/tink-callback";
+import TableQR from "@/pages/table-qr";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -14,6 +15,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/session/:id" component={Session} />
       <Route path="/auth/tink/callback" component={TinkCallback} />
+      <Route path="/table-qr" component={TableQR} />
       <Route component={NotFound} />
     </Switch>
   );
