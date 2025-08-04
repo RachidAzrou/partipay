@@ -4,6 +4,7 @@ import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
 import { insertSessionSchema, insertParticipantSchema, insertItemClaimSchema } from "@shared/schema";
 import { z } from "zod";
+import { getIbanFromTink, exchangeCodeForToken } from "./tink-integration.js";
 
 interface WebSocketClient extends WebSocket {
   sessionId?: string;
@@ -272,6 +273,77 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Payment error:', error);
       res.status(400).json({ message: 'Payment failed' });
+    }
+  });
+
+  // Tink OAuth2 callback
+  app.get('/auth/tink/callback', async (req, res) => {
+    try {
+      const { code, state } = req.query;
+      
+      if (!code || !state) {
+        return res.status(400).send('Missing authorization code or state');
+      }
+      
+      // Exchange code for access token
+      const tokenData = await exchangeCodeForToken(code as string);
+      
+      if (!tokenData.access_token) {
+        return res.status(400).send('Failed to get access token');
+      }
+      
+      // Get IBAN and account info from Tink
+      const accountInfo = await getIbanFromTink(tokenData.access_token);
+      
+      if (!accountInfo) {
+        return res.status(400).send('Could not retrieve account information');
+      }
+      
+      // Store in session storage for the frontend to pick up
+      // In production, you'd want a more secure approach
+      const sessionData = {
+        iban: accountInfo.iban,
+        accountHolder: accountInfo.accountHolder,
+        accessToken: tokenData.access_token
+      };
+      
+      // Redirect back to frontend with success message
+      const redirectUrl = `${req.headers.origin || 'http://localhost:5000'}?bank_linked=success&data=${encodeURIComponent(JSON.stringify(sessionData))}`;
+      res.redirect(redirectUrl);
+      
+    } catch (error) {
+      console.error('Tink callback error:', error);
+      res.status(500).send('Authentication failed');
+    }
+  });
+  
+  // Link bank account to session
+  app.post('/api/sessions/:id/link-bank', async (req, res) => {
+    try {
+      const { iban, accountHolder, accessToken } = req.body;
+      const sessionId = req.params.id;
+      
+      if (!iban || !accountHolder) {
+        return res.status(400).json({ message: 'IBAN and account holder name are required' });
+      }
+      
+      await storage.updateSession(sessionId, {
+        linkedIban: iban,
+        accountHolderName: accountHolder,
+        tinkAccessToken: accessToken // In production: encrypt this
+      });
+      
+      broadcastToSession(sessionId, {
+        type: 'bank-linked',
+        iban,
+        accountHolder
+      });
+      
+      res.json({ success: true, iban, accountHolder });
+      
+    } catch (error) {
+      console.error('Link bank error:', error);
+      res.status(500).json({ message: 'Failed to link bank account' });
     }
   });
 

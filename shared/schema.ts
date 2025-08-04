@@ -12,6 +12,10 @@ export const sessions = pgTable("sessions", {
   totalAmount: decimal("total_amount", { precision: 10, scale: 2 }).notNull(),
   isActive: boolean("is_active").default(true),
   mainBookerId: varchar("main_booker_id"),
+  // Bank account info from Tink
+  linkedIban: text("linked_iban"),
+  accountHolderName: text("account_holder_name"),
+  tinkAccessToken: text("tink_access_token"), // Store encrypted in production
   createdAt: timestamp("created_at").defaultNow(),
 });
 

@@ -1,9 +1,11 @@
 import { useState } from "react";
+import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 
 interface BillItem {
   name: string;
@@ -25,20 +27,51 @@ interface ModeSetupProps {
 
 export default function ModeSetup({ splitMode, billData, onBack, onContinue }: ModeSetupProps) {
   const [name, setName] = useState("");
-  const [selectedBank, setSelectedBank] = useState("");
+  const [bankLinked, setBankLinked] = useState(false);
+  const [bankInfo, setBankInfo] = useState<{iban: string; accountHolder: string} | null>(null);
   const [participantCount, setParticipantCount] = useState(4);
   const [selectedItems, setSelectedItems] = useState<Record<number, boolean>>({});
+  const { toast } = useToast();
 
-  const banks = [
-    { id: 'kbc', name: 'KBC Bank', logo: '🏦', deeplink: 'kbc://payment' },
-    { id: 'belfius', name: 'Belfius Bank', logo: '🔷', deeplink: 'belfius://payment' },
-    { id: 'ing', name: 'ING België', logo: '🧡', deeplink: 'ing://payment' },
-    { id: 'bnp', name: 'BNP Paribas Fortis', logo: '🟢', deeplink: 'bnpparibas://payment' },
-    { id: 'argenta', name: 'Argenta', logo: '🔵', deeplink: 'argenta://payment' },
-    { id: 'axa', name: 'AXA Bank Belgium', logo: '🅰️', deeplink: 'axa://payment' },
-    { id: 'crelan', name: 'Crelan', logo: '🟡', deeplink: 'crelan://payment' },
-    { id: 'vdk', name: 'VDK Bank', logo: '🏛️', deeplink: 'vdk://payment' }
-  ];
+  // Check for bank linking success on component mount
+  React.useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const bankLinked = urlParams.get('bank_linked');
+    
+    if (bankLinked === 'success') {
+      const storedBankInfo = sessionStorage.getItem('partipay_bank_info');
+      if (storedBankInfo) {
+        try {
+          const bankData = JSON.parse(storedBankInfo);
+          setBankInfo({
+            iban: bankData.iban,
+            accountHolder: bankData.accountHolder
+          });
+          setBankLinked(true);
+          sessionStorage.removeItem('partipay_bank_info');
+          
+          toast({
+            title: "Bankrekening gekoppeld!",
+            description: `${bankData.accountHolder} - ${bankData.iban}`,
+          });
+          
+          // Clean URL
+          window.history.replaceState({}, '', window.location.pathname);
+        } catch (error) {
+          console.error('Error parsing bank info:', error);
+        }
+      }
+    } else if (bankLinked === 'error') {
+      toast({
+        title: "Fout bij bankkoppeling",
+        description: "Er is iets misgegaan. Probeer opnieuw.",
+        variant: "destructive"
+      });
+      // Clean URL
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, [toast]);
+
 
   const handleItemToggle = (index: number) => {
     setSelectedItems(prev => ({
@@ -56,12 +89,35 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
     }, 0).toFixed(2);
   };
 
+  const handleLinkBank = async () => {
+    try {
+      // Start Tink OAuth2 flow
+      const clientId = 'df05e4b379934cd09963197cc855bfe9'; // Tink Sandbox Client ID
+      const redirectUri = encodeURIComponent(`${window.location.origin}/auth/tink/callback`);
+      const scope = 'accounts:read';
+      const state = 'partipay_auth_' + Math.random().toString(36).substring(7);
+      
+      // Store state in sessionStorage for security
+      sessionStorage.setItem('tink_oauth_state', state);
+      
+      const authUrl = `https://link.tink.com/1.0/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code&state=${state}&market=BE`;
+      
+      window.location.href = authUrl;
+    } catch (error) {
+      toast({
+        title: "Fout",
+        description: "Kon bankkoppeling niet starten. Probeer opnieuw.",
+        variant: "destructive"
+      });
+    }
+  };
+
   const handleContinue = () => {
     if (!name.trim()) return;
 
     const userData = {
       name: name.trim(),
-      selectedBank: selectedBank,
+      bankInfo: bankInfo,
       ...(splitMode === 'equal' 
         ? { participantCount }
         : { selectedItems: Object.entries(selectedItems).filter(([_, selected]) => selected).map(([index]) => parseInt(index)) }
@@ -100,71 +156,59 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
           </div>
         
           <div>
-            <Label className="block text-lg font-semibold text-foreground mb-4">Kies je bank</Label>
-            <div className="grid grid-cols-2 gap-4">
-              {banks.map(bank => (
-                <button
-                  key={bank.id}
-                  type="button"
-                  className={`p-4 rounded-2xl border-2 transition-all touch-target ${
-                    selectedBank === bank.id
-                      ? 'border-primary bg-primary/10 text-primary parti-shadow-lg'
-                      : 'parti-card border-border text-foreground hover:border-primary/50 hover:parti-shadow'
-                  }`}
-                  onClick={() => setSelectedBank(bank.id)}
-                  data-testid={`button-select-${bank.id}`}
-                >
-                  <div className="text-center">
-                    <div className="text-3xl mb-2">{bank.logo}</div>
-                    <div className="text-sm font-semibold">{bank.name}</div>
+            <Label className="block text-lg font-semibold text-foreground mb-4">Bankrekening koppelen (hoofdboeker)</Label>
+            
+            {!bankLinked ? (
+              <div className="parti-card-elevated p-6 bg-gradient-to-r from-orange-50 to-yellow-50 border-orange-200">
+                <div className="text-center space-y-4">
+                  <div className="w-16 h-16 parti-gradient rounded-full flex items-center justify-center mx-auto parti-shadow">
+                    <i className="fas fa-university text-white text-2xl"></i>
                   </div>
-                </button>
-              ))}
-            </div>
-            {selectedBank && (
-              <div className="mt-6 parti-card-elevated p-6 animate-slide-up">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    <span className="text-2xl">{banks.find(b => b.id === selectedBank)?.logo}</span>
-                    <span className="text-lg font-semibold text-foreground">
-                      {banks.find(b => b.id === selectedBank)?.name} geselecteerd
-                    </span>
+                  <h3 className="text-xl font-bold text-orange-900">
+                    Koppel je bankrekening
+                  </h3>
+                  <p className="text-base text-orange-800">
+                    Automatisch je IBAN koppelen voor snelle betalingen van deelnemers.
+                  </p>
+                  <button
+                    type="button"
+                    className="parti-button parti-button-primary"
+                    onClick={handleLinkBank}
+                    data-testid="button-link-bank"
+                  >
+                    <i className="fas fa-link mr-3"></i>
+                    Koppel via Tink
+                  </button>
+                  <p className="text-sm text-orange-700">
+                    Veilig via Tink - Ondersteunt alle Belgische banken
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="parti-card-elevated p-6 bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center">
+                    <i className="fas fa-check text-white text-lg"></i>
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="text-lg font-semibold text-green-900">Bankrekening gekoppeld</h4>
+                    <p className="text-sm text-green-800">{bankInfo?.accountHolder}</p>
+                    <p className="text-sm text-green-700 font-mono">{bankInfo?.iban}</p>
                   </div>
                   <button
                     type="button"
-                    className="parti-button parti-button-primary text-sm px-4 py-2"
+                    className="text-green-600 hover:text-green-800 transition-colors"
                     onClick={() => {
-                      const bank = banks.find(b => b.id === selectedBank);
-                      if (bank) {
-                        // Try to open bank app with fallback
-                        const userAgent = navigator.userAgent.toLowerCase();
-                        if (userAgent.includes('iphone') || userAgent.includes('ipad')) {
-                          // iOS: try deep link, fallback to app store
-                          window.location.href = bank.deeplink;
-                          setTimeout(() => {
-                            window.location.href = `https://apps.apple.com/search?term=${bank.name}`;
-                          }, 2000);
-                        } else if (userAgent.includes('android')) {
-                          // Android: try deep link, fallback to play store
-                          window.location.href = bank.deeplink;
-                          setTimeout(() => {
-                            window.location.href = `https://play.google.com/store/search?q=${bank.name}`;
-                          }, 2000);
-                        } else {
-                          // Desktop/other: show message
-                          alert(`Open je ${bank.name} app op je telefoon om te betalen.`);
-                        }
-                      }
+                      setBankLinked(false);
+                      setBankInfo(null);
                     }}
-                    data-testid="button-open-bank-app"
+                    data-testid="button-unlink-bank"
                   >
-                    <i className="fas fa-mobile-alt mr-2"></i>
-                    Open app
+                    <i className="fas fa-unlink"></i>
                   </button>
                 </div>
               </div>
             )}
-            <p className="text-base text-muted-foreground mt-4">Selecteer je bank voor snelle betalingen</p>
           </div>
         </div>
 

@@ -45,7 +45,7 @@ export interface IStorage {
   updatePayment(id: string, updates: Partial<Payment>): Promise<Payment | undefined>;
   
   // Mock POS system
-  getMockBillData(tableNumber: string, restaurantName: string): Promise<{ items: InsertBillItem[], totalAmount: string } | null>;
+  getMockBillData(tableNumber: string, restaurantName: string): Promise<{ items: Omit<InsertBillItem, 'sessionId'>[], totalAmount: string } | null>;
 }
 
 export class DatabaseStorage implements IStorage {

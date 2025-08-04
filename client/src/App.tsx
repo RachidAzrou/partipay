@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Home from "@/pages/home";
 import Session from "@/pages/session";
+import TinkCallback from "@/pages/tink-callback";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -12,6 +13,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/session/:id" component={Session} />
+      <Route path="/auth/tink/callback" component={TinkCallback} />
       <Route component={NotFound} />
     </Switch>
   );
