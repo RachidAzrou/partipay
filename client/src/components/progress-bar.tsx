@@ -8,20 +8,20 @@ interface ProgressBarProps {
 
 export default function ProgressBar({ currentStep, totalSteps, onBack }: ProgressBarProps) {
   return (
-    <div className="sticky top-0 z-50 bg-background px-6 py-6">
+    <div className="sticky top-0 z-50 bg-white px-6 py-6 border-b border-gray-100">
       <div className="flex items-center justify-between mb-8">
         {onBack && currentStep > 1 ? (
           <button 
-            className="w-10 h-10 rounded-full flex items-center justify-center touch-target hover:bg-muted transition-colors"
+            className="monarch-icon-btn touch-target"
             onClick={onBack}
             data-testid="button-back-progress"
           >
-            <i className="fas fa-arrow-left text-foreground text-lg"></i>
+            <i className="fas fa-arrow-left text-gray-600 text-lg"></i>
           </button>
         ) : (
           <div className="w-10"></div>
         )}
-        <p className="parti-step-indicator">Stap {currentStep} van {totalSteps}</p>
+        <p className="monarch-section-title">Stap {currentStep} van {totalSteps}</p>
         <div className="w-10"></div>
       </div>
       <div className="flex items-center justify-center mb-6">

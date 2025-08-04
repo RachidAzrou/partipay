@@ -141,14 +141,14 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
   if (sessionCompleted) {
     return (
       <div className="px-4 py-6">
-        <div className="parti-card-elevated text-center" data-testid="success-state">
-          <div className="w-20 h-20 parti-bg-primary rounded-full flex items-center justify-center mx-auto mb-6">
+        <div className="monarch-widget text-center" data-testid="success-state">
+          <div className="w-20 h-20 bg-monarch-primary rounded-full flex items-center justify-center mx-auto mb-6">
             <i className="fas fa-check text-white text-2xl"></i>
           </div>
-          <h3 className="parti-heading-2 mb-4">Alle betalingen voltooid!</h3>
-          <p className="parti-body mb-8">Bedankt voor het gebruik van PartiPay</p>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Alle betalingen voltooid!</h3>
+          <p className="monarch-body mb-8">Bedankt voor het gebruik van PartiPay</p>
           <button 
-            className="parti-button parti-button-primary"
+            className="monarch-btn monarch-btn-primary"
             onClick={() => window.location.href = '/'}
             data-testid="button-new-session"
           >
@@ -160,16 +160,16 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
   }
 
   return (
-    <div className="parti-container bg-background flex flex-col">
+    <div className="monarch-container bg-background flex flex-col">
       <div className="flex-1 px-6 py-8 space-y-8">
       
       
       <div className="text-center animate-fade-in mb-12">
-        <h1 className="parti-heading-1">Deel met je vrienden</h1>
-        <p className="parti-body text-lg">Laat anderen deze QR-code scannen om mee te betalen</p>
+        <h1 className="monarch-title text-2xl">Deel met je vrienden</h1>
+        <p className="monarch-body text-lg">Laat anderen deze QR-code scannen om mee te betalen</p>
       </div>
 
-      <div className="parti-card-elevated text-center animate-slide-up">
+      <div className="monarch-widget text-center animate-slide-up">
         {qrCodeUrl ? (
           <img 
             src={qrCodeUrl} 
@@ -180,12 +180,12 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
           />
         ) : (
           <div className="w-48 h-48 bg-muted rounded-2xl mx-auto mb-6 flex items-center justify-center">
-            <div className="parti-body">QR-code laden...</div>
+            <div className="monarch-body">QR-code laden...</div>
           </div>
         )}
-        <p className="parti-body mb-6">Sessie: <span className="font-mono parti-small bg-muted px-3 py-1 rounded-full">{sessionData.session.id.slice(0, 8).toUpperCase()}</span></p>
+        <p className="monarch-body mb-6">Sessie: <span className="font-mono monarch-caption bg-muted px-3 py-1 rounded-full">{sessionData.session.id.slice(0, 8).toUpperCase()}</span></p>
         <button 
-          className="parti-button parti-button-primary touch-target"
+          className="monarch-btn monarch-btn-primary touch-target"
           onClick={handleShareQR}
           data-testid="button-share-qr"
         >
@@ -194,22 +194,22 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
       </div>
 
       <div className="space-y-6">
-        <h2 className="parti-heading-2">Deelnemers ({paidCount}/{totalCount})</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-3">Deelnemers ({paidCount}/{totalCount})</h2>
         
         {sessionData.participants.map((participant, index) => (
-          <div key={participant.id} className="parti-card flex items-center justify-between animate-slide-up" style={{animationDelay: `${index * 0.1}s`}}>
+          <div key={participant.id} className="monarch-card flex items-center justify-between animate-slide-up" style={{animationDelay: `${index * 0.1}s`}}>
             <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 parti-bg-primary rounded-full flex items-center justify-center">
+              <div className="w-12 h-12 bg-monarch-primary rounded-full flex items-center justify-center">
                 <span className="text-white font-semibold text-sm">
                   {participant.name.split(' ').map(n => n[0]).join('').toUpperCase()}
                 </span>
               </div>
               <div>
-                <p className="parti-heading-3">
+                <p className="text-base font-semibold text-gray-900 mb-2">
                   {participant.name}
-                  {participant.isMainBooker && <span className="parti-small ml-2 text-muted-foreground">• Hoofdboeker</span>}
+                  {participant.isMainBooker && <span className="monarch-caption ml-2 text-muted-foreground">• Hoofdboeker</span>}
                 </p>
-                <p className="parti-body-semibold parti-amount">
+                <p className="text-base text-gray-900 leading-relaxed font-semibold tabular-nums">
                   € {participant.expectedAmount || (parseFloat(sessionData.session.totalAmount) / sessionData.participants.length).toFixed(2)}
                 </p>
               </div>
@@ -217,15 +217,15 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
             <div className="flex items-center space-x-3">
               {participant.hasPaid ? (
                 <>
-                  <div className="w-2 h-2 parti-bg-accent rounded-full"></div>
-                  <span className="parti-body-semibold parti-text-accent">Betaald</span>
+                  <div className="w-2 h-2 bg-monarch-green rounded-full"></div>
+                  <span className="text-base text-gray-900 leading-relaxed font-semibold text-monarch-green">Betaald</span>
                 </>
               ) : (
                 <>
                   <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
-                  <span className="parti-body font-medium text-yellow-600">Wachtend</span>
+                  <span className="monarch-body font-medium text-yellow-600">Wachtend</span>
                   <button
-                    className="ml-3 parti-button parti-button-secondary px-3 py-1.5 text-xs"
+                    className="ml-3 monarch-btn monarch-btn-secondary px-3 py-1.5 text-xs"
                     onClick={() => handleMockPayment(participant)}
                     disabled={paymentMutation.isPending}
                     data-testid={`button-pay-${participant.id}`}
@@ -239,21 +239,21 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
         ))}
       </div>
 
-      <div className="parti-card animate-slide-up">
+      <div className="monarch-card animate-slide-up">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="parti-heading-3">Betalingsvoortgang</h3>
-          <span className="parti-body-semibold parti-amount">
+          <h3 className="text-base font-semibold text-gray-900 mb-2">Betalingsvoortgang</h3>
+          <span className="text-base text-gray-900 leading-relaxed font-semibold tabular-nums">
             € {sessionData.participants.reduce((sum, p) => sum + parseFloat(p.paidAmount || '0'), 0).toFixed(2)} / € {sessionData.session.totalAmount}
           </span>
         </div>
         <div className="w-full bg-muted rounded-full h-3 mb-6">
           <div 
-            className="parti-bg-primary h-3 rounded-full transition-all duration-700 ease-out"
+            className="bg-monarch-primary h-3 rounded-full transition-all duration-700 ease-out"
             style={{ width: `${calculateProgress()}%` }}
             data-testid="progress-bar"
           ></div>
         </div>
-        <p className="parti-body text-center font-medium">{paidCount} van {totalCount} personen hebben betaald</p>
+        <p className="monarch-body text-center font-medium">{paidCount} van {totalCount} personen hebben betaald</p>
       </div>
 
       

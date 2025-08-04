@@ -3,82 +3,72 @@
 @tailwind utilities;
 
 :root {
-  /* Monarch Money warm & approachable colors (2025 refresh) */
-  --background: hsl(0, 0%, 100%);
-  --foreground: hsl(220, 9%, 15%); /* Warm dark gray instead of navy */
-  --muted: hsl(220, 13%, 96%); /* Warm light gray */
-  --muted-foreground: hsl(220, 9%, 46%); /* Warm medium gray */
-  --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(220, 9%, 15%);
-  --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(220, 9%, 15%);
-  --border: hsl(220, 13%, 91%); /* Warm light border */
-  --input: hsl(220, 13%, 96%);
-  --primary: hsl(213, 96%, 50%); /* Bright, warm blue - vibrant but approachable */
-  --primary-foreground: hsl(0, 0%, 100%);
-  --secondary: hsl(220, 13%, 96%);
-  --secondary-foreground: hsl(220, 9%, 15%);
-  --accent: hsl(142, 69%, 48%); /* Fresh green for positive */
-  --accent-foreground: hsl(0, 0%, 100%);
-  --destructive: hsl(0, 84%, 60%);
-  --destructive-foreground: hsl(0, 0%, 98%);
-  --ring: hsl(213, 96%, 50%);
-  --radius: 0.75rem;
+  /* Exact Monarch Money iOS App Colors */
+  --background: #FFFFFF; /* Pure white */
+  --background-muted: #F9FAFB; /* Off-white background */
+  --foreground: #111827; /* Dark gray for text */
+  --muted: #F3F4F6; /* Light gray backgrounds */
+  --muted-foreground: #9CA3AF; /* Medium gray text */
+  --popover: #FFFFFF;
+  --popover-foreground: #111827;
+  --card: #FFFFFF;
+  --card-foreground: #111827;
+  --border: #D1D5DB; /* Light gray borders */
+  --input: #F9FAFB;
+  --primary: #6366F1; /* Deep blue-violet */
+  --primary-foreground: #FFFFFF;
+  --secondary: #F3F4F6;
+  --secondary-foreground: #111827;
+  --accent: #34D399; /* Pastel green */
+  --accent-foreground: #FFFFFF;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --ring: #6366F1;
+  --radius: 1rem; /* rounded-2xl equivalent */
   
-  /* Monarch Money warm palette */
-  --parti-primary: hsl(213, 96%, 50%); /* Bright blue - vibrant & approachable */
-  --parti-primary-light: hsl(213, 96%, 85%); /* Light blue accent */
-  --parti-primary-dark: hsl(213, 96%, 35%); /* Darker blue for hover */
-  --parti-secondary: hsl(220, 9%, 46%); /* Warm gray */
-  --parti-accent: hsl(142, 69%, 48%); /* Fresh green */
-  --parti-warning: hsl(38, 100%, 50%); /* Warm amber for warnings */
-  --parti-error: hsl(0, 84%, 60%); /* Red for errors */
-  --parti-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  --parti-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --parti-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.06);
-  --parti-surface: hsl(0, 0%, 100%);
-  --parti-surface-elevated: hsl(0, 0%, 100%);
-  --parti-surface-muted: hsl(220, 20%, 98%);
-  --parti-border-light: hsl(220, 13%, 91%);
+  /* Monarch iOS specific colors */
+  --monarch-primary: #6366F1; /* Deep blue-violet */
+  --monarch-purple: #A78BFA; /* Soft purple */
+  --monarch-green: #34D399; /* Pastel green */
+  --monarch-orange: #FBBF24; /* Soft orange */
+  --monarch-gray-400: #9CA3AF; /* Medium gray */
+  --monarch-gray-300: #D1D5DB; /* Light gray */
+  --monarch-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --monarch-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 .dark {
-  /* Monarch Money refreshed dark mode (warm, not navy) */
-  --background: hsl(220, 13%, 8%); /* Warm dark gray, not blue */
-  --foreground: hsl(0, 0%, 98%);
-  --muted: hsl(220, 13%, 14%); /* Warm dark gray for muted */
-  --muted-foreground: hsl(220, 9%, 65%); /* Warm medium gray */
-  --popover: hsl(220, 13%, 10%);
-  --popover-foreground: hsl(0, 0%, 98%);
-  --card: hsl(220, 13%, 10%);
-  --card-foreground: hsl(0, 0%, 98%);
-  --border: hsl(220, 13%, 20%); /* Warm dark border */
-  --input: hsl(220, 13%, 14%);
-  --primary: hsl(213, 96%, 65%); /* Brighter blue for dark mode */
-  --primary-foreground: hsl(220, 13%, 8%);
-  --secondary: hsl(220, 13%, 14%);
-  --secondary-foreground: hsl(0, 0%, 98%);
-  --accent: hsl(142, 69%, 48%);
-  --accent-foreground: hsl(0, 0%, 98%);
-  --destructive: hsl(0, 84%, 70%);
-  --destructive-foreground: hsl(0, 0%, 98%);
-  --ring: hsl(213, 96%, 65%);
+  /* Monarch Money Dark Mode */
+  --background: #1F2937; /* Dark background */
+  --background-muted: #111827; /* Darker background */
+  --foreground: #F9FAFB; /* Light text */
+  --muted: #374151; /* Dark gray backgrounds */
+  --muted-foreground: #9CA3AF; /* Medium gray text */
+  --popover: #1F2937;
+  --popover-foreground: #F9FAFB;
+  --card: #1F2937;
+  --card-foreground: #F9FAFB;
+  --border: #374151; /* Dark borders */
+  --input: #111827;
+  --primary: #6366F1; /* Keep vibrant colors */
+  --primary-foreground: #FFFFFF;
+  --secondary: #374151;
+  --secondary-foreground: #F9FAFB;
+  --accent: #34D399;
+  --accent-foreground: #FFFFFF;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --ring: #6366F1;
   
-  /* Dark mode warm colors */
-  --parti-primary: hsl(213, 96%, 65%); /* Bright blue for dark */
-  --parti-primary-light: hsl(213, 96%, 75%);
-  --parti-primary-dark: hsl(213, 96%, 50%);
-  --parti-secondary: hsl(220, 9%, 65%);
-  --parti-accent: hsl(142, 69%, 48%);
-  --parti-warning: hsl(38, 100%, 60%);
-  --parti-error: hsl(0, 84%, 70%);
-  --parti-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-  --parti-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-  --parti-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
-  --parti-surface: hsl(220, 13%, 10%);
-  --parti-surface-elevated: hsl(220, 13%, 12%);
-  --parti-surface-muted: hsl(220, 13%, 14%);
-  --parti-border-light: hsl(220, 13%, 20%);
+  /* Dark mode specific */
+  --monarch-primary: #6366F1;
+  --monarch-purple: #A78BFA;
+  --monarch-green: #34D399;
+  --monarch-orange: #FBBF24;
+  --monarch-gray-400: #9CA3AF;
+  --monarch-gray-300: #6B7280;
+  --monarch-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  --monarch-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
 }
 
 @layer base {
@@ -87,14 +77,15 @@
   }
 
   html {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: system-ui, -apple-system, "SF Pro Display", sans-serif;
     height: 100%;
     height: -webkit-fill-available;
   }
 
   body {
-    @apply font-inter antialiased bg-background text-foreground;
-    font-family: 'Inter', system-ui, sans-serif;
+    @apply antialiased text-foreground;
+    font-family: system-ui, -apple-system, "SF Pro Display", sans-serif;
+    background: var(--background-muted);
     margin: 0;
     padding: 0;
     min-height: 100vh;
@@ -111,92 +102,106 @@
 }
 
 @layer utilities {
-  .font-inter {
-    font-family: 'Inter', system-ui, sans-serif;
+  .font-sf {
+    font-family: system-ui, -apple-system, "SF Pro Display", sans-serif;
   }
   
   .active-scale-98:active {
     transform: scale(0.98);
   }
   
-  /* True Monarch utilities */
-  .parti-shadow {
-    box-shadow: var(--parti-shadow);
+  /* Monarch iOS Widget Cards */
+  .monarch-widget {
+    @apply bg-white rounded-2xl p-4 transition-all duration-200;
+    box-shadow: var(--monarch-shadow);
   }
   
-  .parti-shadow-md {
-    box-shadow: var(--parti-shadow-md);
-  }
-  
-  .parti-shadow-lg {
-    box-shadow: var(--parti-shadow-lg);
-  }
-  
-  /* True Monarch Money cards */
-  .parti-card {
-    background: var(--parti-surface);
-    border-radius: var(--radius);
-    border: 1px solid var(--parti-border-light);
-    padding: 1.5rem;
-    transition: all 0.2s ease;
-  }
-  
-  .parti-card:hover {
-    box-shadow: var(--parti-shadow-md);
-    border-color: hsl(217, 35%, 80%);
-  }
-  
-  .parti-card-elevated {
-    background: var(--parti-surface-elevated);
-    border-radius: var(--radius);
-    box-shadow: var(--parti-shadow);
-    border: 1px solid var(--parti-border-light);
-    padding: 1.5rem;
-    transition: all 0.2s ease;
-  }
-  
-  .parti-card-elevated:hover {
-    box-shadow: var(--parti-shadow-lg);
+  .monarch-widget:hover {
+    box-shadow: var(--monarch-shadow-lg);
     transform: translateY(-1px);
   }
   
-  /* Exact Monarch buttons */
-  .parti-button {
-    @apply rounded-full px-8 py-4 font-semibold text-base transition-all duration-200;
-    border: none;
-    box-shadow: none;
+  .monarch-card {
+    @apply bg-white rounded-2xl p-4 border border-gray-200 transition-all duration-200;
   }
   
-  .parti-button:active {
+  .monarch-card:hover {
+    @apply shadow-md;
+    transform: translateY(-1px);
+  }
+  
+  /* Monarch iOS Buttons */
+  .monarch-btn {
+    @apply px-6 py-3 rounded-2xl font-semibold text-base transition-all duration-200;
+    box-shadow: var(--monarch-shadow);
+  }
+  
+  .monarch-btn:active {
     transform: scale(0.98);
   }
   
-  .parti-button-primary {
-    background: hsl(var(--primary));
-    color: hsl(var(--primary-foreground));
-    font-weight: 600;
+  .monarch-btn-primary {
+    @apply text-white;
+    background: var(--monarch-primary);
   }
   
-  .parti-button-primary:hover {
-    background: hsl(213, 96%, 45%); /* Darker vibrant blue on hover */
+  .monarch-btn-primary:hover {
+    background: #5855EB;
+  }
+  
+  .monarch-btn-secondary {
+    @apply bg-gray-100 text-gray-900;
+  }
+  
+  .monarch-btn-secondary:hover {
+    @apply bg-gray-200;
+  }
+  
+  /* Icon Buttons */
+  .monarch-icon-btn {
+    @apply w-10 h-10 rounded-full flex items-center justify-center transition-all duration-150;
+  }
+  
+  .monarch-icon-btn:hover {
+    @apply bg-gray-100;
+  }
+  
+  /* Monarch Typography */
+  .monarch-title {
+    @apply text-xl font-semibold text-gray-900;
+  }
+  
+  .monarch-section-title {
+    @apply text-sm uppercase tracking-wide text-gray-500 font-medium;
+  }
+  
+  .monarch-body {
+    @apply text-base text-gray-600 leading-relaxed;
+  }
+  
+  .monarch-caption {
+    @apply text-sm text-gray-500;
+  }
+  
+  /* Legacy Support - Keep old classes working during transition */
+  .parti-card {
+    @apply monarch-card;
+  }
+  
+  .parti-card-elevated {
+    @apply monarch-widget;
+  }
+  
+  .parti-button {
+    @apply monarch-btn;
+  }
+  
+  .parti-button-primary {
+    @apply monarch-btn-primary;
   }
   
   .parti-button-secondary {
-    background: hsl(var(--muted));
-    color: hsl(var(--foreground));
-  }
-  
-  .parti-button-secondary:hover {
-    background: hsl(220, 13%, 94%); /* Warm light gray hover */
-  }
-  
-  .parti-button-accent {
-    background: hsl(var(--accent));
-    color: hsl(var(--accent-foreground));
-  }
-  
-  .parti-button-accent:hover {
-    background: hsl(142, 71%, 43%);
+    @apply monarch-btn-secondary;
   }
   
   /* Custom scrollbar for mobile */
@@ -246,6 +251,12 @@
     min-height: -webkit-fill-available;
     padding: 0;
     margin: 0;
+    background: var(--background-muted);
+  }
+  
+  .monarch-container {
+    @apply min-h-screen;
+    background: var(--background-muted);
   }
 }
 
@@ -316,93 +327,107 @@ button, .button, [role="button"] {
   background: var(--parti-surface-muted);
 }
 
-.parti-text-primary {
-  color: hsl(var(--primary));
+/* Monarch Color Utilities */
+.text-monarch-primary {
+  color: var(--monarch-primary);
 }
 
-.parti-text-primary-light {
-  color: hsl(213, 96%, 85%); /* Light vibrant blue */
+.text-monarch-purple {
+  color: var(--monarch-purple);
+}
+
+.text-monarch-green {
+  color: var(--monarch-green);
+}
+
+.text-monarch-orange {
+  color: var(--monarch-orange);
+}
+
+.bg-monarch-primary {
+  background: var(--monarch-primary);
+}
+
+.bg-monarch-purple {
+  background: var(--monarch-purple);
+}
+
+.bg-monarch-green {
+  background: var(--monarch-green);
+}
+
+.bg-monarch-orange {
+  background: var(--monarch-orange);
+}
+
+/* Legacy Support */
+.parti-text-primary {
+  color: var(--monarch-primary);
 }
 
 .parti-text-accent {
-  color: hsl(var(--accent));
-}
-
-.parti-text-secondary {
-  color: hsl(var(--parti-secondary));
+  color: var(--monarch-green);
 }
 
 .parti-bg-primary {
-  background: hsl(var(--primary));
-}
-
-.parti-bg-primary-light {
-  background: hsl(213, 96%, 85%); /* Light vibrant blue background */
+  background: var(--monarch-primary);
 }
 
 .parti-bg-accent {
-  background: hsl(var(--accent));
+  background: var(--monarch-green);
 }
 
-.parti-bg-surface-muted {
-  background: var(--parti-surface-muted);
+/* Monarch iOS style inputs */
+.monarch-input {
+  @apply rounded-2xl border border-gray-200 bg-white px-4 py-3 text-base transition-all;
 }
 
-/* Clean Monarch inputs */
-.parti-input {
-  @apply rounded-lg border bg-background px-4 py-3 text-sm transition-colors;
-  border-color: var(--parti-border-light);
-}
-
-.parti-input:focus {
+.monarch-input:focus {
   outline: none;
-  border-color: hsl(var(--primary));
-  box-shadow: 0 0 0 1px hsl(var(--primary));
+  border-color: var(--monarch-primary);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
 }
 
-/* True Monarch Money typography */
+/* Legacy input support */
+.parti-input {
+  @apply monarch-input;
+}
+
+/* Legacy Typography - Maps to Monarch styles */
 .parti-heading-1 {
-  @apply text-3xl font-bold text-foreground mb-4;
-  letter-spacing: -0.025em;
+  @apply monarch-title mb-4;
 }
 
 .parti-heading-2 {
-  @apply text-xl font-semibold text-foreground mb-3;
-  letter-spacing: -0.02em;
+  @apply text-lg font-semibold text-gray-900 mb-3;
 }
 
 .parti-heading-3 {
-  @apply text-lg font-semibold text-foreground mb-2;
-  letter-spacing: -0.015em;
+  @apply text-base font-semibold text-gray-900 mb-2;
 }
 
 .parti-body {
-  @apply text-base text-muted-foreground leading-relaxed;
-  font-weight: 400;
+  @apply monarch-body;
 }
 
 .parti-body-semibold {
-  @apply text-base text-foreground leading-relaxed;
-  font-weight: 600;
+  @apply text-base text-gray-900 leading-relaxed font-semibold;
 }
 
 .parti-small {
-  @apply text-sm text-muted-foreground;
-  font-weight: 400;
+  @apply monarch-caption;
 }
 
 .parti-step-indicator {
-  @apply text-base font-medium text-muted-foreground;
+  @apply text-base font-medium text-gray-500;
 }
 
 .parti-amount {
-  @apply font-semibold tabular-nums;
-  letter-spacing: -0.01em;
+  @apply font-semibold tabular-nums text-gray-900;
 }
 
 .parti-amount-large {
-  @apply text-2xl font-bold tabular-nums text-foreground;
-  letter-spacing: -0.02em;
+  @apply text-2xl font-bold tabular-nums text-gray-900;
 }
 
 @keyframes scan-line {

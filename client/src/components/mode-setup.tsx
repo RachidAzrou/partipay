@@ -181,40 +181,40 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
   };
 
   return (
-    <div className="parti-container bg-background flex flex-col">
+    <div className="monarch-container flex flex-col">
       <div className="flex-1 px-6 py-8 space-y-8">
         <div className="text-center animate-fade-in mb-8">
-          <h1 className="parti-heading-1">Koppel je bankrekening</h1>
-          <p className="parti-body text-lg">Koppel je bankrekening om deel te nemen aan de betaling</p>
+          <h1 className="monarch-title text-2xl">Koppel je bankrekening</h1>
+          <p className="monarch-body text-lg">Koppel je bankrekening om deel te nemen aan de betaling</p>
         </div>
 
         <div className="space-y-6 animate-slide-up">
           
         
           <div>
-            <Label className="block text-lg font-semibold text-foreground mb-4">Bankrekening koppelen (hoofdboeker)</Label>
+            <Label className="block monarch-title mb-4">Bankrekening koppelen (hoofdboeker)</Label>
             
             {!bankLinked ? (
-              <div className="parti-card-elevated">
+              <div className="monarch-widget">
                 <div className="text-center space-y-6">
-                  <div className="w-20 h-20 parti-bg-primary-light rounded-2xl flex items-center justify-center mx-auto">
+                  <div className="w-20 h-20 bg-monarch-primary rounded-2xl flex items-center justify-center mx-auto">
                     <i className="fas fa-university text-white text-2xl"></i>
                   </div>
                   <div>
-                    <h3 className="parti-heading-3 mb-3">
+                    <h3 className="text-base font-semibold text-gray-900 mb-3">
                       Koppel je bankrekening
                     </h3>
-                    <p className="parti-body mb-4">
+                    <p className="monarch-body mb-4">
                       Automatisch je IBAN koppelen voor snelle betalingen van deelnemers.
                     </p>
                     
-                    <p className="parti-small">
+                    <p className="monarch-caption">
                       Veilig via Tink - Ondersteunt alle Belgische banken
                     </p>
                   </div>
                   
                   <button 
-                    className="parti-button parti-button-primary"
+                    className="monarch-btn monarch-btn-primary"
                     onClick={handleLinkBank}
                     data-testid="button-link-bank"
                   >
@@ -223,19 +223,19 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                 </div>
               </div>
             ) : (
-              <div className="parti-card">
+              <div className="monarch-card">
                 <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 parti-bg-primary rounded-full flex items-center justify-center">
+                  <div className="w-12 h-12 bg-monarch-green rounded-full flex items-center justify-center">
                     <i className="fas fa-check text-white text-lg"></i>
                   </div>
                   <div className="flex-1">
-                    <h4 className="parti-heading-3">Bankrekening gekoppeld</h4>
-                    <p className="parti-body font-semibold">{bankInfo?.accountHolder}</p>
-                    <p className="parti-small font-mono">{bankInfo?.iban}</p>
+                    <h4 className="text-base font-semibold text-gray-900">Bankrekening gekoppeld</h4>
+                    <p className="monarch-body font-semibold">{bankInfo?.accountHolder}</p>
+                    <p className="monarch-caption font-mono">{bankInfo?.iban}</p>
                   </div>
                   <button
                     type="button"
-                    className="text-muted-foreground hover:text-foreground transition-colors p-2"
+                    className="text-gray-400 hover:text-gray-600 transition-colors p-2"
                     onClick={() => {
                       setBankLinked(false);
                       setBankInfo(null);

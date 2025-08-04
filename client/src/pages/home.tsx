@@ -93,7 +93,7 @@ export default function Home() {
   };
 
   return (
-    <div className="parti-container bg-background flex flex-col">
+    <div className="monarch-container flex flex-col">
       <ProgressBar 
         currentStep={currentStep} 
         totalSteps={3} 
@@ -104,10 +104,10 @@ export default function Home() {
         <div className="flex-1 px-6 py-8 space-y-8 animate-fade-in">
           {loadBillMutation.isPending && (
             <div className="text-center space-y-8 py-20">
-              <div className="w-12 h-12 border-3 border-muted-foreground border-t-transparent rounded-full animate-spin mx-auto"></div>
+              <div className="w-12 h-12 border-3 border-gray-300 border-t-transparent rounded-full animate-spin mx-auto"></div>
               <div>
-                <h2 className="parti-heading-2">Rekening ophalen...</h2>
-                <p className="parti-body">Een moment geduld</p>
+                <h2 className="monarch-title">Rekening ophalen...</h2>
+                <p className="monarch-body">Een moment geduld</p>
               </div>
             </div>
           )}
@@ -115,12 +115,12 @@ export default function Home() {
           {billData && dataLoaded && (
             <>
               <div className="text-center space-y-8 mb-12 animate-slide-up">
-                <div className="w-20 h-20 parti-bg-primary rounded-full flex items-center justify-center mx-auto">
+                <div className="w-20 h-20 bg-monarch-green rounded-full flex items-center justify-center mx-auto">
                   <i className="fas fa-check text-3xl text-white"></i>
                 </div>
                 <div>
-                  <h1 className="parti-heading-1">Rekening gevonden!</h1>
-                  <p className="parti-body text-lg">Restaurant De Blauwe Kater, Tafel 12</p>
+                  <h1 className="monarch-title text-2xl">Rekening gevonden!</h1>
+                  <p className="monarch-body text-lg">Restaurant De Blauwe Kater, Tafel 12</p>
                 </div>
               </div>
               
@@ -132,7 +132,7 @@ export default function Home() {
               
               <div className="space-y-4 mt-auto animate-slide-up px-4">
                 <button 
-                  className="w-full parti-button parti-button-primary touch-target"
+                  className="w-full monarch-btn monarch-btn-primary py-4 touch-target"
                   onClick={() => handleModeSelect('equal')}
                   data-testid="button-split-bill"
                 >
@@ -140,7 +140,7 @@ export default function Home() {
                 </button>
                 
                 <button 
-                  className="w-full parti-button parti-button-secondary touch-target"
+                  className="w-full monarch-btn monarch-btn-secondary py-4 touch-target"
                   onClick={() => handleModeSelect('items')}
                   data-testid="button-pay-part"
                 >
