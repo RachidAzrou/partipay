@@ -23,7 +23,6 @@ export default function ProgressBar({ currentStep, totalSteps, onBack }: Progres
         ) : (
           <div className="w-12"></div>
         )}
-        <p className="monarch-section-title">Stap {currentStep} van {totalSteps}</p>
         <div className="w-12"></div>
       </div>
       
@@ -56,6 +55,21 @@ export default function ProgressBar({ currentStep, totalSteps, onBack }: Progres
             />
           ))}
         </div>
+      </div>
+      
+      {/* Step indicator and back button */}
+      <div className="flex justify-between items-center">
+        <p className="monarch-section-title">Stap {currentStep} van {totalSteps}</p>
+        {onBack && currentStep > 1 && (
+          <button 
+            onClick={onBack}
+            className="flex items-center space-x-2 px-4 py-2 rounded-2xl bg-white shadow-md hover:shadow-lg transition-all duration-200 active:scale-95"
+            data-testid="button-back-bottom"
+          >
+            <i className="fas fa-arrow-left text-gray-700"></i>
+            <span className="text-sm font-medium text-gray-700">Terug</span>
+          </button>
+        )}
       </div>
     </div>
   );
