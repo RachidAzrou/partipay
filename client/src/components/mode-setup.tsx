@@ -298,100 +298,87 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                 const isUnavailable = availableQuantity === 0;
                 
                 return (
-                  <div key={index} className={`monarch-card p-6 transition-all duration-200 ${isUnavailable ? 'opacity-60 bg-gray-50 border-gray-200' : 'hover:shadow-lg hover:-translate-y-0.5'} ${selectedQuantity > 0 ? 'ring-2 ring-monarch-primary ring-opacity-20 bg-orange-50' : ''}`}>
-                    <div className="flex items-start justify-between">
-                      {/* Left side - Item info */}
-                      <div className="flex-1 mr-6">
-                        <div className="flex items-start justify-between mb-3">
-                          <h4 className={`text-lg font-semibold leading-tight ${isUnavailable ? 'text-gray-500' : 'text-gray-900'}`}>
-                            {item.name}
-                          </h4>
-                          {selectedQuantity > 0 && (
-                            <div className="bg-monarch-primary text-white px-2 py-1 rounded-full text-xs font-medium ml-3">
-                              {selectedQuantity} geselecteerd
-                            </div>
-                          )}
-                        </div>
-                        
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-4">
-                            <span className={`text-xl font-bold ${isUnavailable ? 'text-gray-500' : 'text-monarch-primary'}`}>
-                              €{item.price}
-                            </span>
-                            <span className="text-sm text-gray-500">per stuk</span>
-                          </div>
-                          
-                          <div className={`text-sm font-medium ${isUnavailable ? 'text-red-500' : availableQuantity <= 3 ? 'text-orange-600' : 'text-green-600'}`}>
-                            {isUnavailable ? (
-                              <div className="flex items-center space-x-1">
-                                <i className="fas fa-exclamation-triangle text-xs"></i>
-                                <span>Uitverkocht</span>
-                              </div>
-                            ) : (
-                              <div className="flex items-center space-x-1">
-                                <i className="fas fa-check-circle text-xs"></i>
-                                <span>{availableQuantity} beschikbaar</span>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        
-                        {isUnavailable && (
-                          <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
-                            <p className="text-sm text-red-700 flex items-center">
-                              <i className="fas fa-info-circle mr-2"></i>
-                              Dit item is niet meer beschikbaar
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                      
-                      {/* Right side - Quantity controls */}
-                      {!isUnavailable && (
-                        <div className="flex flex-col items-end space-y-3">
-                          <div className="flex items-center bg-gray-50 rounded-2xl p-1 border border-gray-200">
-                            <button 
-                              className="w-10 h-10 rounded-xl bg-white hover:bg-gray-100 flex items-center justify-center transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
-                              onClick={() => handleQuantityChange(index, -1)}
-                              disabled={selectedQuantity === 0}
-                              data-testid={`button-decrease-${index}`}
-                            >
-                              <i className="fas fa-minus text-gray-600"></i>
-                            </button>
-                            
-                            <div className="w-12 text-center">
-                              <span className="text-xl font-bold text-gray-900" data-testid={`quantity-${index}`}>
-                                {selectedQuantity}
-                              </span>
-                            </div>
-                            
-                            <button 
-                              className="w-10 h-10 rounded-xl bg-monarch-primary hover:bg-orange-600 text-white flex items-center justify-center transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                              onClick={() => handleQuantityChange(index, 1)}
-                              disabled={selectedQuantity >= availableQuantity}
-                              data-testid={`button-increase-${index}`}
-                            >
-                              <i className="fas fa-plus"></i>
-                            </button>
-                          </div>
-                          
-                          {selectedQuantity > 0 && (
-                            <div className="text-right">
-                              <div className="text-sm text-gray-500">Subtotaal</div>
-                              <div className="text-lg font-bold text-monarch-primary">
-                                €{(parseFloat(item.price) * selectedQuantity).toFixed(2)}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                      
-                      {isUnavailable && (
-                        <div className="flex items-center justify-center w-24 h-16 bg-gray-100 rounded-xl border-2 border-dashed border-gray-300">
-                          <i className="fas fa-ban text-2xl text-gray-400"></i>
+                  <div key={index} className={`monarch-card p-4 transition-all duration-200 ${isUnavailable ? 'opacity-60 bg-gray-50 border-gray-200' : 'hover:shadow-md'} ${selectedQuantity > 0 ? 'ring-2 ring-monarch-primary ring-opacity-20 bg-orange-50' : ''}`}>
+                    {/* Header with item name and selected badge */}
+                    <div className="flex items-center justify-between mb-3">
+                      <h4 className={`text-base font-semibold ${isUnavailable ? 'text-gray-500' : 'text-gray-900'}`}>
+                        {item.name}
+                      </h4>
+                      {selectedQuantity > 0 && (
+                        <div className="bg-monarch-primary text-white px-2 py-1 rounded-full text-xs font-medium">
+                          {selectedQuantity}x
                         </div>
                       )}
                     </div>
+                    
+                    {/* Price and availability row */}
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-2">
+                        <span className={`text-lg font-bold ${isUnavailable ? 'text-gray-500' : 'text-monarch-primary'}`}>
+                          €{item.price}
+                        </span>
+                        <span className="text-sm text-gray-500">per stuk</span>
+                      </div>
+                      
+                      <div className={`px-2 py-1 rounded-full text-xs font-medium ${isUnavailable ? 'bg-red-100 text-red-700' : availableQuantity <= 3 ? 'bg-orange-100 text-orange-700' : 'bg-green-100 text-green-700'}`}>
+                        {isUnavailable ? (
+                          <>
+                            <i className="fas fa-times mr-1"></i>
+                            Uitverkocht
+                          </>
+                        ) : (
+                          <>
+                            <i className="fas fa-check mr-1"></i>
+                            {availableQuantity} beschikbaar
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    
+                    {/* Quantity controls or unavailable message */}
+                    {!isUnavailable ? (
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center bg-gray-50 rounded-xl p-1 border border-gray-200">
+                          <button 
+                            className="w-10 h-10 rounded-lg bg-white hover:bg-gray-100 flex items-center justify-center transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed touch-target"
+                            onClick={() => handleQuantityChange(index, -1)}
+                            disabled={selectedQuantity === 0}
+                            data-testid={`button-decrease-${index}`}
+                          >
+                            <i className="fas fa-minus text-gray-600"></i>
+                          </button>
+                          
+                          <div className="w-12 text-center">
+                            <span className="text-lg font-bold text-gray-900" data-testid={`quantity-${index}`}>
+                              {selectedQuantity}
+                            </span>
+                          </div>
+                          
+                          <button 
+                            className="w-10 h-10 rounded-lg bg-monarch-primary hover:bg-orange-600 text-white flex items-center justify-center transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed touch-target"
+                            onClick={() => handleQuantityChange(index, 1)}
+                            disabled={selectedQuantity >= availableQuantity}
+                            data-testid={`button-increase-${index}`}
+                          >
+                            <i className="fas fa-plus"></i>
+                          </button>
+                        </div>
+                        
+                        {selectedQuantity > 0 && (
+                          <div className="text-right">
+                            <div className="text-xs text-gray-500 mb-1">Subtotaal</div>
+                            <div className="text-base font-bold text-monarch-primary">
+                              €{(parseFloat(item.price) * selectedQuantity).toFixed(2)}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center py-4 bg-red-50 border border-red-200 rounded-lg">
+                        <i className="fas fa-exclamation-triangle text-red-500 mr-2"></i>
+                        <span className="text-sm text-red-700 font-medium">Item is niet meer beschikbaar</span>
+                      </div>
+                    )}
                   </div>
                 );
               })}
