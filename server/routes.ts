@@ -67,17 +67,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Get client configuration
   app.get('/api/config', (req, res) => {
-    // Use fixed redirect URI from environment variable or generate dynamically
-    let redirectUri = process.env.TINK_REDIRECT_URI;
-    
-    if (!redirectUri) {
-      // Fallback to dynamic generation if not set
-      const protocol = req.headers['x-forwarded-proto'] || (req.secure ? 'https' : 'http');
-      const host = req.headers.host;
-      redirectUri = `${protocol}://${host}/auth/tink/callback`;
-    }
-    
-    console.log('Using Tink redirect URI:', redirectUri);
+    // Generate the correct redirect URI based on the current request
+    const protocol = req.headers['x-forwarded-proto'] || (req.secure ? 'https' : 'http');
+    const host = req.headers.host;
+    const redirectUri = `${protocol}://${host}/auth/tink/callback`;
     
     res.json({
       tinkClientId: process.env.TINK_CLIENT_ID?.trim(),
@@ -601,35 +594,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       console.log('Tink callback received with code and state');
       
-      // Use the same redirect URI that was used in the authorization request
-      let redirectUri = process.env.TINK_REDIRECT_URI;
-      
-      if (!redirectUri) {
-        // Fallback to dynamic generation if not set
-        const protocol = req.headers['x-forwarded-proto'] || (req.secure ? 'https' : 'http');
-        const host = req.headers.host;
-        redirectUri = `${protocol}://${host}/auth/tink/callback`;
-      }
-      
-      console.log('Using callback redirect URI:', redirectUri);
+      // Generate the same redirect URI that was used in the authorization request
+      const protocol = req.headers['x-forwarded-proto'] || (req.secure ? 'https' : 'http');
+      const host = req.headers.host;
+      const redirectUri = `${protocol}://${host}/auth/tink/callback`;
       
       // Exchange code for access token
-      console.log('Exchanging authorization code for access token...');
       const tokenData = await exchangeCodeForToken(code as string, redirectUri);
       
       if (!tokenData.access_token) {
-        console.error('Failed to get access token from Tink');
+        console.error('Failed to get access token');
         return res.redirect('/tink-callback?bank_linked=error&error=no_token');
       }
       
       console.log('Access token obtained successfully');
       
       // Get IBAN and account info from Tink
-      console.log('Fetching account information...');
       const accountInfo = await getIbanFromTink(tokenData.access_token);
       
       if (!accountInfo) {
-        console.error('Could not retrieve account information from Tink API');
+        console.error('Could not retrieve account information');
         return res.redirect('/tink-callback?bank_linked=error&error=no_account_info');
       }
       
@@ -642,9 +626,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         accessToken: tokenData.access_token
       };
       
-      // Redirect to callback page with success data  
+      // Redirect to callback page with success data
       const redirectUrl = `/tink-callback?bank_linked=success&data=${encodeURIComponent(JSON.stringify(bankData))}`;
-      console.log('Redirecting to:', redirectUrl);
       res.redirect(redirectUrl);
       
     } catch (error) {

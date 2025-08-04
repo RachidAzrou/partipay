@@ -19,7 +19,6 @@ function Router() {
       <Route path="/join/:sessionId" component={ParticipantJoin} />
       <Route path="/payment-success/:sessionId" component={PaymentSuccess} />
       <Route path="/auth/tink/callback" component={TinkCallback} />
-      <Route path="/tink-callback" component={TinkCallback} />
       <Route path="/table-qr" component={TableQR} />
       <Route component={NotFound} />
     </Switch>

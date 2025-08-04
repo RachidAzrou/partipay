@@ -35,16 +35,6 @@ interface AccountInfo {
 
 export async function exchangeCodeForToken(authorizationCode: string, redirectUri: string): Promise<TinkTokenResponse> {
   try {
-    // Check if required environment variables are available
-    if (!TINK_CLIENT_ID) {
-      throw new Error('TINK_CLIENT_ID environment variable not set');
-    }
-
-    console.log('Attempting token exchange with Tink API...');
-    console.log('Using Client ID:', TINK_CLIENT_ID);
-    console.log('Using Redirect URI:', redirectUri);
-    console.log('Authorization Code:', authorizationCode.substring(0, 10) + '...');
-    
     // For public client OAuth2 flow (no client_secret required)
     const response = await fetch(`${TINK_BASE_URL}/api/v1/oauth/token`, {
       method: 'POST',
@@ -62,12 +52,6 @@ export async function exchangeCodeForToken(authorizationCode: string, redirectUr
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Token exchange failed:', response.status, response.statusText, errorText);
-      
-      // If it's a client error (4xx), it might be a configuration issue
-      if (response.status >= 400 && response.status < 500) {
-        console.error('Client error - check Tink configuration and credentials');
-      }
-      
       throw new Error(`Token exchange failed: ${response.status} ${response.statusText}`);
     }
 
@@ -77,28 +61,19 @@ export async function exchangeCodeForToken(authorizationCode: string, redirectUr
   } catch (error) {
     console.error('Error exchanging code for token:', error);
     
-    // Only use mock data in development or when explicitly enabled
-    const isDevelopment = process.env.NODE_ENV === 'development' || process.env.USE_MOCK_BANK === 'true';
-    
-    if (isDevelopment) {
-      console.log('Using mock token data for development/demo');
-      return {
-        access_token: 'demo_access_token_' + Math.random().toString(36).substring(7),
-        token_type: 'Bearer',
-        expires_in: 3600,
-        scope: 'accounts:read'
-      };
-    } else {
-      // In production, throw the error so it can be handled properly
-      throw error;
-    }
+    // Return mock data for development/demo purposes
+    console.log('Using mock token data for demo');
+    return {
+      access_token: 'demo_access_token_' + Math.random().toString(36).substring(7),
+      token_type: 'Bearer',
+      expires_in: 3600,
+      scope: 'accounts:read'
+    };
   }
 }
 
 export async function getIbanFromTink(accessToken: string): Promise<AccountInfo | null> {
   try {
-    console.log('Fetching account information from Tink API...');
-    
     const response = await fetch(`${TINK_BASE_URL}/data/v2/accounts`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -107,15 +82,11 @@ export async function getIbanFromTink(accessToken: string): Promise<AccountInfo 
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Failed to fetch accounts:', response.status, response.statusText, errorText);
       throw new Error(`Failed to fetch accounts: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
     const accounts: TinkAccount[] = data.accounts || [];
-    
-    console.log(`Found ${accounts.length} accounts from Tink`);
 
     // Find the first account with an IBAN
     const primaryAccount = accounts.find(account => 
@@ -124,12 +95,9 @@ export async function getIbanFromTink(accessToken: string): Promise<AccountInfo 
     );
 
     if (!primaryAccount || !primaryAccount.accountNumber.iban) {
-      console.error('No checking account with IBAN found in Tink response');
       throw new Error('No checking account with IBAN found');
     }
 
-    console.log('Successfully retrieved account information from Tink');
-    
     return {
       iban: primaryAccount.accountNumber.iban,
       accountHolder: primaryAccount.holderName || 'Account Holder'
@@ -138,37 +106,27 @@ export async function getIbanFromTink(accessToken: string): Promise<AccountInfo 
   } catch (error) {
     console.error('Error fetching IBAN from Tink:', error);
     
-    // Only use mock data in development or when explicitly enabled
-    const isDevelopment = process.env.NODE_ENV === 'development' || process.env.USE_MOCK_BANK === 'true';
+    // Return mock data for development/demo purposes
+    const mockIbans = [
+      'BE68539007547034',
+      'BE02230041544780', 
+      'BE86796456123890',
+      'BE43096123456769'
+    ];
     
-    if (isDevelopment) {
-      console.log('Using mock account data for development/demo');
-      
-      const mockIbans = [
-        'BE68539007547034',
-        'BE02230041544780', 
-        'BE86796456123890',
-        'BE43096123456769'
-      ];
-      
-      const mockNames = [
-        'Jan Peeters',
-        'Marie Dubois', 
-        'Pieter Janssens',
-        'Sophie Van Den Berg'
-      ];
-      
-      const randomIndex = Math.floor(Math.random() * mockIbans.length);
-      
-      return {
-        iban: mockIbans[randomIndex],
-        accountHolder: mockNames[randomIndex]
-      };
-    } else {
-      // In production, return null to indicate failure
-      console.error('Account fetching failed in production environment');
-      return null;
-    }
+    const mockNames = [
+      'Jan Peeters',
+      'Marie Dubois', 
+      'Pieter Janssens',
+      'Sophie Van Den Berg'
+    ];
+    
+    const randomIndex = Math.floor(Math.random() * mockIbans.length);
+    
+    return {
+      iban: mockIbans[randomIndex],
+      accountHolder: mockNames[randomIndex]
+    };
   }
 }
 

@@ -147,29 +147,26 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
       
       console.log('Tink OAuth configured with client ID:', config.tinkClientId);
       
-      // Always use demo data for seamless experience
-      console.log('Using demo bank data for seamless experience');
+      // For development/demo purposes, let's use mock data directly
+      // The real Tink OAuth service might not be available in this environment
+      console.log('Using mock bank data for demo purposes');
       
-      const demoBankAccounts = [
-        { iban: 'BE68539007547034', accountHolder: 'Jan Peeters' },
-        { iban: 'BE02230041544780', accountHolder: 'Marie Dubois' },
-        { iban: 'BE86796456123890', accountHolder: 'Pieter Janssens' },
-        { iban: 'BE43096123456769', accountHolder: 'Sophie Van Den Berg' }
-      ];
-      
-      const randomAccount = demoBankAccounts[Math.floor(Math.random() * demoBankAccounts.length)];
+      const mockBankData = {
+        iban: 'BE68539007547034',
+        accountHolder: 'Jan Peeters'
+      };
       
       // Simulate a brief loading delay
       setTimeout(() => {
-        setBankInfo(randomAccount);
+        setBankInfo(mockBankData);
         setBankLinked(true);
         
         toast({
           title: "Bankrekening gekoppeld!",
-          description: `${randomAccount.accountHolder} - ${randomAccount.iban}`,
+          description: `${mockBankData.accountHolder} - ${mockBankData.iban}`,
         });
         
-        console.log('Demo bank account linked successfully:', randomAccount);
+        console.log('Mock bank account linked successfully:', mockBankData);
       }, 1000);
       
     } catch (error) {
@@ -183,12 +180,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
   };
 
   const handleContinue = () => {
-    console.log('handleContinue called - bankLinked:', bankLinked, 'bankInfo:', bankInfo);
-    
-    if (!bankLinked || !bankInfo) {
-      console.log('Early return - missing bank data');
-      return;
-    }
+    if (!bankLinked || !bankInfo) return;
 
     const userData = {
       name: bankInfo.accountHolder,
@@ -199,7 +191,6 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
       )
     };
 
-    console.log('Calling onContinue with userData:', userData);
     onContinue(userData);
   };
 
@@ -468,17 +459,6 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
               }
             </span>
           </button>
-          
-          {/* Debug info - remove this after fixing */}
-          {process.env.NODE_ENV === 'development' && (
-            <div className="mt-2 p-2 bg-gray-100 rounded text-xs">
-              <div>Bank linked: {bankLinked ? 'Yes' : 'No'}</div>
-              <div>Split mode: {splitMode}</div>
-              <div>Selected items: {JSON.stringify(selectedItems)}</div>
-              <div>Items selected: {Object.values(selectedItems).some(qty => qty > 0) ? 'Yes' : 'No'}</div>
-              <div>Button disabled: {(!bankLinked || (splitMode === 'items' && Object.values(selectedItems).every(qty => qty === 0))).toString()}</div>
-            </div>
-          )}
         </div>
       </div>
     </div>
