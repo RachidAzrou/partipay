@@ -316,8 +316,26 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                         <span className="text-sm text-gray-500">per stuk</span>
                       </div>
                       
-                      <div className="text-sm text-gray-600">
-                        {availableQuantity} beschikbaar
+                      <div className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 ${
+                        availableQuantity === 0 
+                          ? 'bg-red-100 text-red-700' 
+                          : availableQuantity <= 2 
+                          ? 'bg-orange-100 text-orange-700' 
+                          : availableQuantity <= 5
+                          ? 'bg-yellow-100 text-yellow-700'
+                          : 'bg-green-100 text-green-700'
+                      }`}>
+                        {availableQuantity === 0 ? (
+                          <>
+                            <i className="fas fa-times mr-1"></i>
+                            Uitverkocht
+                          </>
+                        ) : (
+                          <>
+                            <i className="fas fa-check mr-1"></i>
+                            {availableQuantity} beschikbaar
+                          </>
+                        )}
                       </div>
                     </div>
                     
