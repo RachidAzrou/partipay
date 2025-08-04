@@ -100,7 +100,6 @@ export default function Home() {
         totalSteps={3} 
         onBack={currentStep > 1 ? () => setCurrentStep(currentStep - 1) : undefined}
       />
-      
       {currentStep === 1 && (
         <div className="flex-1 px-6 py-8 space-y-8 animate-fade-in">
           {loadBillMutation.isPending && (
@@ -136,9 +135,7 @@ export default function Home() {
                   className="w-full monarch-btn monarch-btn-primary py-4 touch-target"
                   onClick={() => handleModeSelect('equal')}
                   data-testid="button-split-bill"
-                >
-                  Rekening splitten
-                </button>
+                >Split the Bill</button>
                 
                 <button 
                   className="w-full monarch-btn monarch-btn-secondary py-4 touch-target"
@@ -152,7 +149,6 @@ export default function Home() {
           )}
         </div>
       )}
-
       {currentStep === 2 && billData && splitMode && (
         <ModeSetup
           splitMode={splitMode}
