@@ -162,17 +162,7 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
   return (
     <div className="parti-container bg-background flex flex-col">
       <div className="flex-1 px-6 py-8 space-y-8">
-      <div className="flex items-center justify-between mb-4">
-        <Button 
-          variant="outline"
-          onClick={() => window.history.back()}
-          className="flex items-center space-x-2"
-          data-testid="button-back"
-        >
-          <i className="fas fa-arrow-left"></i>
-          <span>Terug</span>
-        </Button>
-      </div>
+      
       
       <div className="text-center animate-fade-in">
         <h1 className="text-3xl font-bold text-foreground">Deel met je vrienden</h1>
