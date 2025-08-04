@@ -222,7 +222,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                 </div>
               </div>
             ) : (
-              <div className="monarch-card">
+              <div className="monarch-card bg-green-50 border-green-200">
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 bg-monarch-green rounded-full flex items-center justify-center">
                     <TbPlugConnected className="text-white text-lg" />
