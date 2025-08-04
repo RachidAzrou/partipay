@@ -187,8 +187,6 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
       </div>
 
       <div className="space-y-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-3">Deelnemers ({actualParticipants}/{totalCount})</h2>
-        
         {/* Payment Progress Bar */}
         {(() => {
           const totalAmount = parseFloat(sessionData.session.totalAmount);
@@ -202,7 +200,7 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
               <div className="flex justify-between items-center mb-3">
                 <span className="text-sm font-medium text-gray-700">Betalingsvoortgang</span>
                 <span className="text-sm font-medium text-gray-900">
-                  € {totalPaid.toFixed(2)} / € {totalAmount.toFixed(2)}
+                  Deelnemers ({actualParticipants}/{totalCount})
                 </span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
