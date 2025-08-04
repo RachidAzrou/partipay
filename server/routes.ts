@@ -4,7 +4,7 @@ import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
 import { insertSessionSchema, insertParticipantSchema, insertItemClaimSchema } from "@shared/schema";
 import { z } from "zod";
-// Removed Tink integration - using mock data for production
+import { getIbanFromTink, exchangeCodeForToken } from "./tink-integration.js";
 
 interface WebSocketClient extends WebSocket {
   sessionId?: string;
@@ -65,11 +65,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   }
 
-  // Get client configuration (mock mode)
+  // Get client configuration
   app.get('/api/config', (req, res) => {
+    // Generate the correct redirect URI based on the current request
+    const protocol = req.headers['x-forwarded-proto'] || (req.secure ? 'https' : 'http');
+    const host = req.headers.host;
+    const redirectUri = `${protocol}://${host}/auth/tink/callback`;
+    
     res.json({
-      mockMode: true,
-      message: "Using mock data for production deployment"
+      tinkClientId: process.env.TINK_CLIENT_ID?.trim(),
+      tinkRedirectUri: redirectUri
     });
   });
 
