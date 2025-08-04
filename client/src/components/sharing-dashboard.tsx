@@ -454,7 +454,7 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-3">
             <div className="bg-white rounded-xl p-4 max-w-sm w-full animate-slide-up">
               <div className="flex items-start space-x-2 mb-3">
-                <MdError className="w-20 h-20 text-orange-500 mt-0.5" />
+                <MdError className="w-24 h-24 text-orange-500 mt-0.5" />
                 <div className="flex-1">
                   <h3 className="text-base font-semibold text-gray-900 mb-1">Bevestig volledige betaling</h3>
                   <p className="text-xs text-gray-600 mb-3">
