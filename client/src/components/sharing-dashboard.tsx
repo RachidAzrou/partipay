@@ -225,20 +225,9 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
 
   const calculateOutstandingDetails = () => {
     const totalAmount = parseFloat(sessionData.session.totalAmount);
-    const totalPaid = sessionData.participants.reduce((sum, p) => {
-      if (p.hasPaid) {
-        // Use the participant's actual expected amount
-        const participantExpected = parseFloat(p.expectedAmount || '0');
-        return sum + participantExpected;
-      }
-      return sum;
-    }, 0);
     
-    // Calculate outstanding amount with better precision handling
-    let outstandingAmount = totalAmount - totalPaid;
-    
-    // For items mode, also check if there are unclaimed items
     if (sessionData.session.splitMode === 'items') {
+      // For items mode, calculate based on unclaimed items
       const totalItemsValue = sessionData.billItems.reduce((sum, item) => {
         const claimedQuantity = sessionData.itemClaims
           .filter(claim => claim.billItemId === item.id)
@@ -247,19 +236,32 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
         return sum + (parseFloat(item.price) * unclaimedQuantity);
       }, 0);
       
-      // If there are unclaimed items, use their value as outstanding
-      if (totalItemsValue > 0.01) {
-        outstandingAmount = totalItemsValue;
-      }
+      const unpaidParticipants = sessionData.participants.filter(p => !p.hasPaid);
+      
+      return {
+        outstandingAmount: totalItemsValue,
+        unpaidParticipants,
+        hasOutstanding: totalItemsValue > 0.01 // Small threshold for floating point precision
+      };
+    } else {
+      // For equal mode, calculate based on participant expected amounts
+      const totalPaid = sessionData.participants.reduce((sum, p) => {
+        if (p.hasPaid) {
+          const participantExpected = parseFloat(p.expectedAmount || '0');
+          return sum + participantExpected;
+        }
+        return sum;
+      }, 0);
+      
+      const outstandingAmount = totalAmount - totalPaid;
+      const unpaidParticipants = sessionData.participants.filter(p => !p.hasPaid);
+      
+      return {
+        outstandingAmount,
+        unpaidParticipants,
+        hasOutstanding: outstandingAmount > 0.01
+      };
     }
-    
-    const unpaidParticipants = sessionData.participants.filter(p => !p.hasPaid);
-    
-    return {
-      outstandingAmount,
-      unpaidParticipants,
-      hasOutstanding: outstandingAmount > 0.01 // Small threshold for floating point precision
-    };
   };
 
   const calculateUnpaidItems = () => {
