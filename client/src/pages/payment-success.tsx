@@ -247,23 +247,7 @@ export default function PaymentSuccess() {
         </div>
       </div>
 
-      {/* Bottom Actions */}
-      <div className="px-4 pb-6 space-y-3">
-        <Button
-          onClick={() => setLocation('/')}
-          className="w-full monarch-btn monarch-btn-primary"
-          data-testid="button-new-session"
-        >
-          Nieuwe rekening splitsen
-        </Button>
-        <Button
-          onClick={() => setLocation(`/session/${params.sessionId}`)}
-          className="w-full monarch-btn monarch-btn-secondary"
-          data-testid="button-back-session"
-        >
-          Terug naar sessie
-        </Button>
-      </div>
+      
     </div>
   );
 }
