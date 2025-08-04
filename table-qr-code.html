@@ -140,24 +140,19 @@
     </div>
 
     <script>
-        // Generate QR Code
+        // Generate QR Code with simpler URL
         const currentUrl = window.location.origin;
-        const tableData = {
-            restaurant: "De Blauwe Kater",
-            table: "12", 
-            billId: "De Blauwe Kater-12"
-        };
         
-        // Create URL that triggers the app
-        const qrUrl = `${currentUrl.replace('/table-qr-code.html', '')}/?scan=${encodeURIComponent(JSON.stringify(tableData))}`;
+        // Create simpler URL that triggers the app
+        const qrUrl = `${currentUrl.replace('/table-qr-code.html', '')}/`;
         
-        // Generate QR code
-        const qr = qrcode(0, 'M');
+        // Generate QR code with better error correction
+        const qr = qrcode(0, 'H'); // High error correction
         qr.addData(qrUrl);
         qr.make();
         
-        // Create QR code element
-        const qrElement = qr.createImgTag(6, 8);
+        // Create QR code element with larger size
+        const qrElement = qr.createImgTag(8, 16); // Larger pixels, more border
         document.getElementById('qrcode').innerHTML = qrElement;
         
         // Add click functionality for testing

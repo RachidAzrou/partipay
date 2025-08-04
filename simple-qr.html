@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test QR Code</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            padding: 50px; 
+            background: #f5f5f5;
+        }
+        .qr-container { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 10px; 
+            display: inline-block;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .qr-code { 
+            margin: 20px 0; 
+        }
+        h1 { color: #333; }
+        p { color: #666; margin: 10px 0; }
+        .url { 
+            background: #f0f0f0; 
+            padding: 10px; 
+            border-radius: 5px; 
+            font-family: monospace; 
+            word-break: break-all;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="qr-container">
+        <h1>🍽️ De Blauwe Kater</h1>
+        <p><strong>Tafel 12</strong></p>
+        <p>Scan om rekening te splitsen</p>
+        
+        <div class="qr-code" id="qr"></div>
+        
+        <p>Of ga direct naar:</p>
+        <div class="url" id="url"></div>
+        
+        <p><small>Klik op QR code om te testen</small></p>
+    </div>
+
+    <script>
+        // Simple URL - just the app homepage
+        const appUrl = window.location.origin.replace('/simple-qr.html', '') + '/';
+        
+        // Show URL
+        document.getElementById('url').textContent = appUrl;
+        
+        // Generate simple QR code
+        const qr = qrcode(4, 'M'); // Version 4, Medium error correction
+        qr.addData(appUrl);
+        qr.make();
+        
+        // Large, clear QR code
+        document.getElementById('qr').innerHTML = qr.createImgTag(10, 20);
+        
+        // Make clickable
+        document.getElementById('qr').onclick = () => window.open(appUrl, '_blank');
+        
+        console.log('QR URL:', appUrl);
+    </script>
+</body>
+</html>
