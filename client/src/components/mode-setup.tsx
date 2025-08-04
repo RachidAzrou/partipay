@@ -231,11 +231,11 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">Split the Bill</h3>
-                    <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 mb-3 border border-green-100 shadow-sm">
+                    <div className="bg-gray-50 rounded-lg p-3 mb-3 border border-gray-200">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center space-x-2">
-                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                          <p className="text-sm font-medium text-green-800">Bankrekening gekoppeld</p>
+                          <div className="w-2 h-2 bg-gray-500 rounded-full"></div>
+                          <p className="text-sm text-gray-600">Bankrekening gekoppeld</p>
                         </div>
                         <button
                           className="text-gray-400 hover:text-gray-600 transition-colors p-1"
@@ -248,8 +248,8 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                           <i className="fas fa-times text-xs"></i>
                         </button>
                       </div>
-                      <p className="text-sm font-semibold text-gray-900 mb-1">{bankInfo?.accountHolder}</p>
-                      <p className="text-xs font-mono text-gray-600">{bankInfo?.iban}</p>
+                      <p className="text-sm font-medium text-gray-800 mb-1">{bankInfo?.accountHolder}</p>
+                      <p className="text-xs font-mono text-gray-500">{bankInfo?.iban}</p>
                     </div>
                   </div>
                 </div>
@@ -419,7 +419,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
             data-testid="button-continue"
           >
             <MdOutlinePayment className="text-lg" />
-            <span>Verder naar delen</span>
+            <span>Verder naar betalen</span>
           </button>
         </div>
       </div>
