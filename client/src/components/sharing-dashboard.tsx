@@ -174,9 +174,7 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
       </div>
 
       <div className="monarch-widget text-center animate-slide-up">
-        <div className="w-48 h-48 bg-muted rounded-2xl mx-auto mb-6 flex items-center justify-center">
-          <i className="fas fa-qrcode text-4xl text-gray-400"></i>
-        </div>
+        
         <p className="monarch-body mb-6">Sessie: <span className="font-mono monarch-caption bg-muted px-3 py-1 rounded-full">{sessionData.session.id.slice(0, 8).toUpperCase()}</span></p>
         <button 
           className="monarch-btn monarch-btn-primary touch-target"

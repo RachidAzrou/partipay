@@ -1,4 +1,4 @@
-import { useParams } from "wouter";
+import { useParams, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import SharingDashboard from "@/components/sharing-dashboard";
 import ProgressBar from "@/components/progress-bar";
