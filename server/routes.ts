@@ -335,7 +335,105 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Main booker pays full bill
+  // Initiate banking payment flow  
+  app.post('/api/sessions/:id/initiate-payment', async (req, res) => {
+    try {
+      const sessionId = req.params.id;
+      
+      // Get session data
+      const session = await storage.getSession(sessionId);
+      if (!session) {
+        return res.status(404).json({ message: 'Session not found' });
+      }
+      
+      const participants = await storage.getParticipantsBySession(sessionId);
+      const mainBooker = participants.find(p => p.isMainBooker);
+      
+      if (!mainBooker) {
+        return res.status(400).json({ message: 'Main booker not found' });
+      }
+      
+      // Return payment initialization data
+      res.json({
+        success: true,
+        sessionId,
+        amount: session.totalAmount,
+        recipient: session.restaurantName,
+        description: `${session.restaurantName} - Tafel ${session.tableNumber}`,
+        mainBooker: mainBooker.name
+      });
+      
+    } catch (error) {
+      console.error('Payment initiation error:', error);
+      res.status(500).json({ message: 'Failed to initiate payment' });
+    }
+  });
+
+  // Complete banking payment (called after successful banking flow)
+  app.post('/api/sessions/:id/complete-payment', async (req, res) => {
+    try {
+      const sessionId = req.params.id;
+      
+      // Get session and participants
+      const session = await storage.getSession(sessionId);
+      if (!session) {
+        return res.status(404).json({ message: 'Session not found' });
+      }
+      
+      const participants = await storage.getParticipantsBySession(sessionId);
+      const mainBooker = participants.find(p => p.isMainBooker);
+      
+      if (!mainBooker) {
+        return res.status(400).json({ message: 'Main booker not found' });
+      }
+      
+      const totalAmount = parseFloat(session.totalAmount);
+      
+      // Create payment record for the full amount
+      const payment = await storage.createPayment({
+        sessionId,
+        participantId: mainBooker.id,
+        amount: totalAmount.toString(),
+        status: 'completed'
+      });
+      
+      // Mark main booker as having paid the full amount
+      await storage.updateParticipant(mainBooker.id, {
+        hasPaid: true,
+        paidAmount: totalAmount.toString()
+      });
+      
+      // Mark all other participants as paid (since main booker covered them)
+      for (const participant of participants) {
+        if (!participant.isMainBooker) {
+          await storage.updateParticipant(participant.id, {
+            hasPaid: true,
+            paidAmount: participant.expectedAmount || '0'
+          });
+        }
+      }
+      
+      // Mark session as completed
+      await storage.updateSession(sessionId, { isActive: false });
+      
+      // Broadcast session completion
+      broadcastToSession(sessionId, {
+        type: 'session-completed'
+      });
+      
+      res.json({ 
+        success: true, 
+        payment,
+        message: 'Payment completed successfully via banking app'
+      });
+      
+    } catch (error) {
+      console.error('Payment completion error:', error);
+      res.status(500).json({ message: 'Failed to complete payment' });
+    }
+  });
+
+  // Main booker pays full bill (legacy endpoint - kept for compatibility)
   app.post('/api/sessions/:id/pay-full', async (req, res) => {
     try {
       const sessionId = req.params.id;

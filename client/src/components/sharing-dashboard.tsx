@@ -5,6 +5,7 @@ import { useWebSocket } from "@/hooks/use-websocket";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { generateQRCode } from "@/lib/qr-utils";
+import { simulateBankingFlow } from "@/lib/pdf-utils";
 
 interface SessionData {
   session: {
@@ -98,22 +99,37 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
     },
   });
 
+  const [processingPayment, setProcessingPayment] = useState(false);
+
   const fullPaymentMutation = useMutation({
     mutationFn: async () => {
-      const res = await apiRequest('POST', `/api/sessions/${sessionData.session.id}/pay-full`, {});
+      const res = await apiRequest('POST', `/api/sessions/${sessionData.session.id}/initiate-payment`, {});
       return res.json();
     },
-    onSuccess: () => {
-      toast({
-        title: "Volledige rekening betaald",
-        description: "Je hebt de volledige rekening betaald!",
-      });
-      setSessionCompleted(true);
+    onSuccess: (data) => {
+      // Start banking deeplink flow
+      setProcessingPayment(true);
+      simulateBankingFlow(
+        sessionData.session.totalAmount,
+        sessionData.session.id,
+        () => {
+          setProcessingPayment(false);
+          // Success handled by redirect to payment-success page
+        },
+        (error) => {
+          setProcessingPayment(false);
+          toast({
+            title: "Betalingsfout",
+            description: error,
+            variant: "destructive",
+          });
+        }
+      );
     },
     onError: () => {
       toast({
         title: "Betalingsfout",
-        description: "Er is iets misgegaan bij de betaling. Probeer opnieuw.",
+        description: "Kon betaling niet starten. Probeer opnieuw.",
         variant: "destructive",
       });
     },
@@ -372,13 +388,13 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
           <button
             className="w-full monarch-btn monarch-btn-primary flex items-center justify-center space-x-2"
             onClick={handlePayFullBill}
-            disabled={fullPaymentMutation.isPending}
+            disabled={fullPaymentMutation.isPending || processingPayment}
             data-testid="button-pay-full-bill"
           >
-            {fullPaymentMutation.isPending ? (
+            {fullPaymentMutation.isPending || processingPayment ? (
               <>
                 <i className="fas fa-spinner fa-spin"></i>
-                <span>Betaling verwerken...</span>
+                <span>{processingPayment ? 'Banking app openen...' : 'Betaling voorbereiden...'}</span>
               </>
             ) : (
               <>
@@ -485,13 +501,13 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
                 <button
                   className="flex-1 monarch-btn monarch-btn-primary text-xs"
                   onClick={confirmFullPayment}
-                  disabled={fullPaymentMutation.isPending}
+                  disabled={fullPaymentMutation.isPending || processingPayment}
                   data-testid="button-confirm-payment"
                 >
-                  {fullPaymentMutation.isPending ? (
+                  {fullPaymentMutation.isPending || processingPayment ? (
                     <>
                       <i className="fas fa-spinner fa-spin mr-1 text-xs"></i>
-                      Betalen...
+                      {processingPayment ? 'Banking app...' : 'Voorbereiden...'}
                     </>
                   ) : (
                     'Ja, betaal alles'
