@@ -184,10 +184,7 @@ export default function PaymentSuccess() {
           {/* Personal Receipt Option (only for Pay Your Part) */}
           {isPayYourPart && mainBooker && (
             <div className="monarch-card">
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <h3 className="font-semibold text-gray-900 mb-1">Persoonlijke rekening</h3>
-                </div>
+              <div className="flex items-center justify-center">
                 <Button
                   onClick={handleDownloadPersonalReceipt}
                   disabled={downloadingPDF === 'personal'}
@@ -202,7 +199,7 @@ export default function PaymentSuccess() {
                   ) : (
                     <>
                       <i className="fas fa-download mr-2"></i>
-                      Download PDF
+                      Download persoonlijke rekening
                     </>
                   )}
                 </Button>
