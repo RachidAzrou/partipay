@@ -7,7 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { TbPlugConnected } from "react-icons/tb";
-import { MdOutlinePayment } from "react-icons/md";
+import { MdOutlinePayment, MdCallSplit } from "react-icons/md";
 
 interface BillItem {
   name: string;
@@ -204,9 +204,10 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
               <div className="monarch-widget">
                 <div className="text-center space-y-6">
                   <div className="w-20 h-20 bg-monarch-primary rounded-2xl flex items-center justify-center mx-auto">
-                    <i className="fas fa-university text-white text-2xl"></i>
+                    <MdCallSplit className="text-white text-3xl" />
                   </div>
                   <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Split the Bill</h3>
                     <p className="monarch-body mb-4">
                       Automatisch je IBAN koppelen voor snelle betalingen van deelnemers.
                     </p>
