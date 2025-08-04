@@ -316,19 +316,6 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                         <span className="text-sm text-gray-500">per stuk</span>
                       </div>
                       
-                      <div className={`px-2 py-1 rounded-full text-xs font-medium ${isUnavailable ? 'bg-red-100 text-red-700' : availableQuantity <= 3 ? 'bg-orange-100 text-orange-700' : 'bg-green-100 text-green-700'}`}>
-                        {isUnavailable ? (
-                          <>
-                            <i className="fas fa-times mr-1"></i>
-                            Uitverkocht
-                          </>
-                        ) : (
-                          <>
-                            <i className="fas fa-check mr-1"></i>
-                            {availableQuantity} beschikbaar
-                          </>
-                        )}
-                      </div>
                     </div>
                     
                     {/* Quantity controls or unavailable message */}
