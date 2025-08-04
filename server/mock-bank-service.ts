@@ -19,82 +19,99 @@ interface MockBank {
   accounts: MockBankAccount[];
 }
 
-// Realistic Dutch banks with their BIC codes
-const DUTCH_BANKS: Record<string, MockBank> = {
+// Realistic Belgian banks with their BIC codes
+const BELGIAN_BANKS: Record<string, MockBank> = {
+  'kbc': {
+    id: 'kbc',
+    name: 'KBC Bank',
+    logo: '🔵',
+    color: '#1E3A8A',
+    accounts: [
+      {
+        id: 'kbc_1',
+        bankName: 'KBC Bank',
+        accountHolder: 'Jan Peeters',
+        iban: 'BE68539007547034',
+        balance: 2847.32,
+        bankCode: 'KREDBEBB',
+        logo: '🔵'
+      },
+      {
+        id: 'kbc_2', 
+        bankName: 'KBC Bank',
+        accountHolder: 'Jan Peeters',
+        iban: 'BE42539007621845',
+        balance: 156.78,
+        bankCode: 'KREDBEBB',
+        logo: '🔵'
+      }
+    ]
+  },
+  'belfius': {
+    id: 'belfius',
+    name: 'Belfius Bank',
+    logo: '🟢',
+    color: '#16A085',
+    accounts: [
+      {
+        id: 'belfius_1',
+        bankName: 'Belfius Bank',
+        accountHolder: 'Jan Peeters',
+        iban: 'BE75068901234567',
+        balance: 1523.45,
+        bankCode: 'GKCCBEBB',
+        logo: '🟢'
+      }
+    ]
+  },
+  'bnpparibas': {
+    id: 'bnpparibas',
+    name: 'BNP Paribas Fortis',
+    logo: '🏛️',
+    color: '#00A651',
+    accounts: [
+      {
+        id: 'bnp_1',
+        bankName: 'BNP Paribas Fortis',
+        accountHolder: 'Jan Peeters',
+        iban: 'BE92001012345678',
+        balance: 3241.87,
+        bankCode: 'GEBABEBB',
+        logo: '🏛️'
+      }
+    ]
+  },
   'ing': {
     id: 'ing',
-    name: 'ING Bank',
+    name: 'ING België',
     logo: '🦁',
     color: '#FF6200',
     accounts: [
       {
         id: 'ing_1',
-        bankName: 'ING Bank',
+        bankName: 'ING België',
         accountHolder: 'Jan Peeters',
-        iban: 'NL91INGB0002445588',
-        balance: 2847.32,
-        bankCode: 'INGBNL2A',
-        logo: '🦁'
-      },
-      {
-        id: 'ing_2', 
-        bankName: 'ING Bank',
-        accountHolder: 'Jan Peeters',
-        iban: 'NL56INGB0005432109',
-        balance: 156.78,
-        bankCode: 'INGBNL2A',
-        logo: '🦁'
-      }
-    ]
-  },
-  'rabobank': {
-    id: 'rabobank',
-    name: 'Rabobank',
-    logo: '🏦',
-    color: '#002F6C',
-    accounts: [
-      {
-        id: 'rabo_1',
-        bankName: 'Rabobank',
-        accountHolder: 'Jan Peeters',
-        iban: 'NL20RABO0300065264',
-        balance: 1523.45,
-        bankCode: 'RABONL2U',
-        logo: '🏦'
-      }
-    ]
-  },
-  'abnamro': {
-    id: 'abnamro',
-    name: 'ABN AMRO',
-    logo: '🏧',
-    color: '#00A79D',
-    accounts: [
-      {
-        id: 'abn_1',
-        bankName: 'ABN AMRO',
-        accountHolder: 'Jan Peeters',
-        iban: 'NL12ABNA0614576832',
-        balance: 3241.87,
-        bankCode: 'ABNANL2A',
-        logo: '🏧'
-      }
-    ]
-  },
-  'sns': {
-    id: 'sns',
-    name: 'SNS Bank',
-    logo: '💛',
-    color: '#FFCD00',
-    accounts: [
-      {
-        id: 'sns_1',
-        bankName: 'SNS Bank',
-        accountHolder: 'Jan Peeters',
-        iban: 'NL86SNSB0942234486',
+        iban: 'BE54310123456789',
         balance: 892.14,
-        bankCode: 'SNSBNL2A',
-        logo: '💛'
+        bankCode: 'BBRUBEBB',
+        logo: '🦁'
+      }
+    ]
+  },
+  'argenta': {
+    id: 'argenta',
+    name: 'Argenta Bank',
+    logo: '🟠',
+    color: '#E67E22',
+    accounts: [
+      {
+        id: 'argenta_1',
+        bankName: 'Argenta Bank',
+        accountHolder: 'Jan Peeters',
+        iban: 'BE95979012345678',
+        balance: 1456.89,
+        bankCode: 'ARSPBE22',
+        logo: '🟠'
       }
     ]
   }
@@ -126,7 +143,7 @@ export class MockBankService {
 
   // Get list of available banks
   static getBankList(): Array<{id: string; name: string; logo: string; color: string}> {
-    return Object.values(DUTCH_BANKS).map(bank => ({
+    return Object.values(BELGIAN_BANKS).map(bank => ({
       id: bank.id,
       name: bank.name,
       logo: bank.logo,
@@ -136,7 +153,7 @@ export class MockBankService {
 
   // Get accounts for a specific bank
   static getBankAccounts(bankId: string): MockBankAccount[] {
-    const bank = DUTCH_BANKS[bankId];
+    const bank = BELGIAN_BANKS[bankId];
     return bank ? bank.accounts : [];
   }
 
@@ -145,7 +162,7 @@ export class MockBankService {
     // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, 1500));
 
-    const bank = DUTCH_BANKS[request.bankId];
+    const bank = BELGIAN_BANKS[request.bankId];
     if (!bank) {
       return {
         success: false,
@@ -185,9 +202,9 @@ export class MockBankService {
     // Remove spaces and convert to uppercase
     const cleanIban = iban.replace(/\s/g, '').toUpperCase();
     
-    // Check if it's a valid Dutch IBAN format
-    const dutchIbanPattern = /^NL\d{2}[A-Z]{4}\d{10}$/;
-    return dutchIbanPattern.test(cleanIban);
+    // Check if it's a valid Belgian IBAN format
+    const belgianIbanPattern = /^BE\d{2}\d{12}$/;
+    return belgianIbanPattern.test(cleanIban);
   }
 
   // Format IBAN for display

@@ -10,6 +10,7 @@ import { TbPlugConnected } from "react-icons/tb";
 import { MdOutlinePayment, MdCallSplit } from "react-icons/md";
 import { BiSolidSelectMultiple } from "react-icons/bi";
 import { ChevronDown } from "lucide-react";
+import BankSelector from "@/components/bank-selector";
 
 interface BillItem {
   name: string;
@@ -32,10 +33,11 @@ interface ModeSetupProps {
 export default function ModeSetup({ splitMode, billData, onBack, onContinue }: ModeSetupProps) {
   const [name, setName] = useState("");
   const [bankLinked, setBankLinked] = useState(false);
-  const [bankInfo, setBankInfo] = useState<{iban: string; accountHolder: string} | null>(null);
+  const [bankInfo, setBankInfo] = useState<{iban: string; accountHolder: string; bankName?: string; logo?: string} | null>(null);
   const [participantCount, setParticipantCount] = useState(4);
   const [selectedItems, setSelectedItems] = useState<Record<number, number>>({});
   const [itemsExpanded, setItemsExpanded] = useState(true);
+  const [showBankSelector, setShowBankSelector] = useState(false);
   const [originalQuantities] = useState<Record<number, number>>(() => {
     const initial: Record<number, number> = {};
     billData.items.forEach((item, index) => {
@@ -124,59 +126,19 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
     }, 0).toFixed(2);
   };
 
-  const handleLinkBank = async () => {
-    try {
-      console.log('Starting Tink OAuth flow...');
-      
-      // Fetch configuration from backend
-      const configResponse = await fetch('/api/config');
-      if (!configResponse.ok) {
-        throw new Error('Failed to fetch configuration');
-      }
-      const config = await configResponse.json();
-      
-      if (!config.tinkClientId || !config.tinkRedirectUri) {
-        throw new Error('Tink configuration not available');
-      }
-      
-      // Generate a random state parameter for security
-      const state = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-      
-      // Store the state in sessionStorage for validation later
-      sessionStorage.setItem('tink_oauth_state', state);
-      
-      console.log('Tink OAuth configured with client ID:', config.tinkClientId);
-      
-      // For development/demo purposes, let's use mock data directly
-      // The real Tink OAuth service might not be available in this environment
-      console.log('Using mock bank data for demo purposes');
-      
-      const mockBankData = {
-        iban: 'BE68539007547034',
-        accountHolder: 'Jan Peeters'
-      };
-      
-      // Simulate a brief loading delay
-      setTimeout(() => {
-        setBankInfo(mockBankData);
-        setBankLinked(true);
-        
-        toast({
-          title: "Bankrekening gekoppeld!",
-          description: `${mockBankData.accountHolder} - ${mockBankData.iban}`,
-        });
-        
-        console.log('Mock bank account linked successfully:', mockBankData);
-      }, 1000);
-      
-    } catch (error) {
-      console.error('Tink OAuth start error:', error);
-      toast({
-        title: "Fout",
-        description: "Kon bankkoppeling niet starten. Probeer opnieuw.",
-        variant: "destructive"
-      });
-    }
+  const handleLinkBank = () => {
+    setShowBankSelector(true);
+  };
+
+  const handleBankAccountSelected = (accountData: { iban: string; accountHolder: string; bankName: string; logo: string }) => {
+    setBankInfo({
+      iban: accountData.iban,
+      accountHolder: accountData.accountHolder,
+      bankName: accountData.bankName,
+      logo: accountData.logo
+    });
+    setBankLinked(true);
+    setShowBankSelector(false);
   };
 
   const handleContinue = () => {
@@ -245,7 +207,11 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                         <div className="flex items-center space-x-3">
                           <div className="relative w-9 h-9">
                             <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-[#f97315]">
-                              <i className="fas fa-university text-white text-sm"></i>
+                              {bankInfo?.logo ? (
+                                <div className="text-lg">{bankInfo.logo}</div>
+                              ) : (
+                                <i className="fas fa-university text-white text-sm"></i>
+                              )}
                             </div>
                             <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-600 rounded-full flex items-center justify-center border-2 border-white">
                               <i className="fas fa-check text-white text-xs"></i>
@@ -253,7 +219,9 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                           </div>
                           <div className="flex-1">
                             <p className="text-sm font-semibold text-gray-900">{bankInfo?.accountHolder}</p>
-                            <p className="text-xs text-green-600 font-medium">Bankrekening gekoppeld</p>
+                            <p className="text-xs text-green-600 font-medium">
+                              {bankInfo?.bankName || 'Bankrekening gekoppeld'}
+                            </p>
                             <p className="text-xs text-gray-500 font-mono">
                               IBAN: {bankInfo?.iban ? `${bankInfo.iban.slice(0, 2)}** **** **** ${bankInfo.iban.slice(-4)}` : ''}
                             </p>
@@ -461,6 +429,12 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
           </button>
         </div>
       </div>
+
+      <BankSelector
+        isOpen={showBankSelector}
+        onClose={() => setShowBankSelector(false)}
+        onAccountSelected={handleBankAccountSelected}
+      />
     </div>
   );
 }

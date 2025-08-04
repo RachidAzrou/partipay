@@ -5,6 +5,7 @@ import { storage } from "./storage";
 import { insertSessionSchema, insertParticipantSchema, insertItemClaimSchema } from "@shared/schema";
 import { z } from "zod";
 import { getIbanFromTink, exchangeCodeForToken } from "./tink-integration.js";
+import { MockBankService } from "./mock-bank-service.js";
 
 interface WebSocketClient extends WebSocket {
   sessionId?: string;
@@ -663,6 +664,64 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Link bank error:', error);
       res.status(500).json({ message: 'Failed to link bank account' });
+    }
+  });
+
+  // Mock Bank API Routes
+  
+  // Get list of available Belgian banks
+  app.get('/api/mock-banks', (req, res) => {
+    try {
+      const banks = MockBankService.getBankList();
+      res.json(banks);
+    } catch (error) {
+      console.error('Error fetching banks:', error);
+      res.status(500).json({ message: 'Failed to fetch banks' });
+    }
+  });
+
+  // Get accounts for a specific bank
+  app.get('/api/mock-banks/:bankId/accounts', (req, res) => {
+    try {
+      const { bankId } = req.params;
+      const accounts = MockBankService.getBankAccounts(bankId);
+      
+      if (accounts.length === 0) {
+        return res.status(404).json({ message: 'Bank not found or no accounts available' });
+      }
+      
+      res.json(accounts);
+    } catch (error) {
+      console.error('Error fetching accounts:', error);
+      res.status(500).json({ message: 'Failed to fetch accounts' });
+    }
+  });
+
+  // Authenticate with mock bank
+  app.post('/api/mock-banks/authenticate', async (req, res) => {
+    try {
+      const { bankId, accountId, state } = req.body;
+      
+      if (!bankId || !accountId || !state) {
+        return res.status(400).json({ 
+          success: false, 
+          error: 'missing_parameters' 
+        });
+      }
+
+      const result = await MockBankService.authenticateWithBank({
+        bankId,
+        accountId,
+        state
+      });
+
+      res.json(result);
+    } catch (error) {
+      console.error('Mock bank authentication error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'server_error' 
+      });
     }
   });
 

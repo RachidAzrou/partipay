@@ -86,4 +86,20 @@ The project uses a monorepo structure with shared TypeScript types and schemas:
 - **Font Awesome**: Icon library for UI elements
 - **Google Fonts**: Web font service (Inter font family)
 
+### Mock Banking Integration
+As of January 2025, the application includes a complete mock banking service for production deployment without external dependencies:
+
+**Mock Bank Service Features:**
+- Realistic Belgian bank simulation (KBC, Belfius, BNP Paribas Fortis, ING België, Argenta)
+- Authentic Belgian IBAN format validation and generation
+- Multi-step authentication flow with bank selection and account selection
+- Simulated network delays and random authentication failures for realistic behavior
+- Comprehensive error handling and user feedback
+
+**Implementation:**
+- `server/mock-bank-service.ts`: Core banking simulation service
+- `client/src/components/bank-selector.tsx`: Bank selection UI component
+- API endpoints: `/api/mock-banks`, `/api/mock-banks/:bankId/accounts`, `/api/mock-banks/authenticate`
+- Replaced Tink integration completely for production independence
+
 The application is designed to be deployed on platforms supporting Node.js with PostgreSQL database connectivity.
