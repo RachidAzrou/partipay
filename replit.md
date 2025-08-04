@@ -7,6 +7,7 @@ PartiPay is a Dutch mobile web application designed for collaborative restaurant
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+Bank linking preference: Direct/simple linking without multiple choices or complex flows.
 
 ## System Architecture
 

@@ -126,8 +126,37 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
     }, 0).toFixed(2);
   };
 
-  const handleLinkBank = () => {
-    setShowBankSelector(true);
+  const handleLinkBank = async () => {
+    try {
+      // Directe simulatie - gewoon een realistische Belgische bankrekening koppelen
+      const mockBankData = {
+        iban: 'BE68539007547034',
+        accountHolder: 'Jan Peeters',
+        bankName: 'KBC Bank',
+        logo: '🔵'
+      };
+      
+      // Korte loading simulatie
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      setBankInfo(mockBankData);
+      setBankLinked(true);
+      
+      toast({
+        title: "Bankrekening gekoppeld!",
+        description: `${mockBankData.accountHolder} - KBC Bank`,
+      });
+      
+      console.log('Mock bank account linked successfully:', mockBankData);
+      
+    } catch (error) {
+      console.error('Bank linking error:', error);
+      toast({
+        title: "Fout",
+        description: "Kon bankkoppeling niet starten. Probeer opnieuw.",
+        variant: "destructive"
+      });
+    }
   };
 
   const handleBankAccountSelected = (accountData: { iban: string; accountHolder: string; bankName: string; logo: string }) => {
@@ -430,11 +459,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
         </div>
       </div>
 
-      <BankSelector
-        isOpen={showBankSelector}
-        onClose={() => setShowBankSelector(false)}
-        onAccountSelected={handleBankAccountSelected}
-      />
+      {/* BankSelector removed for simpler direct linking */}
     </div>
   );
 }
