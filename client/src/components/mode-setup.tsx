@@ -438,7 +438,14 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
             data-testid="button-continue"
           >
             <MdOutlinePayment className="text-lg" />
-            <span>Verder naar betalen</span>
+            <span>
+              {!bankLinked 
+                ? 'Koppel eerst bankrekening'
+                : (splitMode === 'items' && Object.values(selectedItems).every(qty => qty === 0))
+                  ? 'Kies minstens één item'
+                  : 'Verder naar betalen'
+              }
+            </span>
           </button>
         </div>
       </div>
