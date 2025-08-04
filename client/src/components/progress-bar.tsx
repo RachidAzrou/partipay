@@ -8,12 +8,13 @@ interface ProgressBarProps {
 
 export default function ProgressBar({ currentStep, totalSteps, onBack }: ProgressBarProps) {
   return (
-    <div className="sticky top-0 z-50 bg-background border-b px-6 py-6" style={{borderColor: 'var(--parti-border-light)'}}>
-      <div className="flex items-center justify-center mb-6">
-        <div className="text-center">
-          <h1 className="text-2xl font-semibold text-foreground mb-1">PartiPay</h1>
-          <p className="parti-body">Simple Bill Splitting</p>
-        </div>
+    <div className="sticky top-0 z-50 bg-background border-b px-6 py-4" style={{borderColor: 'var(--parti-border-light)'}}>
+      <div className="flex items-center justify-center mb-4">
+        <img 
+          src={logoPath} 
+          alt="PartiPay Logo" 
+          className="h-20 w-auto object-contain"
+        />
       </div>
       <div className="flex space-x-2">
         {Array.from({ length: totalSteps }, (_, index) => (
