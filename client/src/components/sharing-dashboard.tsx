@@ -351,14 +351,6 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
                 <>
                   <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
                   <span className="monarch-body font-medium text-yellow-600 text-xs">Wachtend</span>
-                  <button
-                    className="ml-2 monarch-btn monarch-btn-secondary px-2 py-1 text-xs"
-                    onClick={() => handleMockPayment(participant)}
-                    disabled={paymentMutation.isPending}
-                    data-testid={`button-pay-${participant.id}`}
-                  >
-                    Demo Betaal
-                  </button>
                 </>
               )}
             </div>
