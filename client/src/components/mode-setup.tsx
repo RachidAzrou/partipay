@@ -381,11 +381,6 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                           </div>
                         )}
                       </div>
-                    ) : (
-                      <div className="flex items-center justify-center py-4 bg-red-50 border border-red-200 rounded-lg">
-                        <i className="fas fa-exclamation-triangle text-red-500 mr-2"></i>
-                        <span className="text-sm text-red-700 font-medium">Item is niet meer beschikbaar</span>
-                      </div>
                     )}
                   </div>
                 );
