@@ -36,9 +36,7 @@ function App() {
           backgroundSize: "cover",
           backgroundAttachment: "fixed"
         }}>
-          <p className="text-white font-bold text-sm" data-testid="footer-copyright">
-            © 2025 PartiPay
-          </p>
+          
         </footer>
       </TooltipProvider>
     </QueryClientProvider>
