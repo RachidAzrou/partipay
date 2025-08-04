@@ -135,7 +135,7 @@ export default function PaymentSuccess() {
         
         {/* Success Header */}
         <div className="text-center space-y-4 animate-slide-up">
-          <div className="w-20 h-20 bg-green-600 rounded-full flex items-center justify-center mx-auto">
+          <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto bg-[#f97315]">
             <i className="fas fa-check text-white text-3xl"></i>
           </div>
           <div>
@@ -245,8 +245,6 @@ export default function PaymentSuccess() {
           </div>
         </div>
       </div>
-
-      
     </div>
   );
 }
