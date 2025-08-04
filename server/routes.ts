@@ -73,7 +73,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     const redirectUri = `${protocol}://${host}/auth/tink/callback`;
     
     res.json({
-      tinkClientId: process.env.TINK_CLIENT_ID,
+      tinkClientId: process.env.TINK_CLIENT_ID?.trim(),
       tinkRedirectUri: redirectUri
     });
   });
