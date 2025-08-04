@@ -246,7 +246,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                               <i className="fas fa-university text-white text-sm"></i>
                             </div>
                             <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center border-2 border-white bg-[#fed7aa]">
-                              <i className="fas fa-check text-white text-xs bg-[#fed7aa]"></i>
+                              <i className="fas fa-check text-white text-xs bg-[#f97315]"></i>
                             </div>
                           </div>
                           <div className="flex-1">
