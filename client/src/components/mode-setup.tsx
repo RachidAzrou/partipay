@@ -196,17 +196,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
         </div>
 
         <div className="space-y-6 animate-slide-up">
-          <div>
-            <Label className="block text-lg font-semibold text-foreground mb-3">Je naam *</Label>
-            <Input
-              type="text"
-              className="w-full px-6 py-4 bg-card border border-border rounded-2xl text-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent parti-shadow transition-all"
-              placeholder="Voer je naam in"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              data-testid="input-name"
-            />
-          </div>
+          
         
           <div>
             <Label className="block text-lg font-semibold text-foreground mb-4">Bankrekening koppelen (hoofdboeker)</Label>
