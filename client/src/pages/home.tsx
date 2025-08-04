@@ -81,8 +81,13 @@ export default function Home() {
     setCurrentStep(2);
   };
 
-  const handleContinueToSharing = (userData: { name: string; bankAccount?: string; participantCount?: number; selectedItems?: any[] }) => {
-    if (!billData || !splitMode) return;
+  const handleContinueToSharing = (userData: { name: string; bankInfo?: any; participantCount?: number; selectedItems?: any[] }) => {
+    console.log('handleContinueToSharing called with userData:', userData);
+    
+    if (!billData || !splitMode) {
+      console.log('Missing billData or splitMode');
+      return;
+    }
 
     const sessionData = {
       restaurantName: "De Blauwe Kater",
@@ -92,9 +97,19 @@ export default function Home() {
       isActive: true,
     };
 
+    // Transform userData to match expected format
+    const transformedUserData = {
+      name: userData.name,
+      bankAccount: userData.bankInfo?.iban || '',
+      participantCount: userData.participantCount,
+      selectedItems: userData.selectedItems
+    };
+
+    console.log('Creating session with data:', { ...sessionData, userData: transformedUserData });
+
     createSessionMutation.mutate({
       ...sessionData,
-      userData,
+      userData: transformedUserData,
       billItems: billData.items
     });
   };

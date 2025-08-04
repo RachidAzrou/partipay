@@ -201,7 +201,12 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
   };
 
   const handleContinue = () => {
-    if (!bankLinked || !bankInfo) return;
+    console.log('handleContinue called - bankLinked:', bankLinked, 'bankInfo:', bankInfo);
+    
+    if (!bankLinked || !bankInfo) {
+      console.log('Early return - missing bank data');
+      return;
+    }
 
     const userData = {
       name: bankInfo.accountHolder,
@@ -212,6 +217,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
       )
     };
 
+    console.log('Calling onContinue with userData:', userData);
     onContinue(userData);
   };
 
