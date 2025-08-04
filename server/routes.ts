@@ -142,8 +142,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         await storage.updateSession(session.id, { mainBookerId: mainBooker.id });
         
         // Handle main booker's item selection for 'items' mode
+        let expectedAmount = 0;
         if (session.splitMode === 'items' && userData.selectedItems && billItems?.length > 0) {
-          let expectedAmount = 0;
           
           // Get the created bill items from database first
           const createdItems = await storage.getBillItemsBySession(session.id);
