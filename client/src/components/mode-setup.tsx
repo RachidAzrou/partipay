@@ -291,7 +291,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                 </div>
                 <button 
                   className="w-12 h-12 parti-bg-primary rounded-lg flex items-center justify-center touch-target hover:opacity-90 transition-opacity"
-                  onClick={() => setParticipantCount(Math.min(8, participantCount + 1))}
+                  onClick={() => setParticipantCount(Math.min(20, participantCount + 1))}
                   data-testid="button-increase-participants"
                 >
                   <i className="fas fa-plus text-white text-sm"></i>
