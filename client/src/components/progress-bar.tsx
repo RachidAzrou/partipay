@@ -10,21 +10,21 @@ export default function ProgressBar({ currentStep, totalSteps, onBack }: Progres
   const progressPercentage = (currentStep / totalSteps) * 100;
 
   return (
-    <div className="sticky top-0 z-50 bg-white px-6 py-6 border-b border-gray-100">
+    <div className="sticky top-0 z-50 bg-white px-3 py-3 border-b border-gray-100">
       
-      <div className="flex items-center justify-center mb-4">
+      <div className="flex items-center justify-center mb-3">
         <img 
           src={logoPath} 
           alt="PartiPay Logo" 
-          className="h-24 w-auto object-contain max-w-xs"
+          className="h-16 w-auto object-contain max-w-xs"
         />
       </div>
       
       {/* Visual Progress Bar */}
-      <div className="mb-6">
-        <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+      <div className="mb-4">
+        <div className="w-full bg-gray-200 rounded-full h-1.5 mb-1.5">
           <div 
-            className="bg-monarch-primary h-2 rounded-full transition-all duration-700 ease-out"
+            className="bg-monarch-primary h-1.5 rounded-full transition-all duration-700 ease-out"
             style={{ width: `${progressPercentage}%` }}
             data-testid="visual-progress-bar"
           ></div>
@@ -33,7 +33,7 @@ export default function ProgressBar({ currentStep, totalSteps, onBack }: Progres
           {Array.from({ length: totalSteps }, (_, index) => (
             <div 
               key={index + 1}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
                 index + 1 <= currentStep 
                   ? 'bg-monarch-primary' 
                   : 'bg-gray-300'
@@ -47,7 +47,7 @@ export default function ProgressBar({ currentStep, totalSteps, onBack }: Progres
       <div className="flex items-center justify-center relative">
         {onBack && currentStep > 1 && (
           <button 
-            className="w-12 h-12 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center touch-target transition-all duration-200 shadow-sm absolute left-0"
+            className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center touch-target transition-all duration-200 shadow-sm absolute left-0"
             onClick={onBack}
             data-testid="button-back-progress"
           >

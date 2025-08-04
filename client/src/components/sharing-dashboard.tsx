@@ -227,13 +227,13 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
 
   return (
     <div className="monarch-container bg-background flex flex-col">
-      <div className="flex-1 px-6 py-8 space-y-8">
+      <div className="flex-1 px-3 py-4 space-y-4">
       
       
       <div className="monarch-widget text-center animate-slide-up">
-        <h1 className="monarch-title text-2xl mb-3">Deel met je vrienden</h1>
-        <p className="monarch-body text-lg mb-6">Laat anderen deze QR-code scannen om mee te betalen</p>
-        <p className="monarch-body mb-6">Sessie: <span className="font-mono monarch-caption bg-muted px-3 py-1 rounded-full">{sessionData.session.id.slice(0, 8).toUpperCase()}</span></p>
+        <h1 className="monarch-title mb-2">Deel met je vrienden</h1>
+        <p className="monarch-body mb-3">Laat anderen deze QR-code scannen om mee te betalen</p>
+        <p className="monarch-body mb-4">Sessie: <span className="font-mono monarch-caption bg-muted px-2 py-0.5 rounded-full text-xs">{sessionData.session.id.slice(0, 8).toUpperCase()}</span></p>
         <button 
           className="monarch-btn monarch-btn-primary touch-target"
           onClick={() => setShowQRModal(true)}
@@ -243,7 +243,7 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
         </button>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-3">
         {/* Payment Progress Bar */}
         {(() => {
           const totalAmount = parseFloat(sessionData.session.totalAmount);
@@ -253,16 +253,16 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
           const progressPercentage = totalAmount > 0 ? (totalPaid / totalAmount) * 100 : 0;
           
           return (
-            <div className="monarch-card p-4 mb-6">
-              <div className="flex justify-between items-center mb-3">
-                <span className="text-sm font-medium text-gray-700">Betalingsvoortgang</span>
-                <span className="text-sm font-medium text-gray-900">
+            <div className="monarch-card mb-3">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-xs font-medium text-gray-700">Betalingsvoortgang</span>
+                <span className="text-xs font-medium text-gray-900">
                   Deelnemers ({actualParticipants}/{totalCount})
                 </span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
+              <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
                 <div 
-                  className="bg-monarch-primary h-3 rounded-full transition-all duration-700 ease-out"
+                  className="bg-monarch-primary h-2 rounded-full transition-all duration-700 ease-out"
                   style={{ width: `${Math.min(progressPercentage, 100)}%` }}
                   data-testid="payment-progress-bar"
                 />
@@ -277,27 +277,27 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
         
         {/* Main Booker Full Payment Section */}
         {isMainBooker && (
-          <div className="monarch-card p-4 border-2 border-monarch-primary bg-orange-50">
-            <div className="flex items-start space-x-3 mb-4">
-              <div className="w-8 h-8 bg-monarch-primary rounded-full flex items-center justify-center mt-1">
-                <i className="fas fa-crown text-white text-sm"></i>
+          <div className="monarch-card border-2 border-monarch-primary bg-orange-50">
+            <div className="flex items-start space-x-2 mb-3">
+              <div className="w-6 h-6 bg-monarch-primary rounded-full flex items-center justify-center mt-0.5">
+                <i className="fas fa-crown text-white text-xs"></i>
               </div>
               <div className="flex-1">
-                <h3 className="text-base font-semibold text-gray-900 mb-2">Hoofdboeker opties</h3>
-                <p className="text-sm text-gray-600 mb-4">
+                <h3 className="text-sm font-semibold text-gray-900 mb-1">Hoofdboeker opties</h3>
+                <p className="text-xs text-gray-600 mb-3">
                   Je kunt de volledige rekening betalen, ook als niet iedereen zijn deel heeft betaald.
                 </p>
                 
                 {outstandingDetails.hasOutstanding && (
-                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4">
-                    <div className="flex items-start space-x-2">
-                      <i className="fas fa-exclamation-triangle text-yellow-600 text-sm mt-0.5"></i>
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-2 mb-3">
+                    <div className="flex items-start space-x-1.5">
+                      <i className="fas fa-exclamation-triangle text-yellow-600 text-xs mt-0.5"></i>
                       <div className="flex-1">
-                        <h4 className="text-sm font-medium text-yellow-800 mb-2">Nog openstaand</h4>
-                        <p className="text-sm text-yellow-700 mb-2">
+                        <h4 className="text-xs font-medium text-yellow-800 mb-1">Nog openstaand</h4>
+                        <p className="text-xs text-yellow-700 mb-1">
                           <strong>€ {outstandingDetails.outstandingAmount.toFixed(2)}</strong> van de volgende deelnemers:
                         </p>
-                        <ul className="text-xs text-yellow-700 space-y-1">
+                        <ul className="text-xs text-yellow-700 space-y-0.5">
                           {outstandingDetails.unpaidParticipants.map(p => (
                             <li key={p.id} className="flex justify-between">
                               <span>• {p.name}</span>
@@ -335,18 +335,18 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
         
         {sessionData.participants.map((participant, index) => (
           <div key={participant.id} className="monarch-card flex items-center justify-between animate-slide-up" style={{animationDelay: `${index * 0.1}s`}}>
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-monarch-primary rounded-full flex items-center justify-center">
-                <span className="text-white font-semibold text-sm">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-monarch-primary rounded-full flex items-center justify-center">
+                <span className="text-white font-semibold text-xs">
                   {participant.name.split(' ').map(n => n[0]).join('').toUpperCase()}
                 </span>
               </div>
               <div>
-                <p className="text-base font-semibold text-gray-900 mb-2">
+                <p className="text-sm font-semibold text-gray-900 mb-1">
                   {participant.name}
-                  {participant.isMainBooker && <span className="monarch-caption ml-2 text-muted-foreground">• Hoofdboeker</span>}
+                  {participant.isMainBooker && <span className="monarch-caption ml-1 text-muted-foreground text-xs">• Hoofdboeker</span>}
                 </p>
-                <p className="text-base text-gray-900 leading-relaxed font-semibold tabular-nums">
+                <p className="text-sm text-gray-900 leading-tight font-semibold tabular-nums">
                   {participant.isMainBooker 
                     ? `€ ${(parseFloat(sessionData.session.totalAmount) / totalCount).toFixed(2)} (deel)`
                     : `€ ${participant.expectedAmount || (parseFloat(sessionData.session.totalAmount) / sessionData.participants.length).toFixed(2)}`
@@ -354,18 +354,18 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
                 </p>
               </div>
             </div>
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2">
               {participant.hasPaid ? (
                 <>
                   <div className="w-2 h-2 bg-monarch-green rounded-full"></div>
-                  <span className="text-base text-gray-900 leading-relaxed font-semibold text-monarch-green">Betaald</span>
+                  <span className="text-sm text-gray-900 leading-tight font-semibold text-monarch-green">Betaald</span>
                 </>
               ) : (
                 <>
                   <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
-                  <span className="monarch-body font-medium text-yellow-600">Wachtend</span>
+                  <span className="monarch-body font-medium text-yellow-600 text-xs">Wachtend</span>
                   <button
-                    className="ml-3 monarch-btn monarch-btn-secondary px-3 py-1.5 text-xs"
+                    className="ml-2 monarch-btn monarch-btn-secondary px-2 py-1 text-xs"
                     onClick={() => handleMockPayment(participant)}
                     disabled={paymentMutation.isPending}
                     data-testid={`button-pay-${participant.id}`}
@@ -383,22 +383,22 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
         {/* Show waiting slots for remaining participants */}
         {waitingForParticipants > 0 && Array.from({ length: waitingForParticipants }, (_, index) => (
           <div key={`waiting-${index}`} className="monarch-card flex items-center justify-between animate-slide-up opacity-50" style={{animationDelay: `${(sessionData.participants.length + index) * 0.1}s`}}>
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
-                <i className="fas fa-user text-gray-500"></i>
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
+                <i className="fas fa-user text-gray-500 text-sm"></i>
               </div>
               <div>
-                <p className="text-base font-semibold text-gray-500 mb-2">
+                <p className="text-sm font-semibold text-gray-500 mb-1">
                   Wachtend op deelnemer...
                 </p>
-                <p className="text-base text-gray-500 leading-relaxed font-semibold tabular-nums">
+                <p className="text-sm text-gray-500 leading-tight font-semibold tabular-nums">
                   € {(parseFloat(sessionData.session.totalAmount) / totalCount).toFixed(2)}
                 </p>
               </div>
             </div>
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></div>
-              <span className="monarch-body font-medium text-gray-500">Wachtend</span>
+              <span className="monarch-body font-medium text-gray-500 text-xs">Wachtend</span>
             </div>
           </div>
         ))}
@@ -407,10 +407,10 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
       
       {/* QR Code Modal */}
       {showQRModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl p-6 max-w-sm w-full text-center animate-slide-up">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-lg font-semibold text-gray-900">Scan QR-code</h3>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-3">
+          <div className="bg-white rounded-xl p-4 max-w-sm w-full text-center animate-slide-up">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-base font-semibold text-gray-900">Scan QR-code</h3>
               <button 
                 onClick={() => setShowQRModal(false)}
                 className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center"
@@ -423,15 +423,15 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
               <img 
                 src={qrCodeUrl} 
                 alt="QR Code" 
-                className="w-64 h-64 mx-auto mb-6 rounded-2xl border"
+                className="w-48 h-48 mx-auto mb-4 rounded-xl border"
                 data-testid="qr-code-modal"
               />
             ) : (
-              <div className="w-64 h-64 bg-muted rounded-2xl mx-auto mb-6 flex items-center justify-center">
-                <div className="monarch-body">QR-code laden...</div>
+              <div className="w-48 h-48 bg-muted rounded-xl mx-auto mb-4 flex items-center justify-center">
+                <div className="monarch-body text-xs">QR-code laden...</div>
               </div>
             )}
-            <p className="monarch-body mb-6">Laat vrienden deze code scannen om mee te betalen</p>
+            <p className="monarch-body mb-4 text-xs">Laat vrienden deze code scannen om mee te betalen</p>
             <button 
               className="monarch-btn monarch-btn-secondary touch-target w-full"
               onClick={handleShareQR}
@@ -447,27 +447,27 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
       {showPaymentConfirmModal && (() => {
         const outstandingDetails = calculateOutstandingDetails();
         return (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl p-6 max-w-md w-full animate-slide-up">
-              <div className="flex items-start space-x-3 mb-4">
-                <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center mt-1">
-                  <i className="fas fa-exclamation-triangle text-white text-sm"></i>
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-3">
+            <div className="bg-white rounded-xl p-4 max-w-sm w-full animate-slide-up">
+              <div className="flex items-start space-x-2 mb-3">
+                <div className="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center mt-0.5">
+                  <i className="fas fa-exclamation-triangle text-white text-xs"></i>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Bevestig volledige betaling</h3>
-                  <p className="text-sm text-gray-600 mb-4">
+                  <h3 className="text-base font-semibold text-gray-900 mb-1">Bevestig volledige betaling</h3>
+                  <p className="text-xs text-gray-600 mb-3">
                     Niet alle deelnemers hebben hun deel betaald. Wil je toch de volledige rekening betalen?
                   </p>
                 </div>
               </div>
               
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-                <h4 className="text-sm font-medium text-red-800 mb-2">Openstaand bedrag</h4>
-                <p className="text-lg font-bold text-red-900 mb-3">
+              <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+                <h4 className="text-xs font-medium text-red-800 mb-1">Openstaand bedrag</h4>
+                <p className="text-base font-bold text-red-900 mb-2">
                   € {outstandingDetails.outstandingAmount.toFixed(2)}
                 </p>
-                <p className="text-sm text-red-700 mb-2">Van de volgende deelnemers:</p>
-                <ul className="text-sm text-red-700 space-y-1">
+                <p className="text-xs text-red-700 mb-1">Van de volgende deelnemers:</p>
+                <ul className="text-xs text-red-700 space-y-0.5">
                   {outstandingDetails.unpaidParticipants.map(p => (
                     <li key={p.id} className="flex justify-between items-center" data-testid={`unpaid-participant-${p.id}`}>
                       <span>• {p.name}</span>
@@ -477,23 +477,23 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
                 </ul>
               </div>
               
-              <div className="flex space-x-3">
+              <div className="flex space-x-2">
                 <button
-                  className="flex-1 monarch-btn monarch-btn-secondary"
+                  className="flex-1 monarch-btn monarch-btn-secondary text-xs"
                   onClick={() => setShowPaymentConfirmModal(false)}
                   data-testid="button-cancel-payment"
                 >
                   Annuleren
                 </button>
                 <button
-                  className="flex-1 monarch-btn monarch-btn-primary"
+                  className="flex-1 monarch-btn monarch-btn-primary text-xs"
                   onClick={confirmFullPayment}
                   disabled={fullPaymentMutation.isPending}
                   data-testid="button-confirm-payment"
                 >
                   {fullPaymentMutation.isPending ? (
                     <>
-                      <i className="fas fa-spinner fa-spin mr-2"></i>
+                      <i className="fas fa-spinner fa-spin mr-1 text-xs"></i>
                       Betalen...
                     </>
                   ) : (

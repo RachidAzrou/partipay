@@ -192,7 +192,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
 
   return (
     <div className="monarch-container flex flex-col">
-      <div className="flex-1 px-6 py-8 space-y-8">
+      <div className="flex-1 px-3 py-4 space-y-4">
         
 
         <div className="space-y-6 animate-slide-up">

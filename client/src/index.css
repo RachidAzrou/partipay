@@ -110,9 +110,9 @@
     transform: scale(0.98);
   }
   
-  /* Monarch iOS Widget Cards */
+  /* Monarch iOS Widget Cards - Mobile Optimized */
   .monarch-widget {
-    @apply bg-white rounded-2xl p-4 transition-all duration-200;
+    @apply bg-white rounded-xl p-3 transition-all duration-200;
     box-shadow: var(--monarch-shadow);
   }
   
@@ -122,7 +122,7 @@
   }
   
   .monarch-card {
-    @apply bg-white rounded-2xl p-4 border border-gray-200 transition-all duration-200;
+    @apply bg-white rounded-xl p-3 border border-gray-200 transition-all duration-200;
   }
   
   .monarch-card:hover {
@@ -130,9 +130,9 @@
     transform: translateY(-1px);
   }
   
-  /* Monarch iOS Buttons */
+  /* Monarch iOS Buttons - Mobile Optimized */
   .monarch-btn {
-    @apply px-6 py-3 rounded-2xl font-semibold text-base transition-all duration-200;
+    @apply px-4 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200;
     box-shadow: var(--monarch-shadow);
   }
   
@@ -166,9 +166,9 @@
     @apply bg-gray-100;
   }
   
-  /* Monarch Typography */
+  /* Monarch Typography - Mobile Optimized */
   .monarch-title {
-    @apply text-xl font-semibold text-gray-900;
+    @apply text-lg font-semibold text-gray-900;
   }
   
   .monarch-section-title {
@@ -176,7 +176,7 @@
   }
   
   .monarch-body {
-    @apply text-base text-gray-600 leading-relaxed;
+    @apply text-sm text-gray-600 leading-relaxed;
   }
   
   .monarch-caption {
@@ -233,7 +233,7 @@
   }
 }
 
-/* Mobile optimizations */
+/* Mobile optimizations - iPhone 15 Specific */
 @media (max-width: 768px) {
   .max-w-sm {
     max-width: 100%;
@@ -258,21 +258,46 @@
     @apply min-h-screen;
     background: var(--background-muted);
   }
+  
+  /* Mobile specific compact styles */
+  .monarch-widget {
+    @apply p-2 rounded-lg;
+  }
+  
+  .monarch-card {
+    @apply p-2.5 rounded-lg;
+  }
+  
+  .monarch-btn {
+    @apply px-3 py-2 text-xs rounded-lg;
+  }
+  
+  .monarch-title {
+    @apply text-base;
+  }
+  
+  .monarch-body {
+    @apply text-xs;
+  }
+  
+  .monarch-caption {
+    @apply text-xs;
+  }
 }
 
-/* Touch-friendly interactions */
+/* Touch-friendly interactions - Mobile Optimized */
 button, .button, [role="button"] {
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
-  min-height: 48px;
-  min-width: 48px;
+  min-height: 40px;
+  min-width: 40px;
 }
 
-/* Enhanced touch targets */
+/* Enhanced touch targets - Mobile Optimized */
 .touch-target {
-  min-height: 44px;
-  min-width: 44px;
-  padding: 12px 16px;
+  min-height: 40px;
+  min-width: 40px;
+  padding: 8px 12px;
 }
 
 /* Smooth animations for better UX */

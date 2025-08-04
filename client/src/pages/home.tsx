@@ -102,42 +102,42 @@ export default function Home() {
         onBack={currentStep > 1 ? () => setCurrentStep(currentStep - 1) : undefined}
       />
       {currentStep === 1 && (
-        <div className="flex-1 px-6 py-8 space-y-8 animate-fade-in">
+        <div className="flex-1 px-3 py-4 space-y-4 animate-fade-in">
           {loadBillMutation.isPending && (
-            <div className="text-center space-y-8 py-20">
-              <div className="w-12 h-12 border-3 border-gray-300 border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <div className="text-center space-y-4 py-10">
+              <div className="w-8 h-8 border-2 border-gray-300 border-t-transparent rounded-full animate-spin mx-auto"></div>
               <div>
-                <h2 className="monarch-title">Rekening ophalen...</h2>
-                <p className="monarch-body">Een moment geduld</p>
+                <h2 className="monarch-title text-base">Rekening ophalen...</h2>
+                <p className="monarch-body text-xs">Een moment geduld</p>
               </div>
             </div>
           )}
           
           {billData && dataLoaded && (
-            <div className="text-center space-y-8 animate-slide-up px-4">
+            <div className="text-center space-y-4 animate-slide-up px-2">
               <BillDisplay 
                 billData={billData}
                 expanded={billExpanded}
                 onToggleExpand={() => setBillExpanded(!billExpanded)}
               />
               
-              <div className="space-y-4 mt-auto">
+              <div className="space-y-3 mt-auto">
                 <button 
-                  className="w-full monarch-btn monarch-btn-primary py-4 touch-target flex items-center justify-center space-x-2"
+                  className="w-full monarch-btn monarch-btn-primary touch-target flex items-center justify-center space-x-2"
                   onClick={() => handleModeSelect('equal')}
                   data-testid="button-split-bill"
                 >
-                  <MdCallSplit className="text-xl" />
-                  <span>Split the Bill</span>
+                  <MdCallSplit className="text-lg" />
+                  <span className="text-sm">Split the Bill</span>
                 </button>
                 
                 <button 
-                  className="w-full monarch-btn monarch-btn-secondary py-4 touch-target flex items-center justify-center space-x-2"
+                  className="w-full monarch-btn monarch-btn-secondary touch-target flex items-center justify-center space-x-2"
                   onClick={() => handleModeSelect('items')}
                   data-testid="button-pay-part"
                 >
-                  <BiSelectMultiple className="text-xl" />
-                  <span>Pay your Part</span>
+                  <BiSelectMultiple className="text-lg" />
+                  <span className="text-sm">Pay your Part</span>
                 </button>
               </div>
             </div>
