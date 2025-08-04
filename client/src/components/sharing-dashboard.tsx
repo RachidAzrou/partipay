@@ -55,6 +55,11 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
   // Sync local state with props when data changes
   useEffect(() => {
     setSessionData(initialData);
+    
+    // Check if session is completed
+    if (initialData.session && !initialData.session.isActive) {
+      setSessionCompleted(true);
+    }
   }, [initialData]);
   const [qrCodeUrl, setQrCodeUrl] = useState("");
   const [sessionCompleted, setSessionCompleted] = useState(false);
@@ -64,15 +69,21 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
   const queryClient = useQueryClient();
 
   const { connected } = useWebSocket(sessionData.session.id, (message) => {
-    if (message.type === 'participant-joined') {
+    // Force immediate refresh for all real-time updates
+    const forceRefresh = () => {
       queryClient.invalidateQueries({ queryKey: ['/api/sessions', sessionData.session.id] });
+      queryClient.refetchQueries({ queryKey: ['/api/sessions', sessionData.session.id] });
+    };
+
+    if (message.type === 'participant-joined') {
+      forceRefresh();
       toast({
         title: "Nieuwe deelnemer! 👋",
         description: `${message.participant.name} heeft zich aangesloten`,
         duration: 4000,
       });
     } else if (message.type === 'items-claimed') {
-      queryClient.invalidateQueries({ queryKey: ['/api/sessions', sessionData.session.id] });
+      forceRefresh();
       const participant = sessionData.participants.find(p => p.id === message.participantId);
       if (participant) {
         toast({
@@ -81,15 +92,25 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
           duration: 4000,
         });
       }
-    } else if (message.type === 'participant-payment-completed' || message.type === 'payment-completed') {
-      queryClient.invalidateQueries({ queryKey: ['/api/sessions', sessionData.session.id] });
-      const paidParticipant = message.participant || sessionData.participants.find(p => p.id === message.participantId);
-      if (paidParticipant) {
+    } else if (message.type === 'participant-payment-completed' || message.type === 'payment-completed' || message.type === 'session-completed') {
+      forceRefresh();
+      
+      if (message.type === 'session-completed') {
         toast({
-          title: "Betaling ontvangen! 💰",
-          description: `${paidParticipant.name} heeft €${parseFloat(message.payment.amount).toFixed(2)} betaald`,
+          title: "Sessie voltooid! 🎉",
+          description: "Alle betalingen zijn ontvangen",
           duration: 5000,
         });
+        setSessionCompleted(true);
+      } else {
+        const paidParticipant = message.participant || sessionData.participants.find(p => p.id === message.participantId);
+        if (paidParticipant) {
+          toast({
+            title: "Betaling ontvangen! 💰",
+            description: `${paidParticipant.name} heeft €${parseFloat(message.payment?.amount || message.amount || '0').toFixed(2)} betaald`,
+            duration: 5000,
+          });
+        }
       }
     }
   });

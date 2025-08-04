@@ -1,5 +1,7 @@
 import { useParams, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
+import { useWebSocket } from "@/hooks/use-websocket";
+import { queryClient } from "@/lib/queryClient";
 import SharingDashboard from "@/components/sharing-dashboard";
 import ProgressBar from "@/components/progress-bar";
 import { Card, CardContent } from "@/components/ui/card";
@@ -16,8 +18,15 @@ export default function Session() {
   const { data: sessionData, isLoading, error } = useQuery({
     queryKey: ['/api/sessions', id],
     enabled: !!id,
-    // Remove polling - use WebSocket for real-time updates instead
-    staleTime: 30 * 1000, // 30 seconds stale time for instant loading
+    staleTime: 5 * 1000, // 5 seconds stale time for frequent updates
+    refetchInterval: false, // Disable polling, use WebSocket instead
+  });
+
+  // WebSocket for real-time session updates at page level
+  const { connected } = useWebSocket(id || '', (message) => {
+    // Force immediate refresh for any session-related updates
+    queryClient.invalidateQueries({ queryKey: ['/api/sessions', id] });
+    queryClient.refetchQueries({ queryKey: ['/api/sessions', id] });
   });
 
   if (isLoading) {
