@@ -162,6 +162,18 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
   return (
     <div className="parti-container bg-background flex flex-col">
       <div className="flex-1 px-6 py-8 space-y-8">
+      <div className="flex items-center justify-between mb-4">
+        <Button 
+          variant="outline"
+          onClick={() => window.history.back()}
+          className="flex items-center space-x-2"
+          data-testid="button-back"
+        >
+          <i className="fas fa-arrow-left"></i>
+          <span>Terug</span>
+        </Button>
+      </div>
+      
       <div className="text-center animate-fade-in">
         <h1 className="text-3xl font-bold text-foreground">Deel met je vrienden</h1>
         <p className="text-lg text-muted-foreground mt-2">Laat anderen deze QR-code scannen</p>
@@ -254,13 +266,7 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
         <p className="text-base text-muted-foreground text-center">{paidCount} van {totalCount} personen hebben betaald</p>
       </div>
 
-      <div className="fixed bottom-6 right-6 flex items-center space-x-3 parti-card px-4 py-3">
-        <div className={`w-4 h-4 rounded-full ${connected ? 'bg-green-500' : 'bg-red-500'}`} 
-             title={connected ? 'Verbonden' : 'Niet verbonden'}
-             data-testid="connection-status">
-        </div>
-        <span className="text-sm font-medium text-foreground">{connected ? 'Live' : 'Offline'}</span>
-      </div>
+      
       </div>
     </div>
   );
