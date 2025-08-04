@@ -381,6 +381,11 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                           </div>
                         )}
                       </div>
+                    ) : (
+                      <div className="text-center py-4">
+                        <i className="fas fa-ban text-red-400 text-2xl mb-2"></i>
+                        <p className="text-sm text-gray-500">Dit item is niet meer beschikbaar</p>
+                      </div>
                     )}
                   </div>
                 );
