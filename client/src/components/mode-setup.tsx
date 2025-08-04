@@ -224,19 +224,19 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                 </div>
               </div>
             ) : (
-              <div className="monarch-card bg-green-50 border-green-200">
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-monarch-green rounded-full flex items-center justify-center">
-                    <TbPlugConnected className="text-white text-lg" />
+              <div className="monarch-widget bg-green-50 border-green-200">
+                <div className="text-center space-y-6">
+                  <div className="w-20 h-20 bg-green-600 rounded-2xl flex items-center justify-center mx-auto">
+                    <TbPlugConnected className="text-white text-3xl" />
                   </div>
-                  <div className="flex-1">
-                    <h4 className="text-base font-semibold text-gray-900">Bankrekening gekoppeld</h4>
-                    <p className="monarch-body font-semibold">{bankInfo?.accountHolder}</p>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Bankrekening gekoppeld</h3>
+                    <p className="monarch-body font-semibold mb-1">{bankInfo?.accountHolder}</p>
                     <p className="monarch-caption font-mono">{bankInfo?.iban}</p>
                   </div>
-                  <button
-                    type="button"
-                    className="text-gray-400 hover:text-gray-600 transition-colors p-2"
+                  
+                  <button 
+                    className="monarch-btn monarch-btn-secondary flex items-center justify-center space-x-2 mx-auto"
                     onClick={() => {
                       setBankLinked(false);
                       setBankInfo(null);
@@ -244,6 +244,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                     data-testid="button-unlink-bank"
                   >
                     <i className="fas fa-times text-sm"></i>
+                    <span>Ontkoppelen</span>
                   </button>
                 </div>
               </div>
