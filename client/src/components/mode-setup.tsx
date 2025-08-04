@@ -32,7 +32,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
   const [bankInfo, setBankInfo] = useState<{iban: string; accountHolder: string} | null>(null);
   const [participantCount, setParticipantCount] = useState(4);
   const [selectedItems, setSelectedItems] = useState<Record<number, number>>({});
-  const [availableQuantities, setAvailableQuantities] = useState<Record<number, number>>(() => {
+  const [originalQuantities] = useState<Record<number, number>>(() => {
     const initial: Record<number, number> = {};
     billData.items.forEach((item, index) => {
       initial[index] = item.quantity;
@@ -104,21 +104,12 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
 
   const handleQuantityChange = (index: number, change: number) => {
     const currentQuantity = selectedItems[index] || 0;
-    const availableQuantity = availableQuantities[index] || 0;
-    const newQuantity = Math.max(0, Math.min(availableQuantity, currentQuantity + change));
-    
-    // Calculate the difference in selection
-    const quantityDifference = newQuantity - currentQuantity;
+    const originalQuantity = originalQuantities[index] || 0;
+    const newQuantity = Math.max(0, Math.min(originalQuantity, currentQuantity + change));
     
     setSelectedItems(prev => ({
       ...prev,
       [index]: newQuantity
-    }));
-    
-    // Update available quantities - decrease when selecting, increase when deselecting
-    setAvailableQuantities(prev => ({
-      ...prev,
-      [index]: prev[index] - quantityDifference
     }));
   };
 
@@ -299,8 +290,9 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
               <h3 className="parti-heading-3">Selecteer jouw items:</h3>
               {billData.items.map((item, index) => {
                 const selectedQuantity = selectedItems[index] || 0;
-                const availableQuantity = availableQuantities[index] || 0;
-                const isUnavailable = availableQuantity === 0;
+                const originalQuantity = originalQuantities[index] || 0;
+                const remainingQuantity = originalQuantity - selectedQuantity;
+                const isUnavailable = originalQuantity === 0;
                 
                 return (
                   <div key={index} className={`monarch-card p-4 transition-all duration-200 ${isUnavailable ? 'opacity-60 bg-gray-50 border-gray-200' : 'hover:shadow-md'} ${selectedQuantity > 0 ? 'ring-2 ring-monarch-primary ring-opacity-20 bg-orange-50' : ''}`}>
@@ -321,23 +313,30 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                       </div>
                       
                       <div className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 ${
-                        availableQuantity === 0 
+                        originalQuantity === 0 
                           ? 'bg-red-100 text-red-700' 
-                          : availableQuantity <= 2 
+                          : remainingQuantity === 0
+                          ? 'bg-blue-100 text-blue-700'
+                          : remainingQuantity <= 2 
                           ? 'bg-orange-100 text-orange-700' 
-                          : availableQuantity <= 5
+                          : remainingQuantity <= 5
                           ? 'bg-yellow-100 text-yellow-700'
                           : 'bg-green-100 text-green-700'
                       }`}>
-                        {availableQuantity === 0 ? (
+                        {originalQuantity === 0 ? (
                           <>
                             <i className="fas fa-times mr-1"></i>
                             Onbeschikbaar
                           </>
+                        ) : remainingQuantity === 0 ? (
+                          <>
+                            <i className="fas fa-check-circle mr-1"></i>
+                            Allemaal geselecteerd
+                          </>
                         ) : (
                           <>
                             <i className="fas fa-check mr-1"></i>
-                            {availableQuantity} beschikbaar
+                            {remainingQuantity} nog beschikbaar
                           </>
                         )}
                       </div>
@@ -365,7 +364,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                           <button 
                             className="w-10 h-10 rounded-lg bg-monarch-primary hover:bg-orange-600 text-white flex items-center justify-center transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed touch-target"
                             onClick={() => handleQuantityChange(index, 1)}
-                            disabled={selectedQuantity >= availableQuantity}
+                            disabled={selectedQuantity >= originalQuantity}
                             data-testid={`button-increase-${index}`}
                           >
                             <i className="fas fa-plus"></i>
