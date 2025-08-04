@@ -179,10 +179,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         // Auto-mark main booker as paid since they pay restaurant directly
         const totalAmount = parseFloat(session.totalAmount);
+        
+        // For items mode, preserve the expectedAmount that was already set based on selected items
+        // For equal mode, set the expectedAmount to the equal share
+        const mainBookerExpectedAmount = session.splitMode === 'equal' 
+          ? (totalAmount / participantCount).toString() 
+          : expectedAmount.toFixed(2); // Use the calculated amount from selected items
+        
         await storage.updateParticipant(mainBooker.id, {
           hasPaid: true,
           paidAmount: totalAmount.toString(),
-          expectedAmount: session.splitMode === 'equal' ? (totalAmount / participantCount).toString() : undefined
+          expectedAmount: mainBookerExpectedAmount
         });
         
         // Create payment record for main booker

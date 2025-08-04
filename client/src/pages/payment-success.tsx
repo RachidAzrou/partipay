@@ -145,9 +145,27 @@ export default function PaymentSuccess() {
             </p>
             <div className="bg-green-50 border border-green-200 rounded-lg p-4">
               <div className="flex items-center justify-between">
-                <span className="text-green-800 font-medium">Totaal betaald:</span>
+                <span className="text-green-800 font-medium">Jij hebt betaald:</span>
                 <span className="text-green-900 font-bold text-lg">
-                  € {sessionData.session.totalAmount}
+                  € {(() => {
+                    // For "equal" split, show amount per participant
+                    if (sessionData.session.splitMode === 'equal') {
+                      return (parseFloat(sessionData.session.totalAmount) / sessionData.participants.length).toFixed(2);
+                    }
+                    // For "items" split, try to find current participant's paid amount
+                    // If we can't determine it, show the average expected amount
+                    const paidParticipant = sessionData.participants.find(p => p.hasPaid && !p.isMainBooker);
+                    if (paidParticipant && paidParticipant.paidAmount) {
+                      return parseFloat(paidParticipant.paidAmount).toFixed(2);
+                    }
+                    // Fallback: show average of expected amounts for non-main-bookers
+                    const nonMainBookers = sessionData.participants.filter(p => !p.isMainBooker);
+                    if (nonMainBookers.length > 0) {
+                      const avgExpected = nonMainBookers.reduce((sum, p) => sum + parseFloat(p.expectedAmount || '0'), 0) / nonMainBookers.length;
+                      return avgExpected.toFixed(2);
+                    }
+                    return '0.00';
+                  })()}
                 </span>
               </div>
             </div>
