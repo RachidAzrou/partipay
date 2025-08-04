@@ -172,18 +172,36 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
   };
 
   const handleContinue = () => {
-    if (!bankLinked || !bankInfo) return;
+    if (!bankLinked || !bankInfo) {
+      console.error('Cannot continue: bankLinked =', bankLinked, 'bankInfo =', bankInfo);
+      toast({
+        title: "Fout",
+        description: "Koppel eerst je bankrekening.",
+        variant: "destructive"
+      });
+      return;
+    }
 
-    const userData = {
-      name: bankInfo.accountHolder,
-      bankInfo: bankInfo,
-      ...(splitMode === 'equal' 
-        ? { participantCount }
-        : { selectedItems: Object.entries(selectedItems).filter(([_, quantity]) => quantity > 0).map(([index, quantity]) => ({ index: parseInt(index), quantity })) }
-      )
-    };
+    try {
+      const userData = {
+        name: bankInfo.accountHolder || 'Onbekend',
+        bankInfo: bankInfo,
+        ...(splitMode === 'equal' 
+          ? { participantCount }
+          : { selectedItems: Object.entries(selectedItems).filter(([_, quantity]) => quantity > 0).map(([index, quantity]) => ({ index: parseInt(index), quantity })) }
+        )
+      };
 
-    onContinue(userData);
+      console.log('Continuing with userData:', userData);
+      onContinue(userData);
+    } catch (error) {
+      console.error('Error in handleContinue:', error);
+      toast({
+        title: "Fout",
+        description: "Er ging iets mis. Probeer opnieuw.",
+        variant: "destructive"
+      });
+    }
   };
 
   return (
@@ -450,12 +468,12 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
           <button 
             className="w-full parti-button parti-button-primary disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
             onClick={handleContinue}
-            disabled={!bankLinked || (splitMode === 'items' && Object.values(selectedItems).every(qty => qty === 0))}
+            disabled={!bankLinked || !bankInfo || (splitMode === 'items' && Object.values(selectedItems).every(qty => qty === 0))}
             data-testid="button-continue"
           >
             <MdOutlinePayment className="text-lg" />
             <span>
-              {!bankLinked 
+              {!bankLinked || !bankInfo
                 ? 'Koppel eerst bankrekening'
                 : (splitMode === 'items' && Object.values(selectedItems).every(qty => qty === 0))
                   ? 'Kies minstens één item'
