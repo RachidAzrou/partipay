@@ -206,15 +206,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                   <p className="text-base text-orange-800">
                     Automatisch je IBAN koppelen voor snelle betalingen van deelnemers.
                   </p>
-                  <button
-                    type="button"
-                    className="parti-button parti-button-primary"
-                    onClick={handleLinkBank}
-                    data-testid="button-link-bank"
-                  >
-                    <i className="fas fa-link mr-3"></i>
-                    Koppel via Tink
-                  </button>
+                  
                   <p className="text-sm text-orange-700">
                     Veilig via Tink - Ondersteunt alle Belgische banken
                   </p>
