@@ -53,7 +53,8 @@ export default function Home() {
       console.log('Environment check:', {
         isDev: import.meta.env.DEV,
         baseURL: import.meta.env.BASE_URL,
-        currentURL: window.location.href
+        currentURL: window.location.href,
+        timestamp: new Date().toISOString()
       });
       
       try {
@@ -67,11 +68,15 @@ export default function Home() {
         
         // In production, try multiple fallback methods
         if (!import.meta.env.DEV) {
-          console.log('Trying production fallbacks...');
+          console.log('🔄 Server 502 error detected, trying production fallbacks...');
+          console.log('💡 This is normal for serverless deployments that need to wake up');
           
-          // First try: Direct fetch with relative URL
+          // First try: Direct fetch with relative URL (retry after 502)
           try {
-            console.log('Fallback 1: Direct fetch with relative URL');
+            console.log('⏳ Fallback 1: Retrying after server wake-up delay...');
+            // Add delay for serverless cold start
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
             const directRes = await fetch('/api/sessions', {
               method: 'POST',
               headers: {
@@ -83,18 +88,22 @@ export default function Home() {
             
             if (directRes.ok) {
               const result = await directRes.json();
-              console.log('Direct fetch (relative) succeeded:', result);
+              console.log('✅ Direct fetch succeeded after retry:', result);
               return result;
             }
-            console.log('Direct fetch (relative) failed:', directRes.status);
+            console.log(`❌ Direct fetch still failed: ${directRes.status}`);
           } catch (e) {
             console.log('Direct fetch (relative) error:', e);
           }
           
-          // Second try: Absolute URL
+          // Second try: Absolute URL with longer delay
           try {
-            console.log('Fallback 2: Absolute URL fetch');
+            console.log('⏳ Fallback 2: Longer delay + absolute URL...');
+            await new Promise(resolve => setTimeout(resolve, 3000));
+            
             const absoluteUrl = `${window.location.origin}/api/sessions`;
+            console.log('🌐 Trying absolute URL:', absoluteUrl);
+            
             const absoluteRes = await fetch(absoluteUrl, {
               method: 'POST',
               headers: {
@@ -106,12 +115,12 @@ export default function Home() {
             
             if (absoluteRes.ok) {
               const result = await absoluteRes.json();
-              console.log('Absolute URL fetch succeeded:', result);
+              console.log('✅ Absolute URL fetch succeeded:', result);
               return result;
             }
-            console.log('Absolute URL fetch failed:', absoluteRes.status);
+            console.log(`❌ Absolute URL also failed: ${absoluteRes.status}`);
             const errorText = await absoluteRes.text();
-            throw new Error(`All fallbacks failed. Last error: ${absoluteRes.status} ${errorText}`);
+            throw new Error(`🚫 Server still not responding: ${absoluteRes.status} ${errorText}`);
           } catch (absoluteError) {
             console.error('All production fallbacks failed:', absoluteError);
             throw absoluteError;
