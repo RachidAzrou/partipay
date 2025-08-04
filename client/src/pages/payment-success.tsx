@@ -161,10 +161,6 @@ export default function PaymentSuccess() {
           <div className="monarch-card">
             <div className="flex items-center justify-between">
               <div className="flex-1">
-                <h3 className="font-semibold text-gray-900 mb-1">Volledige rekening</h3>
-                <p className="text-sm text-gray-600">
-                  Alle items van {sessionData.session.restaurantName}, Tafel {sessionData.session.tableNumber}
-                </p>
               </div>
               <Button
                 onClick={handleDownloadFullReceipt}
