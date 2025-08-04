@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { TbPlugConnected } from "react-icons/tb";
 import { MdOutlinePayment, MdCallSplit } from "react-icons/md";
 import { BiSolidSelectMultiple } from "react-icons/bi";
+import { ChevronDown } from "lucide-react";
 
 interface BillItem {
   name: string;
@@ -34,6 +35,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
   const [bankInfo, setBankInfo] = useState<{iban: string; accountHolder: string} | null>(null);
   const [participantCount, setParticipantCount] = useState(4);
   const [selectedItems, setSelectedItems] = useState<Record<number, number>>({});
+  const [itemsExpanded, setItemsExpanded] = useState(true);
   const [originalQuantities] = useState<Record<number, number>>(() => {
     const initial: Record<number, number> = {};
     billData.items.forEach((item, index) => {
@@ -315,8 +317,18 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
             
           
             <div className="space-y-4">
-              <h3 className="parti-heading-3">Selecteer jouw items:</h3>
-              {billData.items.map((item, index) => {
+              <div 
+                className="flex items-center justify-between cursor-pointer p-2 -m-2 rounded-lg hover:bg-gray-50 transition-colors"
+                onClick={() => setItemsExpanded(!itemsExpanded)}
+              >
+                <h3 className="parti-heading-3">Selecteer jouw items:</h3>
+                <ChevronDown 
+                  className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${
+                    itemsExpanded ? 'rotate-180' : ''
+                  }`}
+                />
+              </div>
+              {itemsExpanded && billData.items.map((item, index) => {
                 const selectedQuantity = selectedItems[index] || 0;
                 const originalQuantity = originalQuantities[index] || 0;
                 const remainingQuantity = originalQuantity - selectedQuantity;
