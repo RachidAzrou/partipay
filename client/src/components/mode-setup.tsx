@@ -212,7 +212,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                   </div>
                   
                   <button 
-                    className="monarch-btn monarch-btn-primary flex items-center justify-center space-x-2"
+                    className="monarch-btn monarch-btn-primary flex items-center justify-center space-x-2 mx-auto"
                     onClick={handleLinkBank}
                     data-testid="button-link-bank"
                   >
