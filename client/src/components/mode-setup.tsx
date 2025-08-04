@@ -91,19 +91,25 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
 
   const handleLinkBank = async () => {
     try {
-      // Start Tink OAuth2 flow
-      const clientId = 'df05e4b379934cd09963197cc855bfe9'; // Tink Sandbox Client ID
-      const redirectUri = encodeURIComponent(`${window.location.origin}/auth/tink/callback`);
-      const scope = 'accounts:read';
-      const state = 'partipay_auth_' + Math.random().toString(36).substring(7);
+      console.log('Starting bank link process...');
       
-      // Store state in sessionStorage for security
-      sessionStorage.setItem('tink_oauth_state', state);
+      // Voor demo doeleinden: gebruik mock bank data direct
+      const mockBankData = {
+        iban: 'BE68539007547034',
+        accountHolder: 'Jan Peeters'
+      };
       
-      const authUrl = `https://link.tink.com/1.0/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code&state=${state}&market=BE`;
+      setBankInfo(mockBankData);
+      setBankLinked(true);
       
-      window.location.href = authUrl;
+      toast({
+        title: "Bankrekening gekoppeld!",
+        description: `${mockBankData.accountHolder} - ${mockBankData.iban}`,
+      });
+      
+      console.log('Bank linked successfully:', mockBankData);
     } catch (error) {
+      console.error('Bank link error:', error);
       toast({
         title: "Fout",
         description: "Kon bankkoppeling niet starten. Probeer opnieuw.",
