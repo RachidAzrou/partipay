@@ -281,7 +281,7 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
                 <div 
-                  className="bg-monarch-primary h-2 rounded-full transition-all duration-700 ease-out"
+                  className="bg-green-400 h-2 rounded-full transition-all duration-700 ease-out"
                   style={{ width: `${Math.min(progressPercentage, 100)}%` }}
                   data-testid="payment-progress-bar"
                 />
