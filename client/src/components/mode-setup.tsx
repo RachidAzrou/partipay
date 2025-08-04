@@ -238,14 +238,19 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">{splitMode === 'items' ? 'Pay your Part' : 'Split the Bill'}</h3>
-                    <div className="bg-gray-50 rounded-lg p-3 mb-3 border border-gray-200">
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center space-x-2">
-                          <div className="w-2 h-2 bg-gray-500 rounded-full"></div>
-                          <p className="text-sm text-gray-600">Bankrekening gekoppeld</p>
+                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 mb-3 border border-green-200 shadow-sm">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                            <i className="fas fa-check text-white text-xs"></i>
+                          </div>
+                          <div>
+                            <p className="text-sm font-semibold text-green-800">Bankrekening gekoppeld</p>
+                            <p className="text-xs text-green-600">Klaar voor betalingen</p>
+                          </div>
                         </div>
                         <button
-                          className="text-gray-400 hover:text-gray-600 transition-colors p-1"
+                          className="text-gray-400 hover:text-red-500 transition-colors p-2 rounded-full hover:bg-white"
                           onClick={() => {
                             setBankLinked(false);
                             setBankInfo(null);
@@ -255,8 +260,10 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                           <i className="fas fa-times text-xs"></i>
                         </button>
                       </div>
-                      <p className="text-sm font-medium text-gray-800 mb-1">{bankInfo?.accountHolder}</p>
-                      <p className="text-xs font-mono text-gray-500">{bankInfo?.iban}</p>
+                      <div className="bg-white rounded-lg p-3 border border-green-100">
+                        <p className="text-sm font-semibold text-gray-900 mb-1">{bankInfo?.accountHolder}</p>
+                        <p className="text-xs font-mono text-gray-600">{bankInfo?.iban}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
