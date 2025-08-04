@@ -207,7 +207,7 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
                 </p>
                 <p className="text-base text-gray-900 leading-relaxed font-semibold tabular-nums">
                   {participant.isMainBooker 
-                    ? `€ ${(parseFloat(sessionData.session.totalAmount) / sessionData.participants.length).toFixed(2)} (deel)`
+                    ? `€ ${(parseFloat(sessionData.session.totalAmount) / totalCount).toFixed(2)} (deel)`
                     : `€ ${participant.expectedAmount || (parseFloat(sessionData.session.totalAmount) / sessionData.participants.length).toFixed(2)}`
                   }
                 </p>
@@ -289,10 +289,6 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
           </div>
         ))}
       </div>
-
-      
-
-      
       </div>
       
       {/* QR Code Modal */}
