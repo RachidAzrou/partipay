@@ -6,7 +6,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { IoReceiptOutline } from "react-icons/io5";
 import { MdCallSplit } from "react-icons/md";
-import { TbSitemapFilled } from "react-icons/tb";
+import { BiSelectMultiple } from "react-icons/bi";
 import ProgressBar from "@/components/progress-bar";
 import BillDisplay from "@/components/bill-display";
 import ModeSetup from "@/components/mode-setup";
@@ -147,7 +147,7 @@ export default function Home() {
                   onClick={() => handleModeSelect('items')}
                   data-testid="button-pay-part"
                 >
-                  <TbSitemapFilled className="text-xl" />
+                  <BiSelectMultiple className="text-xl" />
                   <span>Pay your Part</span>
                 </button>
               </div>
