@@ -1,5 +1,4 @@
-import { useState } from "react";
-import React from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
@@ -66,7 +65,7 @@ export default function Home() {
   });
 
   // Auto-load bill data when component mounts (simulating QR scan at table)
-  React.useEffect(() => {
+  useEffect(() => {
     if (!dataLoaded && !loadBillMutation.isPending) {
       loadBillMutation.mutate();
     }
