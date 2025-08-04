@@ -170,14 +170,6 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
 
         {splitMode === 'equal' ? (
           <div className="space-y-6 animate-slide-up">
-            <div className="parti-card-elevated p-6 bg-gradient-to-r from-orange-50 to-yellow-50 border-orange-200">
-              <h3 className="text-xl font-bold text-orange-900 mb-3">
-                <i className="fas fa-users mr-3"></i>
-                Split the Bill
-              </h3>
-              <p className="text-base text-orange-800">De rekening wordt gelijk verdeeld over alle deelnemers.</p>
-            </div>
-          
             <div className="parti-card p-6">
               <Label className="block text-lg font-semibold text-foreground mb-4">Aantal deelnemers</Label>
               <div className="flex items-center space-x-6">
