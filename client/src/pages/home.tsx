@@ -49,18 +49,58 @@ export default function Home() {
 
   const createSessionMutation = useMutation({
     mutationFn: async (sessionData: any) => {
-      const res = await apiRequest('POST', '/api/sessions', sessionData);
-      return res.json();
+      console.log('Creating session with data:', sessionData);
+      try {
+        const res = await apiRequest('POST', '/api/sessions', sessionData);
+        if (!res.ok) {
+          const errorText = await res.text();
+          console.error('Session creation failed:', res.status, errorText);
+          throw new Error(`Session creation failed: ${res.status} ${errorText}`);
+        }
+        const result = await res.json();
+        console.log('Session created successfully:', result);
+        return result;
+      } catch (error) {
+        console.error('Session creation error in mutationFn:', error);
+        throw error;
+      }
     },
     onSuccess: (session) => {
+      console.log('Session mutation success, navigating to:', `/session/${session.id}`);
+      
       // Prefetch session data for instant loading
       queryClient.prefetchQuery({
         queryKey: ['/api/sessions', session.id],
         staleTime: 5 * 60 * 1000,
       });
-      setLocation(`/session/${session.id}`);
+      
+      // Force navigation to session page with multiple fallbacks
+      setCurrentStep(3);
+      
+      // Primary navigation attempt
+      try {
+        setLocation(`/session/${session.id}`);
+      } catch (error) {
+        console.error('Navigation error, trying fallback:', error);
+        // Fallback using window.location
+        window.location.href = `/session/${session.id}`;
+      }
+      
+      // Backup navigation after a short delay
+      setTimeout(() => {
+        if (window.location.pathname !== `/session/${session.id}`) {
+          console.log('Fallback navigation triggered');
+          window.location.href = `/session/${session.id}`;
+        }
+      }, 2000);
+      
+      toast({
+        title: "Sessie aangemaakt!",
+        description: "Je wordt doorgestuurd naar de betaalpagina.",
+      });
     },
-    onError: () => {
+    onError: (error) => {
+      console.error('Session creation error:', error);
       toast({
         title: "Fout",
         description: "Kon sessie niet aanmaken. Probeer opnieuw.",
@@ -82,8 +122,21 @@ export default function Home() {
   };
 
   const handleContinueToSharing = (userData: { name: string; bankAccount?: string; participantCount?: number; selectedItems?: any[] }) => {
-    if (!billData || !splitMode) return;
+    console.log('handleContinueToSharing called with userData:', userData);
+    
+    if (!billData || !splitMode) {
+      console.error('Cannot continue: billData =', billData, 'splitMode =', splitMode);
+      toast({
+        title: "Fout",
+        description: "Rekening of split mode ontbreekt. Probeer opnieuw.",
+        variant: "destructive",
+      });
+      return;
+    }
 
+    console.log('Starting session creation process...');
+    console.log('createSessionMutation.isPending:', createSessionMutation.isPending);
+    
     const sessionData = {
       restaurantName: "De Blauwe Kater",
       tableNumber: "12",
@@ -92,11 +145,15 @@ export default function Home() {
       isActive: true,
     };
 
-    createSessionMutation.mutate({
+    const fullSessionData = {
       ...sessionData,
       userData,
       billItems: billData.items
-    });
+    };
+
+    console.log('Calling createSessionMutation with:', fullSessionData);
+    createSessionMutation.mutate(fullSessionData);
+    console.log('createSessionMutation.mutate called');
   };
 
   return (
@@ -157,6 +214,16 @@ export default function Home() {
           onBack={() => setCurrentStep(1)}
           onContinue={handleContinueToSharing}
         />
+      )}
+      
+      {currentStep === 3 && createSessionMutation.isPending && (
+        <div className="flex-1 flex items-center justify-center min-h-0 px-3 animate-fade-in">
+          <div className="text-center space-y-4">
+            <div className="w-12 h-12 border-4 parti-bg-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <h2 className="parti-heading-2">Sessie wordt aangemaakt...</h2>
+            <p className="parti-body">Je wordt doorgestuurd naar de betaalpagina.</p>
+          </div>
+        </div>
       )}
     </div>
   );
