@@ -5,6 +5,7 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { simulateBankingFlow } from "@/lib/pdf-utils";
+import { useWebSocket } from "@/hooks/use-websocket";
 import { MdCallSplit, MdError } from "react-icons/md";
 import { BiSelectMultiple } from "react-icons/bi";
 
@@ -46,8 +47,6 @@ export default function ParticipantJoin() {
   const [match, params] = useRoute("/join/:sessionId");
   const { toast } = useToast();
   
-  // Debug logging
-  console.log('ParticipantJoin - Match:', match, 'Params:', params, 'Location:', window.location.pathname);
   const [participantName, setParticipantName] = useState("");
   const [selectedItems, setSelectedItems] = useState<{[key: string]: number}>({});
   const [processingPayment, setProcessingPayment] = useState(false);
@@ -55,6 +54,25 @@ export default function ParticipantJoin() {
   const sessionQuery = useQuery({
     queryKey: ['/api/sessions', params?.sessionId],
     enabled: !!params?.sessionId,
+  });
+
+  // WebSocket for real-time updates
+  const { connected } = useWebSocket(params?.sessionId || '', (message) => {
+    if (message.type === 'items-claimed' || message.type === 'participant-joined') {
+      // Refresh session data when items are claimed by others
+      queryClient.invalidateQueries({ queryKey: ['/api/sessions', params?.sessionId] });
+      
+      if (message.type === 'items-claimed') {
+        const participant = sessionQuery.data?.participants?.find((p: any) => p.id === message.participantId);
+        if (participant && participant.name !== participantName) {
+          toast({
+            title: "Items geclaimd",
+            description: `${participant.name} heeft items geselecteerd`,
+            duration: 3000,
+          });
+        }
+      }
+    }
   });
 
   const joinMutation = useMutation({
