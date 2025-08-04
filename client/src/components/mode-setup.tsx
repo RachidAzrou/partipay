@@ -284,13 +284,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
           </div>
         ) : (
           <div className="space-y-6 animate-slide-up">
-            <div className="parti-card-elevated">
-              <h3 className="parti-heading-3 mb-3">
-                <i className="fas fa-receipt mr-3 text-muted-foreground"></i>
-                Pay Your Part
-              </h3>
-              <p className="parti-body">Selecteer de items die jij hebt besteld.</p>
-            </div>
+            
           
             <div className="space-y-4">
               <h3 className="parti-heading-3">Selecteer jouw items:</h3>
