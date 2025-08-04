@@ -431,18 +431,9 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
               
               <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
                 <h4 className="text-xs font-medium text-red-800 mb-1">Openstaand bedrag</h4>
-                <p className="text-base font-bold text-red-900 mb-2">
+                <p className="text-base font-bold text-red-900">
                   € {outstandingDetails.outstandingAmount.toFixed(2)}
                 </p>
-                <p className="text-xs text-red-700 mb-1">Van de volgende deelnemers:</p>
-                <ul className="text-xs text-red-700 space-y-0.5">
-                  {outstandingDetails.unpaidParticipants.map(p => (
-                    <li key={p.id} className="flex justify-between items-center" data-testid={`unpaid-participant-${p.id}`}>
-                      <span>• {p.name}</span>
-                      <span className="font-semibold">€ {(parseFloat(p.expectedAmount || (parseFloat(sessionData.session.totalAmount) / totalCount).toString())).toFixed(2)}</span>
-                    </li>
-                  ))}
-                </ul>
               </div>
               
               <div className="flex space-x-2">
