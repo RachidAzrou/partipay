@@ -252,7 +252,9 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                           <div className="flex-1">
                             <p className="text-sm font-semibold text-gray-900">{bankInfo?.accountHolder}</p>
                             <p className="text-xs text-green-600 font-medium">Bankrekening gekoppeld</p>
-                            <p className="text-xs text-gray-500 font-mono filter blur-sm hover:blur-none transition-all duration-200 cursor-pointer select-none" title="Klik om IBAN te tonen">{bankInfo?.iban}</p>
+                            <p className="text-xs text-gray-500 font-mono">
+                              IBAN: {bankInfo?.iban ? `${bankInfo.iban.slice(0, 2)}** **** **** ${bankInfo.iban.slice(-4)}` : ''}
+                            </p>
                           </div>
                         </div>
                         
