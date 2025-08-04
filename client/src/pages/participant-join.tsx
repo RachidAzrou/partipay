@@ -45,6 +45,9 @@ export default function ParticipantJoin() {
   const [, setLocation] = useLocation();
   const [match, params] = useRoute("/join/:sessionId");
   const { toast } = useToast();
+  
+  // Debug logging
+  console.log('ParticipantJoin - Match:', match, 'Params:', params, 'Location:', window.location.pathname);
   const [participantName, setParticipantName] = useState("");
   const [selectedItems, setSelectedItems] = useState<{[key: string]: number}>({});
   const [processingPayment, setProcessingPayment] = useState(false);
@@ -95,11 +98,13 @@ export default function ParticipantJoin() {
   });
 
   if (!match || !params?.sessionId) {
+    console.log('Route match:', match, 'Params:', params);
     return (
       <div className="monarch-container flex flex-col items-center justify-center min-h-screen px-4">
         <div className="text-center">
           <MdError className="w-16 h-16 text-orange-500 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Ongeldige link</h1>
+          <p className="text-gray-600 mb-4">Route: {window.location.pathname}</p>
           <Button onClick={() => setLocation('/')}>
             Terug naar home
           </Button>
