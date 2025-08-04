@@ -189,7 +189,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
           
         
           <div>
-            <Label className="block monarch-title mb-4">Bankrekening koppelen (hoofdboeker)</Label>
+            <Label className="block monarch-title mb-4 text-center">Bankrekening koppelen (hoofdboeker)</Label>
             
             {!bankLinked ? (
               <div className="monarch-widget">
