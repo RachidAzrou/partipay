@@ -30,7 +30,14 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
   const [bankLinked, setBankLinked] = useState(false);
   const [bankInfo, setBankInfo] = useState<{iban: string; accountHolder: string} | null>(null);
   const [participantCount, setParticipantCount] = useState(4);
-  const [selectedItems, setSelectedItems] = useState<Record<number, boolean>>({});
+  const [selectedItems, setSelectedItems] = useState<Record<number, number>>({});
+  const [availableQuantities, setAvailableQuantities] = useState<Record<number, number>>(() => {
+    const initial: Record<number, number> = {};
+    billData.items.forEach((item, index) => {
+      initial[index] = item.quantity;
+    });
+    return initial;
+  });
   const { toast } = useToast();
 
   // Check for bank linking success on component mount
@@ -94,19 +101,21 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
   }, [toast]);
 
 
-  const handleItemToggle = (index: number) => {
+  const handleQuantityChange = (index: number, change: number) => {
+    const currentQuantity = selectedItems[index] || 0;
+    const availableQuantity = availableQuantities[index] || 0;
+    const newQuantity = Math.max(0, Math.min(availableQuantity, currentQuantity + change));
+    
     setSelectedItems(prev => ({
       ...prev,
-      [index]: !prev[index]
+      [index]: newQuantity
     }));
   };
 
   const calculateSelectedTotal = () => {
     return billData.items.reduce((total, item, index) => {
-      if (selectedItems[index]) {
-        return total + parseFloat(item.price) * item.quantity;
-      }
-      return total;
+      const selectedQuantity = selectedItems[index] || 0;
+      return total + parseFloat(item.price) * selectedQuantity;
     }, 0).toFixed(2);
   };
 
@@ -283,25 +292,65 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
           
             <div className="space-y-4">
               <h3 className="parti-heading-3">Selecteer jouw items:</h3>
-              {billData.items.map((item, index) => (
-                <div key={index} className="parti-card !p-4 flex items-center justify-between hover:parti-shadow-md transition-all">
-                  <div className="flex items-center space-x-4">
-                    <Checkbox 
-                      checked={selectedItems[index] || false}
-                      onCheckedChange={() => handleItemToggle(index)}
-                      className="data-[state=checked]:bg-primary data-[state=checked]:border-primary w-5 h-5"
-                      data-testid={`checkbox-item-${index}`}
-                    />
-                    <div>
-                      <span className="parti-body font-semibold">{item.name}</span>
-                      <p className="parti-small mt-1">€ {item.price}</p>
+              {billData.items.map((item, index) => {
+                const selectedQuantity = selectedItems[index] || 0;
+                const availableQuantity = availableQuantities[index] || 0;
+                const isUnavailable = availableQuantity === 0;
+                
+                return (
+                  <div key={index} className={`parti-card !p-4 flex items-center justify-between transition-all ${isUnavailable ? 'opacity-50 bg-gray-100' : 'hover:parti-shadow-md'}`}>
+                    <div className="flex items-center space-x-4">
+                      <div className="flex flex-col">
+                        <span className={`parti-body font-semibold ${isUnavailable ? 'text-gray-500' : ''}`}>{item.name}</span>
+                        <p className="parti-small mt-1">€ {item.price} per stuk</p>
+                        {isUnavailable && (
+                          <p className="parti-small text-red-500 mt-1">Niet meer beschikbaar</p>
+                        )}
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center space-x-4">
+                      <div className="text-right mr-4">
+                        <span className={`parti-small ${isUnavailable ? 'text-gray-500' : ''}`}>
+                          {availableQuantity} beschikbaar
+                        </span>
+                      </div>
+                      
+                      {!isUnavailable && (
+                        <div className="flex items-center space-x-3">
+                          <button 
+                            className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            onClick={() => handleQuantityChange(index, -1)}
+                            disabled={selectedQuantity === 0}
+                            data-testid={`button-decrease-${index}`}
+                          >
+                            <i className="fas fa-minus text-gray-600 text-xs"></i>
+                          </button>
+                          
+                          <span className="parti-body font-semibold w-8 text-center" data-testid={`quantity-${index}`}>
+                            {selectedQuantity}
+                          </span>
+                          
+                          <button 
+                            className="w-8 h-8 rounded-full bg-monarch-primary hover:bg-orange-600 flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            onClick={() => handleQuantityChange(index, 1)}
+                            disabled={selectedQuantity >= availableQuantity}
+                            data-testid={`button-increase-${index}`}
+                          >
+                            <i className="fas fa-plus text-white text-xs"></i>
+                          </button>
+                        </div>
+                      )}
+                      
+                      {isUnavailable && (
+                        <div className="w-20 text-center">
+                          <span className="parti-small text-gray-500">Uitverkocht</span>
+                        </div>
+                      )}
                     </div>
                   </div>
-                  <div className="text-right">
-                    <span className="parti-small">x{item.quantity} beschikbaar</span>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             <div className="parti-card-elevated">
