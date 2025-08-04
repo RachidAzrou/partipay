@@ -58,16 +58,29 @@ export default function ParticipantJoin() {
 
   // WebSocket for real-time updates
   const { connected } = useWebSocket(params?.sessionId || '', (message) => {
-    if (message.type === 'items-claimed' || message.type === 'participant-joined') {
-      // Refresh session data when items are claimed by others
+    if (message.type === 'items-claimed' || message.type === 'participant-joined' || message.type === 'participant-payment-completed') {
+      // Refresh session data when items are claimed by others or payments are made
       queryClient.invalidateQueries({ queryKey: ['/api/sessions', params?.sessionId] });
       
       if (message.type === 'items-claimed') {
-        const participant = sessionQuery.data?.participants?.find((p: any) => p.id === message.participantId);
+        const sessionData = sessionQuery.data as SessionData;
+        const participant = sessionData?.participants?.find((p: any) => p.id === message.participantId);
         if (participant && participant.name !== participantName) {
           toast({
             title: "Items geclaimd",
             description: `${participant.name} heeft items geselecteerd`,
+            duration: 3000,
+          });
+        }
+      }
+      
+      if (message.type === 'participant-payment-completed') {
+        const sessionData = sessionQuery.data as SessionData;
+        const participant = sessionData?.participants?.find((p: any) => p.id === message.participantId);
+        if (participant && participant.name !== participantName) {
+          toast({
+            title: "Betaling voltooid",
+            description: `${participant.name} heeft betaald`,
             duration: 3000,
           });
         }
