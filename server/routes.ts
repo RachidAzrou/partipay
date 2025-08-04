@@ -78,6 +78,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendFile(filePath);
   });
 
+  app.get('/generate-qr-svg.html', (req, res) => {
+    const filePath = path.join(process.cwd(), 'generate-qr-svg.html');
+    res.sendFile(filePath);
+  });
+
   // Get client configuration
   app.get('/api/config', (req, res) => {
     // Generate the correct redirect URI based on the current request

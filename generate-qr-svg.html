@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QR Code SVG Generator</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+</head>
+<body>
+    <h1>QR Code SVG Generator</h1>
+    <div id="output"></div>
+    <script>
+        // Generate QR code for the app URL
+        const appUrl = window.location.origin.replace('/generate-qr-svg.html', '') + '/';
+        
+        // Create QR code
+        const qr = qrcode(4, 'M');
+        qr.addData(appUrl);
+        qr.make();
+        
+        // Get QR code as SVG
+        const modules = qr.modules;
+        const moduleCount = qr.getModuleCount();
+        const cellSize = 10;
+        const margin = 20;
+        const size = moduleCount * cellSize + 2 * margin;
+        
+        let svgContent = `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
+    <rect width="${size}" height="${size}" fill="white"/>
+`;
+        
+        // Add QR modules as rectangles
+        for (let row = 0; row < moduleCount; row++) {
+            for (let col = 0; col < moduleCount; col++) {
+                if (modules[row][col]) {
+                    const x = margin + col * cellSize;
+                    const y = margin + row * cellSize;
+                    svgContent += `    <rect x="${x}" y="${y}" width="${cellSize}" height="${cellSize}" fill="black"/>\n`;
+                }
+            }
+        }
+        
+        svgContent += '</svg>';
+        
+        // Display the SVG
+        document.getElementById('output').innerHTML = `
+            <h2>Generated QR Code SVG:</h2>
+            <div style="border: 1px solid #ccc; padding: 20px; margin: 20px 0;">
+                ${svgContent}
+            </div>
+            <h3>SVG Code:</h3>
+            <textarea style="width: 100%; height: 200px; font-family: monospace;">${svgContent}</textarea>
+            <h3>URL encoded in QR:</h3>
+            <p style="word-break: break-all; background: #f0f0f0; padding: 10px;">${appUrl}</p>
+        `;
+        
+        // Also save to console for easy copying
+        console.log('QR Code SVG:');
+        console.log(svgContent);
+        
+        // Create downloadable file
+        const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'partipay-qr-code.svg';
+        link.textContent = 'Download SVG File';
+        link.style.display = 'block';
+        link.style.marginTop = '20px';
+        link.style.padding = '10px';
+        link.style.background = '#007cba';
+        link.style.color = 'white';
+        link.style.textDecoration = 'none';
+        link.style.borderRadius = '5px';
+        link.style.width = 'fit-content';
+        document.getElementById('output').appendChild(link);
+    </script>
+</body>
+</html>
