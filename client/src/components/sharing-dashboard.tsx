@@ -395,13 +395,7 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
         {sessionData.participants.map((participant, index) => (
           <div key={participant.id} className={`monarch-card flex items-center justify-between animate-slide-up ${participant.isMainBooker ? 'bg-orange-50/50' : ''}`} style={{animationDelay: `${index * 0.02}s`}}>
             <div className="flex items-center space-x-3">
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                participant.hasPaid 
-                  ? 'bg-green-500' 
-                  : participant.isMainBooker 
-                    ? 'bg-monarch-primary' 
-                    : ''
-              }`} style={participant.hasPaid ? {} : participant.isMainBooker ? {} : { backgroundColor: '#f9731691' }}>
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center ${participant.isMainBooker ? 'bg-monarch-primary' : ''}`} style={participant.isMainBooker ? {} : { backgroundColor: '#f9731691' }}>
                 <span className="text-white font-semibold text-xs">
                   {participant.name.split(' ').map(n => n[0]).join('').toUpperCase()}
                 </span>
@@ -422,8 +416,8 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
             <div className="flex items-center space-x-2">
               {participant.hasPaid ? (
                 <>
-                  <div className="w-2 h-2 bg-monarch-green rounded-full"></div>
-                  <span className="text-sm text-gray-900 leading-tight font-semibold text-monarch-green">Betaald</span>
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-sm text-gray-900 leading-tight font-semibold text-green-600">Betaald</span>
                 </>
               ) : (
                 <>
