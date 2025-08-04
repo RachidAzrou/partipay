@@ -60,23 +60,40 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
 
   const { connected } = useWebSocket(sessionData.session.id, (message) => {
     if (message.type === 'participant-joined') {
-      setSessionData(prev => ({
-        ...prev,
-        participants: [...prev.participants, message.participant]
-      }));
-    } else if (message.type === 'payment-completed') {
-      setSessionData(prev => ({
-        ...prev,
-        participants: prev.participants.map(p => 
-          p.id === message.participantId 
-            ? { ...p, hasPaid: true, paidAmount: message.payment.amount }
-            : p
-        ),
-        payments: [...prev.payments, message.payment]
-      }));
+      queryClient.invalidateQueries({ queryKey: ['/api/sessions', sessionData.session.id] });
+      toast({
+        title: "Nieuwe deelnemer! 👋",
+        description: `${message.participant.name} heeft zich aangesloten`,
+        duration: 4000,
+      });
+    } else if (message.type === 'items-claimed') {
+      queryClient.invalidateQueries({ queryKey: ['/api/sessions', sessionData.session.id] });
+      const participant = sessionData.participants.find(p => p.id === message.participantId);
+      if (participant) {
+        toast({
+          title: "Items geselecteerd 🍽️",
+          description: `${participant.name} heeft items gekozen (€${message.expectedAmount.toFixed(2)})`,
+          duration: 4000,
+        });
+      }
+    } else if (message.type === 'participant-payment-completed' || message.type === 'payment-completed') {
+      queryClient.invalidateQueries({ queryKey: ['/api/sessions', sessionData.session.id] });
+      const paidParticipant = message.participant || sessionData.participants.find(p => p.id === message.participantId);
+      if (paidParticipant) {
+        toast({
+          title: "Betaling ontvangen! 💰",
+          description: `${paidParticipant.name} heeft €${parseFloat(message.payment.amount).toFixed(2)} betaald`,
+          duration: 5000,
+        });
+      }
     } else if (message.type === 'session-completed') {
+      queryClient.invalidateQueries({ queryKey: ['/api/sessions', sessionData.session.id] });
       setSessionCompleted(true);
-      setSessionData(prev => ({ ...prev, session: { ...prev.session, isActive: false } }));
+      toast({
+        title: "Sessie voltooid! 🎉",
+        description: "Alle betalingen zijn ontvangen. Bedankt voor het gebruik van PartiPay!",
+        duration: 6000,
+      });
     }
   });
 
@@ -137,8 +154,9 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
   });
 
   useEffect(() => {
-    const sessionUrl = `${window.location.origin}/session/${sessionData.session.id}`;
-    generateQRCode(sessionUrl).then(setQrCodeUrl);
+    // Generate QR code for participants to join the session
+    const joinUrl = `${window.location.origin}/join/${sessionData.session.id}`;
+    generateQRCode(joinUrl).then(setQrCodeUrl);
   }, [sessionData.session.id]);
 
   const calculateProgress = () => {

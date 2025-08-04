@@ -8,6 +8,7 @@ import Session from "@/pages/session";
 import TinkCallback from "@/pages/tink-callback";
 import TableQR from "@/pages/table-qr";
 import PaymentSuccess from "@/pages/payment-success";
+import ParticipantJoin from "@/pages/participant-join";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -15,6 +16,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/session/:id" component={Session} />
+      <Route path="/join/:sessionId" component={ParticipantJoin} />
       <Route path="/payment-success/:sessionId" component={PaymentSuccess} />
       <Route path="/auth/tink/callback" component={TinkCallback} />
       <Route path="/table-qr" component={TableQR} />

@@ -293,33 +293,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Process payment
+  // Process payment (for participants paying to main booker)
   app.post('/api/sessions/:id/pay', async (req, res) => {
     try {
       const { participantId, amount } = req.body;
       const sessionId = req.params.id;
       
+      // Get session and main booker info
+      const session = await storage.getSession(sessionId);
+      const participants = await storage.getParticipantsBySession(sessionId);
+      const mainBooker = participants.find(p => p.isMainBooker);
+      
+      if (!session || !mainBooker) {
+        return res.status(404).json({ message: 'Session or main booker not found' });
+      }
+      
+      // Create payment record (participant pays to main booker's account)
       const payment = await storage.createPayment({
         sessionId,
         participantId,
         amount: amount.toString(),
-        status: 'completed' // Mock payment always succeeds
+        status: 'completed' // Simulated banking payment always succeeds
       });
       
+      // Update participant as paid
       await storage.updateParticipant(participantId, {
         hasPaid: true,
         paidAmount: amount.toString()
       });
       
+      // Broadcast real-time update to all session participants
       broadcastToSession(sessionId, {
-        type: 'payment-completed',
+        type: 'participant-payment-completed',
         participantId,
+        participant: await storage.getParticipant(participantId),
         payment
       });
       
       // Check if all participants have paid
-      const participants = await storage.getParticipantsBySession(sessionId);
-      const allPaid = participants.every(p => p.hasPaid);
+      const updatedParticipants = await storage.getParticipantsBySession(sessionId);
+      const allPaid = updatedParticipants.every(p => p.hasPaid);
       
       if (allPaid) {
         await storage.updateSession(sessionId, { isActive: false });
