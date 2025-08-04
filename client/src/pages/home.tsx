@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { IoReceiptOutline } from "react-icons/io5";
+import { MdCallSplit } from "react-icons/md";
 import ProgressBar from "@/components/progress-bar";
 import BillDisplay from "@/components/bill-display";
 import ModeSetup from "@/components/mode-setup";
@@ -132,10 +133,13 @@ export default function Home() {
               
               <div className="space-y-4 mt-auto animate-slide-up px-4">
                 <button 
-                  className="w-full monarch-btn monarch-btn-primary py-4 touch-target"
+                  className="w-full monarch-btn monarch-btn-primary py-4 touch-target flex items-center justify-center space-x-2"
                   onClick={() => handleModeSelect('equal')}
                   data-testid="button-split-bill"
-                >Split the Bill</button>
+                >
+                  <MdCallSplit className="text-xl" />
+                  <span>Split the Bill</span>
+                </button>
                 
                 <button 
                   className="w-full monarch-btn monarch-btn-secondary py-4 touch-target"
