@@ -227,12 +227,15 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
               <div className="monarch-widget bg-green-50 border-green-200">
                 <div className="text-center space-y-6">
                   <div className="w-20 h-20 bg-green-600 rounded-2xl flex items-center justify-center mx-auto">
-                    <TbPlugConnected className="text-white text-3xl" />
+                    <MdCallSplit className="text-white text-3xl" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Bankrekening gekoppeld</h3>
-                    <p className="monarch-body font-semibold mb-1">{bankInfo?.accountHolder}</p>
-                    <p className="monarch-caption font-mono">{bankInfo?.iban}</p>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Split the Bill</h3>
+                    <div className="bg-white rounded-lg p-3 mb-2 border border-green-200">
+                      <p className="text-xs text-green-700 mb-1">✓ Bankrekening gekoppeld</p>
+                      <p className="monarch-body font-semibold mb-1">{bankInfo?.accountHolder}</p>
+                      <p className="monarch-caption font-mono">{bankInfo?.iban}</p>
+                    </div>
                   </div>
                   
                   <button 
