@@ -141,12 +141,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Update session with main booker ID
         await storage.updateSession(session.id, { mainBookerId: mainBooker.id });
         
+        // Handle main booker's item selection for 'items' mode
+        if (session.splitMode === 'items' && userData.selectedItems && billItems?.length > 0) {
+          let expectedAmount = 0;
+          
+          // Get the created bill items from database first
+          const createdItems = await storage.getBillItemsBySession(session.id);
+          
+          // Create item claims for main booker's selections
+          for (const selection of userData.selectedItems) {
+            const billItem = billItems[selection.index];
+            if (billItem && selection.quantity > 0) {
+              // Find matching item in database
+              const matchingItem = createdItems.find(item => 
+                item.name === billItem.name && 
+                item.price === billItem.price
+              );
+              
+              if (matchingItem) {
+                // Create item claim with the actual selected quantity
+                await storage.createItemClaim({
+                  participantId: mainBooker.id,
+                  billItemId: matchingItem.id,
+                  quantity: selection.quantity
+                });
+                
+                expectedAmount += parseFloat(matchingItem.price) * selection.quantity;
+              }
+            }
+          }
+          
+          // Update main booker's expected amount based on selected items
+          await storage.updateParticipant(mainBooker.id, {
+            expectedAmount: expectedAmount.toFixed(2)
+          });
+        }
+        
         // Auto-mark main booker as paid since they pay restaurant directly
         const totalAmount = parseFloat(session.totalAmount);
         await storage.updateParticipant(mainBooker.id, {
           hasPaid: true,
           paidAmount: totalAmount.toString(),
-          expectedAmount: (totalAmount / participantCount).toString()
+          expectedAmount: session.splitMode === 'equal' ? (totalAmount / participantCount).toString() : undefined
         });
         
         // Create payment record for main booker

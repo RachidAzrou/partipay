@@ -187,7 +187,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
       bankInfo: bankInfo,
       ...(splitMode === 'equal' 
         ? { participantCount }
-        : { selectedItems: Object.entries(selectedItems).filter(([_, selected]) => selected).map(([index]) => parseInt(index)) }
+        : { selectedItems: Object.entries(selectedItems).filter(([_, quantity]) => quantity > 0).map(([index, quantity]) => ({ index: parseInt(index), quantity })) }
       )
     };
 
