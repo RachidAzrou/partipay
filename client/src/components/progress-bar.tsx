@@ -11,20 +11,6 @@ export default function ProgressBar({ currentStep, totalSteps, onBack }: Progres
 
   return (
     <div className="sticky top-0 z-50 bg-white px-6 py-6 border-b border-gray-100">
-      <div className="flex items-center justify-between mb-6">
-        {onBack && currentStep > 1 ? (
-          <button 
-            className="w-12 h-12 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center touch-target transition-all duration-200 shadow-sm"
-            onClick={onBack}
-            data-testid="button-back-progress"
-          >
-            <i className="fas fa-arrow-left text-gray-700 text-lg"></i>
-          </button>
-        ) : (
-          <div className="w-12"></div>
-        )}
-        <div className="w-12"></div>
-      </div>
       
       <div className="flex items-center justify-center mb-4">
         <img 
@@ -58,18 +44,17 @@ export default function ProgressBar({ currentStep, totalSteps, onBack }: Progres
       </div>
       
       {/* Step indicator and back button */}
-      <div className="flex justify-between items-center">
-        <p className="monarch-section-title">Stap {currentStep} van {totalSteps}</p>
+      <div className="flex items-center justify-center relative">
         {onBack && currentStep > 1 && (
           <button 
+            className="w-12 h-12 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center touch-target transition-all duration-200 shadow-sm absolute left-0"
             onClick={onBack}
-            className="flex items-center space-x-2 px-4 py-2 rounded-2xl bg-white shadow-md hover:shadow-lg transition-all duration-200 active:scale-95"
-            data-testid="button-back-bottom"
+            data-testid="button-back-progress"
           >
-            <i className="fas fa-arrow-left text-gray-700"></i>
-            <span className="text-sm font-medium text-gray-700">Terug</span>
+            <i className="fas fa-arrow-left text-gray-700 text-lg"></i>
           </button>
         )}
+        <p className="monarch-section-title">Stap {currentStep} van {totalSteps}</p>
       </div>
     </div>
   );
