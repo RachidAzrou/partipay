@@ -2,8 +2,8 @@
 // Using Tink's PSD2 API for Belgian banks
 
 const TINK_BASE_URL = 'https://api.tink.com';
-const TINK_CLIENT_ID = process.env.TINK_CLIENT_ID || 'df05e4b379934cd09963197cc855bfe9';
-const TINK_CLIENT_SECRET = process.env.TINK_CLIENT_SECRET || 'fa6442f9eb1a44088a0e2bafcec90ac5';
+const TINK_CLIENT_ID = process.env.TINK_CLIENT_ID!;
+const TINK_REDIRECT_URI = process.env.TINK_REDIRECT_URI!;
 
 interface TinkTokenResponse {
   access_token: string;
@@ -35,28 +35,34 @@ interface AccountInfo {
 
 export async function exchangeCodeForToken(authorizationCode: string): Promise<TinkTokenResponse> {
   try {
+    // For public client OAuth2 flow (no client_secret required)
     const response = await fetch(`${TINK_BASE_URL}/api/v1/oauth/token`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': `Basic ${Buffer.from(`${TINK_CLIENT_ID}:${TINK_CLIENT_SECRET}`).toString('base64')}`
+        'Content-Type': 'application/x-www-form-urlencoded'
       },
       body: new URLSearchParams({
         grant_type: 'authorization_code',
         code: authorizationCode,
-        redirect_uri: `${process.env.REPL_URL || 'http://localhost:5000'}/auth/tink/callback`
+        redirect_uri: TINK_REDIRECT_URI,
+        client_id: TINK_CLIENT_ID
       })
     });
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Token exchange failed:', response.status, response.statusText, errorText);
       throw new Error(`Token exchange failed: ${response.status} ${response.statusText}`);
     }
 
-    return await response.json();
+    const tokenData = await response.json();
+    console.log('Token exchange successful');
+    return tokenData;
   } catch (error) {
     console.error('Error exchanging code for token:', error);
     
     // Return mock data for development/demo purposes
+    console.log('Using mock token data for demo');
     return {
       access_token: 'demo_access_token_' + Math.random().toString(36).substring(7),
       token_type: 'Bearer',

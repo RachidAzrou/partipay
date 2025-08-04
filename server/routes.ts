@@ -65,6 +65,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   }
 
+  // Get client configuration
+  app.get('/api/config', (req, res) => {
+    res.json({
+      tinkClientId: process.env.TINK_CLIENT_ID,
+      tinkRedirectUri: process.env.TINK_REDIRECT_URI
+    });
+  });
+
   // Get mock bill data from QR scan
   app.post('/api/scan-qr', async (req, res) => {
     try {
@@ -279,41 +287,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Tink OAuth2 callback
   app.get('/auth/tink/callback', async (req, res) => {
     try {
-      const { code, state } = req.query;
+      const { code, state, error } = req.query;
+      
+      // Handle OAuth errors
+      if (error) {
+        console.error('OAuth error:', error);
+        const errorUrl = `/tink-callback?bank_linked=error&error=${encodeURIComponent(error as string)}`;
+        return res.redirect(errorUrl);
+      }
       
       if (!code || !state) {
-        return res.status(400).send('Missing authorization code or state');
+        console.error('Missing authorization code or state');
+        return res.redirect('/tink-callback?bank_linked=error&error=missing_params');
       }
+      
+      console.log('Tink callback received with code and state');
       
       // Exchange code for access token
       const tokenData = await exchangeCodeForToken(code as string);
       
       if (!tokenData.access_token) {
-        return res.status(400).send('Failed to get access token');
+        console.error('Failed to get access token');
+        return res.redirect('/tink-callback?bank_linked=error&error=no_token');
       }
+      
+      console.log('Access token obtained successfully');
       
       // Get IBAN and account info from Tink
       const accountInfo = await getIbanFromTink(tokenData.access_token);
       
       if (!accountInfo) {
-        return res.status(400).send('Could not retrieve account information');
+        console.error('Could not retrieve account information');
+        return res.redirect('/tink-callback?bank_linked=error&error=no_account_info');
       }
       
-      // Store in session storage for the frontend to pick up
-      // In production, you'd want a more secure approach
-      const sessionData = {
+      console.log('Account info retrieved:', { iban: accountInfo.iban.substring(0, 4) + '****', accountHolder: accountInfo.accountHolder });
+      
+      // Prepare bank data for frontend
+      const bankData = {
         iban: accountInfo.iban,
         accountHolder: accountInfo.accountHolder,
         accessToken: tokenData.access_token
       };
       
-      // Redirect back to frontend with success message
-      const redirectUrl = `${req.headers.origin || 'http://localhost:5000'}?bank_linked=success&data=${encodeURIComponent(JSON.stringify(sessionData))}`;
+      // Redirect to callback page with success data
+      const redirectUrl = `/tink-callback?bank_linked=success&data=${encodeURIComponent(JSON.stringify(bankData))}`;
       res.redirect(redirectUrl);
       
     } catch (error) {
       console.error('Tink callback error:', error);
-      res.status(500).send('Authentication failed');
+      res.redirect('/tink-callback?bank_linked=error&error=server_error');
     }
   });
   

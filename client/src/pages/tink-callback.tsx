@@ -10,26 +10,57 @@ export default function TinkCallback() {
         const urlParams = new URLSearchParams(window.location.search);
         const bankLinked = urlParams.get('bank_linked');
         const data = urlParams.get('data');
+        const error = urlParams.get('error');
+
+        // Validate OAuth state if available
+        const urlState = urlParams.get('state');
+        const storedState = sessionStorage.getItem('tink_oauth_state');
+        
+        if (urlState && storedState && urlState !== storedState) {
+          console.error('OAuth state mismatch - possible CSRF attack');
+          navigate('/?bank_linked=error&error=invalid_state');
+          return;
+        }
+        
+        // Clean up stored state
+        if (storedState) {
+          sessionStorage.removeItem('tink_oauth_state');
+        }
 
         if (bankLinked === 'success' && data) {
           const bankInfo = JSON.parse(decodeURIComponent(data));
           
+          // Validate required fields
+          if (!bankInfo.iban || !bankInfo.accountHolder) {
+            console.error('Invalid bank info received');
+            navigate('/?bank_linked=error&error=invalid_data');
+            return;
+          }
+          
           // Store bank info in sessionStorage for the main app to pick up
-          sessionStorage.setItem('partipay_bank_info', JSON.stringify(bankInfo));
+          sessionStorage.setItem('partipay_bank_info', JSON.stringify({
+            iban: bankInfo.iban,
+            accountHolder: bankInfo.accountHolder
+          }));
+          
+          console.log('Bank account successfully linked');
           
           // Navigate back to home with success message
           navigate('/?bank_linked=success');
         } else {
-          // Handle error case
-          navigate('/?bank_linked=error');
+          // Handle error cases
+          console.error('Bank linking failed:', error || 'Unknown error');
+          navigate(`/?bank_linked=error${error ? `&error=${error}` : ''}`);
         }
       } catch (error) {
         console.error('Callback handling error:', error);
-        navigate('/?bank_linked=error');
+        navigate('/?bank_linked=error&error=callback_error');
       }
     };
 
-    handleCallback();
+    // Small delay to ensure URL is fully loaded
+    const timer = setTimeout(handleCallback, 100);
+    return () => clearTimeout(timer);
   }, [navigate]);
 
   return (

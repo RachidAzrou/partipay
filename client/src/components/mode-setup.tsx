@@ -62,9 +62,30 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
         }
       }
     } else if (bankLinked === 'error') {
+      const error = urlParams.get('error');
+      let errorMessage = "Er is iets misgegaan. Probeer opnieuw.";
+      
+      switch (error) {
+        case 'invalid_state':
+          errorMessage = "Beveiligingsfout. Probeer opnieuw.";
+          break;
+        case 'access_denied':
+          errorMessage = "Toegang geweigerd. Autorisatie vereist.";
+          break;
+        case 'invalid_data':
+          errorMessage = "Ongeldige bankgegevens ontvangen.";
+          break;
+        case 'no_account_info':
+          errorMessage = "Kon geen bankrekeninggegevens ophalen.";
+          break;
+        case 'server_error':
+          errorMessage = "Serverfout. Probeer later opnieuw.";
+          break;
+      }
+      
       toast({
         title: "Fout bij bankkoppeling",
-        description: "Er is iets misgegaan. Probeer opnieuw.",
+        description: errorMessage,
         variant: "destructive"
       });
       // Clean URL
@@ -91,25 +112,47 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
 
   const handleLinkBank = async () => {
     try {
-      console.log('Starting bank link process...');
+      console.log('Starting Tink OAuth flow...');
       
-      // Voor demo doeleinden: gebruik mock bank data direct
-      const mockBankData = {
-        iban: 'BE68539007547034',
-        accountHolder: 'Jan Peeters'
-      };
+      // Fetch configuration from backend
+      const configResponse = await fetch('/api/config');
+      if (!configResponse.ok) {
+        throw new Error('Failed to fetch configuration');
+      }
+      const config = await configResponse.json();
       
-      setBankInfo(mockBankData);
-      setBankLinked(true);
+      if (!config.tinkClientId || !config.tinkRedirectUri) {
+        throw new Error('Tink configuration not available');
+      }
       
-      toast({
-        title: "Bankrekening gekoppeld!",
-        description: `${mockBankData.accountHolder} - ${mockBankData.iban}`,
+      // Generate a random state parameter for security
+      const state = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      
+      // Store the state in sessionStorage for validation later
+      sessionStorage.setItem('tink_oauth_state', state);
+      
+      // Build Tink OAuth2 authorization URL (public client flow)
+      const tinkBaseUrl = 'https://link.tink.com/1.0/auth';
+      
+      const authParams = new URLSearchParams({
+        client_id: config.tinkClientId,
+        redirect_uri: config.tinkRedirectUri,
+        response_type: 'code',
+        scope: 'accounts:read',
+        state: state,
+        market: 'BE', // Belgian market
+        locale: 'nl_BE' // Dutch (Belgium)
       });
       
-      console.log('Bank linked successfully:', mockBankData);
+      const authUrl = `${tinkBaseUrl}?${authParams.toString()}`;
+      
+      console.log('Redirecting to Tink OAuth:', authUrl);
+      
+      // Redirect to Tink OAuth2 authorization page
+      window.location.href = authUrl;
+      
     } catch (error) {
-      console.error('Bank link error:', error);
+      console.error('Tink OAuth start error:', error);
       toast({
         title: "Fout",
         description: "Kon bankkoppeling niet starten. Probeer opnieuw.",
