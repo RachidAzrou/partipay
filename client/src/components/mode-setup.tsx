@@ -238,28 +238,20 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">{splitMode === 'items' ? 'Pay your Part' : 'Split the Bill'}</h3>
-                    <div className="bg-green-50 rounded-xl p-4 mb-3 border border-green-200">
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center space-x-3 mb-2">
-                            <div className="relative w-8 h-8">
-                              <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-[#effdf4]">
-                                <i className="fas fa-university text-white text-sm"></i>
-                              </div>
-                              <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
-                                <i className="fas fa-check text-white text-xs"></i>
-                              </div>
-                            </div>
-                            <p className="text-sm font-semibold text-gray-900">Rekening gekoppeld</p>
+                    <div className="bg-white rounded-2xl p-5 mb-3 border border-gray-100 shadow-sm">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center shadow-md">
+                            <i className="fas fa-university text-white text-sm"></i>
                           </div>
-                          <div className="space-y-1 ml-11">
-                            <p className="text-sm font-medium text-gray-900">{bankInfo?.accountHolder}</p>
-                            <p className="text-xs font-mono text-gray-600">{bankInfo?.iban}</p>
+                          <div>
+                            <h4 className="text-base font-semibold text-gray-900">Bankrekening</h4>
+                            <p className="text-sm text-green-600 font-medium">✓ Gekoppeld</p>
                           </div>
                         </div>
                         
                         <button
-                          className="text-gray-400 hover:text-red-500 transition-colors p-1 rounded-lg hover:bg-white/50"
+                          className="text-gray-300 hover:text-gray-500 transition-colors p-2 hover:bg-gray-50 rounded-lg"
                           onClick={() => {
                             setBankLinked(false);
                             setBankInfo(null);
@@ -268,6 +260,18 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                         >
                           <i className="fas fa-times text-sm"></i>
                         </button>
+                      </div>
+                      
+                      <div className="bg-gray-50 rounded-lg p-3 space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Rekeninghouder</span>
+                        </div>
+                        <p className="text-sm font-semibold text-gray-900">{bankInfo?.accountHolder}</p>
+                        
+                        <div className="flex justify-between items-center pt-2">
+                          <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">IBAN</span>
+                        </div>
+                        <p className="text-sm font-mono text-gray-700 bg-white px-2 py-1 rounded border">{bankInfo?.iban}</p>
                       </div>
                     </div>
                   </div>
