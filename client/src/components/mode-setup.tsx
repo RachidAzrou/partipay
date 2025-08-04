@@ -183,14 +183,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
   return (
     <div className="parti-container bg-background flex flex-col">
       <div className="flex-1 px-6 py-8 space-y-8">
-        <div className="text-center relative animate-fade-in">
-          <button 
-            className="absolute left-0 top-2 w-12 h-12 parti-card rounded-full flex items-center justify-center touch-target"
-            onClick={onBack}
-            data-testid="button-back"
-          >
-            <i className="fas fa-arrow-left text-foreground text-lg"></i>
-          </button>
+        <div className="text-center animate-fade-in">
           <h1 className="text-3xl font-bold text-foreground mt-2">Koppel je bankrekening</h1>
           <p className="text-lg text-muted-foreground mt-2">Koppel je bankrekening om deel te nemen</p>
         </div>
