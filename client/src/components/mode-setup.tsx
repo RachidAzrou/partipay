@@ -238,31 +238,42 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">{splitMode === 'items' ? 'Pay your Part' : 'Split the Bill'}</h3>
-                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 mb-3 border border-green-200 shadow-sm">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                            <i className="fas fa-check text-white text-xs"></i>
+                    <div className="bg-white rounded-2xl p-4 mb-3 border border-green-200 shadow-lg ring-1 ring-green-100">
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-start space-x-4 flex-1">
+                          <div className="w-12 h-12 bg-green-500 rounded-2xl flex items-center justify-center flex-shrink-0">
+                            <i className="fas fa-check text-white text-lg"></i>
                           </div>
-                          <div>
-                            <p className="text-sm font-semibold text-green-800">Bankrekening gekoppeld</p>
-                            <p className="text-xs text-green-600">Klaar voor betalingen</p>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center space-x-2 mb-1">
+                              <h4 className="text-base font-bold text-gray-900">Bankrekening gekoppeld</h4>
+                              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                            </div>
+                            <p className="text-sm text-green-700 mb-3">Klaar voor snelle betalingen</p>
+                            
+                            <div className="space-y-2">
+                              <div className="flex items-center space-x-2">
+                                <i className="fas fa-user text-gray-400 text-xs w-3"></i>
+                                <p className="text-sm font-semibold text-gray-900">{bankInfo?.accountHolder}</p>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <i className="fas fa-credit-card text-gray-400 text-xs w-3"></i>
+                                <p className="text-xs font-mono text-gray-600 bg-gray-50 px-2 py-1 rounded">{bankInfo?.iban}</p>
+                              </div>
+                            </div>
                           </div>
                         </div>
+                        
                         <button
-                          className="text-gray-400 hover:text-red-500 transition-colors p-2 rounded-full hover:bg-white"
+                          className="text-gray-300 hover:text-red-400 transition-colors p-2 rounded-full hover:bg-red-50 ml-2"
                           onClick={() => {
                             setBankLinked(false);
                             setBankInfo(null);
                           }}
                           data-testid="button-unlink-bank"
                         >
-                          <i className="fas fa-times text-xs"></i>
+                          <i className="fas fa-times text-sm"></i>
                         </button>
-                      </div>
-                      <div className="bg-white rounded-lg p-3 border border-green-100">
-                        <p className="text-sm font-semibold text-gray-900 mb-1">{bankInfo?.accountHolder}</p>
-                        <p className="text-xs font-mono text-gray-600">{bankInfo?.iban}</p>
                       </div>
                     </div>
                   </div>
