@@ -86,14 +86,6 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
           duration: 5000,
         });
       }
-    } else if (message.type === 'session-completed') {
-      queryClient.invalidateQueries({ queryKey: ['/api/sessions', sessionData.session.id] });
-      setSessionCompleted(true);
-      toast({
-        title: "Sessie voltooid! 🎉",
-        description: "Alle betalingen zijn ontvangen. Bedankt voor het gebruik van PartiPay!",
-        duration: 6000,
-      });
     }
   });
 
@@ -267,13 +259,6 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
           </div>
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Alle betalingen voltooid!</h3>
           <p className="monarch-body mb-8">Bedankt voor het gebruik van PartiPay</p>
-          <button 
-            className="monarch-btn monarch-btn-primary"
-            onClick={() => window.location.href = '/'}
-            data-testid="button-new-session"
-          >
-            Nieuwe rekening
-          </button>
         </div>
       </div>
     );
