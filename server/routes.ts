@@ -181,12 +181,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
         await storage.updateSession(req.params.id, { mainBookerId: participant.id });
       }
       
-      broadcastToSession(req.params.id, {
-        type: 'participant-joined',
-        participant
-      });
-      
-      res.json(participant);
+      // Automatically mark main booker as paid since they pay the restaurant directly
+      if (participant.isMainBooker) {
+        const session = await storage.getSession(req.params.id);
+        const totalAmount = parseFloat(session?.totalAmount || '0');
+        
+        // Update participant to mark as paid with their expected amount
+        await storage.updateParticipant(participant.id, {
+          hasPaid: true,
+          paidAmount: totalAmount.toString(), // Main booker pays the full amount to restaurant
+          expectedAmount: totalAmount.toString()
+        });
+        
+        // Create payment record for main booker
+        await storage.createPayment({
+          sessionId: req.params.id,
+          participantId: participant.id,
+          amount: totalAmount.toString(),
+          status: 'completed'
+        });
+        
+        // Get updated participant data
+        const updatedParticipant = await storage.getParticipant(participant.id);
+        
+        broadcastToSession(req.params.id, {
+          type: 'participant-joined',
+          participant: updatedParticipant
+        });
+        
+        res.json(updatedParticipant);
+      } else {
+        broadcastToSession(req.params.id, {
+          type: 'participant-joined',
+          participant
+        });
+        
+        res.json(participant);
+      }
     } catch (error) {
       console.error('Join session error:', error);
       res.status(400).json({ message: 'Failed to join session' });

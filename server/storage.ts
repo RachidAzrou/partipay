@@ -26,6 +26,7 @@ export interface IStorage {
   
   // Participants
   createParticipant(participant: InsertParticipant): Promise<Participant>;
+  getParticipant(id: string): Promise<Participant | undefined>;
   getParticipantsBySession(sessionId: string): Promise<Participant[]>;
   updateParticipant(id: string, updates: Partial<Participant>): Promise<Participant | undefined>;
   
@@ -77,6 +78,11 @@ export class DatabaseStorage implements IStorage {
       .values(participant)
       .returning();
     return newParticipant;
+  }
+
+  async getParticipant(id: string): Promise<Participant | undefined> {
+    const [participant] = await db.select().from(participants).where(eq(participants.id, id));
+    return participant || undefined;
   }
 
   async getParticipantsBySession(sessionId: string): Promise<Participant[]> {
