@@ -235,9 +235,16 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
                           <div className="relative w-9 h-9">
-                            <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-[#f97315]">
+                            <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${
+                              bankInfo?.bankName === 'KBC Bank' ? 'bg-[#1E3A8A]' : 
+                              bankInfo?.bankName === 'Belfius Bank' ? 'bg-[#16A085]' :
+                              bankInfo?.bankName === 'BNP Paribas Fortis' ? 'bg-[#00A651]' :
+                              bankInfo?.bankName === 'ING België' ? 'bg-[#FF6200]' :
+                              bankInfo?.bankName === 'Argenta Bank' ? 'bg-[#E67E22]' :
+                              'bg-[#f97315]'
+                            }`}>
                               {bankInfo?.logo ? (
-                                <div className="text-lg">{bankInfo.logo}</div>
+                                <div className="text-lg text-white">{bankInfo.logo}</div>
                               ) : (
                                 <i className="fas fa-university text-white text-sm"></i>
                               )}
