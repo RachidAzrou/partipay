@@ -103,8 +103,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create new session
   app.post('/api/sessions', async (req, res) => {
     try {
-      const sessionData = insertSessionSchema.parse(req.body);
+      const { userData, billItems, ...sessionFields } = req.body;
+      
+      // Extract participant count from userData
+      const participantCount = userData?.participantCount || 4;
+      
+      const sessionData = insertSessionSchema.parse({
+        ...sessionFields,
+        participantCount
+      });
+      
       const session = await storage.createSession(sessionData);
+      
+      // Create bill items if provided
+      if (billItems && billItems.length > 0) {
+        const itemsWithSession = billItems.map((item: any) => ({
+          ...item,
+          sessionId: session.id
+        }));
+        await storage.createBillItems(itemsWithSession);
+      }
+      
+      // Create main booker participant if userData provided
+      if (userData?.name) {
+        const mainBookerData = {
+          sessionId: session.id,
+          name: userData.name,
+          bankAccount: userData.bankAccount || '',
+          isMainBooker: true,
+          hasPaid: false,
+          paidAmount: '0',
+          expectedAmount: '0'
+        };
+        
+        const mainBooker = await storage.createParticipant(mainBookerData);
+        
+        // Update session with main booker ID
+        await storage.updateSession(session.id, { mainBookerId: mainBooker.id });
+        
+        // Auto-mark main booker as paid since they pay restaurant directly
+        const totalAmount = parseFloat(session.totalAmount);
+        await storage.updateParticipant(mainBooker.id, {
+          hasPaid: true,
+          paidAmount: totalAmount.toString(),
+          expectedAmount: (totalAmount / participantCount).toString()
+        });
+        
+        // Create payment record for main booker
+        await storage.createPayment({
+          sessionId: session.id,
+          participantId: mainBooker.id,
+          amount: totalAmount.toString(),
+          status: 'completed'
+        });
+      }
       
       res.json(session);
     } catch (error) {
@@ -175,49 +227,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const participant = await storage.createParticipant(participantData);
       
-      // Update session main booker if this is the first participant
-      const allParticipants = await storage.getParticipantsBySession(req.params.id);
-      if (allParticipants.length === 1 && participant.isMainBooker) {
-        await storage.updateSession(req.params.id, { mainBookerId: participant.id });
-      }
+      broadcastToSession(req.params.id, {
+        type: 'participant-joined',
+        participant
+      });
       
-      // Automatically mark main booker as paid since they pay the restaurant directly
-      if (participant.isMainBooker) {
-        const session = await storage.getSession(req.params.id);
-        const totalAmount = parseFloat(session?.totalAmount || '0');
-        
-        // Update participant to mark as paid with their expected amount
-        await storage.updateParticipant(participant.id, {
-          hasPaid: true,
-          paidAmount: totalAmount.toString(), // Main booker pays the full amount to restaurant
-          expectedAmount: totalAmount.toString()
-        });
-        
-        // Create payment record for main booker
-        await storage.createPayment({
-          sessionId: req.params.id,
-          participantId: participant.id,
-          amount: totalAmount.toString(),
-          status: 'completed'
-        });
-        
-        // Get updated participant data
-        const updatedParticipant = await storage.getParticipant(participant.id);
-        
-        broadcastToSession(req.params.id, {
-          type: 'participant-joined',
-          participant: updatedParticipant
-        });
-        
-        res.json(updatedParticipant);
-      } else {
-        broadcastToSession(req.params.id, {
-          type: 'participant-joined',
-          participant
-        });
-        
-        res.json(participant);
-      }
+      res.json(participant);
     } catch (error) {
       console.error('Join session error:', error);
       res.status(400).json({ message: 'Failed to join session' });

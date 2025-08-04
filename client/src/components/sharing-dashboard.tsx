@@ -13,6 +13,7 @@ interface SessionData {
     tableNumber: string;
     splitMode: string;
     totalAmount: string;
+    participantCount: number;
     isActive: boolean;
   };
   participants: Array<{
@@ -50,6 +51,7 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
   const [sessionData, setSessionData] = useState(initialData);
   const [qrCodeUrl, setQrCodeUrl] = useState("");
   const [sessionCompleted, setSessionCompleted] = useState(false);
+  const [showQRModal, setShowQRModal] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -107,7 +109,9 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
   };
 
   const paidCount = sessionData.participants.filter(p => p.hasPaid).length;
-  const totalCount = sessionData.participants.length;
+  const totalCount = sessionData.session.participantCount || sessionData.participants.length;
+  const actualParticipants = sessionData.participants.length;
+  const waitingForParticipants = totalCount - actualParticipants;
 
   const handleMockPayment = (participant: any) => {
     const amount = parseFloat(participant.expectedAmount || sessionData.session.totalAmount) / sessionData.participants.length;
@@ -170,23 +174,13 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
       </div>
 
       <div className="monarch-widget text-center animate-slide-up">
-        {qrCodeUrl ? (
-          <img 
-            src={qrCodeUrl} 
-            alt="QR Code" 
-            className="w-48 h-48 mx-auto mb-6 rounded-2xl border"
-            style={{borderColor: 'var(--parti-border-light)'}}
-            data-testid="qr-code"
-          />
-        ) : (
-          <div className="w-48 h-48 bg-muted rounded-2xl mx-auto mb-6 flex items-center justify-center">
-            <div className="monarch-body">QR-code laden...</div>
-          </div>
-        )}
+        <div className="w-48 h-48 bg-muted rounded-2xl mx-auto mb-6 flex items-center justify-center">
+          <i className="fas fa-qrcode text-4xl text-gray-400"></i>
+        </div>
         <p className="monarch-body mb-6">Sessie: <span className="font-mono monarch-caption bg-muted px-3 py-1 rounded-full">{sessionData.session.id.slice(0, 8).toUpperCase()}</span></p>
         <button 
           className="monarch-btn monarch-btn-primary touch-target"
-          onClick={handleShareQR}
+          onClick={() => setShowQRModal(true)}
           data-testid="button-share-qr"
         >
           Deel QR-code
@@ -194,7 +188,7 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
       </div>
 
       <div className="space-y-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-3">Deelnemers ({paidCount}/{totalCount})</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-3">Deelnemers ({actualParticipants}/{totalCount})</h2>
         
         {sessionData.participants.map((participant, index) => (
           <div key={participant.id} className="monarch-card flex items-center justify-between animate-slide-up" style={{animationDelay: `${index * 0.1}s`}}>
@@ -240,6 +234,29 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
             </div>
           </div>
         ))}
+        
+        {/* Show waiting slots for remaining participants */}
+        {waitingForParticipants > 0 && Array.from({ length: waitingForParticipants }, (_, index) => (
+          <div key={`waiting-${index}`} className="monarch-card flex items-center justify-between animate-slide-up opacity-50" style={{animationDelay: `${(sessionData.participants.length + index) * 0.1}s`}}>
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
+                <i className="fas fa-user text-gray-500"></i>
+              </div>
+              <div>
+                <p className="text-base font-semibold text-gray-500 mb-2">
+                  Wachtend op deelnemer...
+                </p>
+                <p className="text-base text-gray-500 leading-relaxed font-semibold tabular-nums">
+                  € {(parseFloat(sessionData.session.totalAmount) / totalCount).toFixed(2)}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-3">
+              <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></div>
+              <span className="monarch-body font-medium text-gray-500">Wachtend</span>
+            </div>
+          </div>
+        ))}
       </div>
 
       <div className="monarch-card animate-slide-up">
@@ -256,11 +273,49 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
             data-testid="progress-bar"
           ></div>
         </div>
-        <p className="monarch-body text-center font-medium">{paidCount} van {totalCount} personen hebben betaald</p>
+        <p className="monarch-body text-center font-medium">{paidCount} van {actualParticipants} aangesloten personen hebben betaald</p>
       </div>
 
       
       </div>
+      
+      {/* QR Code Modal */}
+      {showQRModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-6 max-w-sm w-full text-center animate-slide-up">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-lg font-semibold text-gray-900">Scan QR-code</h3>
+              <button 
+                onClick={() => setShowQRModal(false)}
+                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center"
+                data-testid="button-close-qr"
+              >
+                <i className="fas fa-times text-gray-700"></i>
+              </button>
+            </div>
+            {qrCodeUrl ? (
+              <img 
+                src={qrCodeUrl} 
+                alt="QR Code" 
+                className="w-64 h-64 mx-auto mb-6 rounded-2xl border"
+                data-testid="qr-code-modal"
+              />
+            ) : (
+              <div className="w-64 h-64 bg-muted rounded-2xl mx-auto mb-6 flex items-center justify-center">
+                <div className="monarch-body">QR-code laden...</div>
+              </div>
+            )}
+            <p className="monarch-body mb-6">Laat vrienden deze code scannen om mee te betalen</p>
+            <button 
+              className="monarch-btn monarch-btn-secondary touch-target w-full"
+              onClick={handleShareQR}
+              data-testid="button-share-link"
+            >
+              Deel link
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

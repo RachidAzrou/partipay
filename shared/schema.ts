@@ -10,6 +10,7 @@ export const sessions = pgTable("sessions", {
   tableNumber: text("table_number").notNull(),
   splitMode: text("split_mode").notNull(), // 'equal' or 'items'
   totalAmount: decimal("total_amount", { precision: 10, scale: 2 }).notNull(),
+  participantCount: integer("participant_count").default(4),
   isActive: boolean("is_active").default(true),
   mainBookerId: varchar("main_booker_id"),
   // Bank account info from Tink
