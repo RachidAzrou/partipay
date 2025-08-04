@@ -181,9 +181,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const totalAmount = parseFloat(session.totalAmount);
         
         // For items mode, preserve the expectedAmount that was already set based on selected items
-        // For equal mode, set the expectedAmount to the equal share
+        // For equal mode, set the expectedAmount to the equal share based on actual participant count
         const mainBookerExpectedAmount = session.splitMode === 'equal' 
-          ? (totalAmount / participantCount).toString() 
+          ? (totalAmount / (participantCount || 1)).toString() 
           : expectedAmount.toFixed(2); // Use the calculated amount from selected items
         
         await storage.updateParticipant(mainBooker.id, {
@@ -263,14 +263,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Join session as participant
   app.post('/api/sessions/:id/join', async (req, res) => {
     try {
+      const sessionId = req.params.id;
+      const session = await storage.getSession(sessionId);
+      
+      if (!session) {
+        return res.status(404).json({ message: 'Session not found' });
+      }
+      
       const participantData = insertParticipantSchema.parse({
         ...req.body,
-        sessionId: req.params.id
+        sessionId
       });
       
       const participant = await storage.createParticipant(participantData);
       
-      broadcastToSession(req.params.id, {
+      // For equal split mode, recalculate expected amounts for all participants
+      if (session.splitMode === 'equal') {
+        const allParticipants = await storage.getParticipantsBySession(sessionId);
+        const totalAmount = parseFloat(session.totalAmount);
+        const participantCount = allParticipants.length;
+        const expectedAmountPerPerson = (totalAmount / participantCount).toFixed(2);
+        
+        // Update expected amount for all participants
+        for (const p of allParticipants) {
+          await storage.updateParticipant(p.id, {
+            expectedAmount: expectedAmountPerPerson
+          });
+        }
+      }
+      
+      broadcastToSession(sessionId, {
         type: 'participant-joined',
         participant
       });

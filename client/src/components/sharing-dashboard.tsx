@@ -190,13 +190,20 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
   }, [sessionData.session.id]);
 
   const calculateProgress = () => {
-    // For split mode, calculate expected total based on participant count
+    // For split mode, calculate expected total based on actual participants
     const totalAmount = parseFloat(sessionData.session.totalAmount);
     const expectedTotal = sessionData.session.splitMode === 'equal' 
-      ? (totalAmount / totalCount) * actualParticipants
+      ? (totalAmount / actualParticipants) * actualParticipants
       : totalAmount;
     
-    const totalPaid = sessionData.participants.reduce((sum, p) => sum + parseFloat(p.paidAmount || '0'), 0);
+    const totalPaid = sessionData.participants.reduce((sum, p) => {
+      if (p.hasPaid) {
+        // Use the actual expected amount for this participant
+        const participantExpected = parseFloat(p.expectedAmount || '0');
+        return sum + participantExpected;
+      }
+      return sum;
+    }, 0);
     return expectedTotal > 0 ? (totalPaid / expectedTotal) * 100 : 0;
   };
 
@@ -206,17 +213,25 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
   const waitingForParticipants = totalCount - actualParticipants;
 
   const handleMockPayment = (participant: any) => {
-    const amount = parseFloat(participant.expectedAmount || sessionData.session.totalAmount) / sessionData.participants.length;
-    paymentMutation.mutate({
-      participantId: participant.id,
-      amount
-    });
+    // Use the participant's actual expected amount
+    const amount = parseFloat(participant.expectedAmount || '0');
+    if (amount > 0) {
+      paymentMutation.mutate({
+        participantId: participant.id,
+        amount
+      });
+    }
   };
 
   const calculateOutstandingDetails = () => {
     const totalAmount = parseFloat(sessionData.session.totalAmount);
     const totalPaid = sessionData.participants.reduce((sum, p) => {
-      return sum + (p.hasPaid ? parseFloat(p.expectedAmount || (totalAmount / totalCount).toString()) : 0);
+      if (p.hasPaid) {
+        // Use the participant's actual expected amount
+        const participantExpected = parseFloat(p.expectedAmount || '0');
+        return sum + participantExpected;
+      }
+      return sum;
     }, 0);
     const outstandingAmount = totalAmount - totalPaid;
     const unpaidParticipants = sessionData.participants.filter(p => !p.hasPaid);
@@ -325,7 +340,12 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
         {(() => {
           const totalAmount = parseFloat(sessionData.session.totalAmount);
           const totalPaid = sessionData.participants.reduce((sum, p) => {
-            return sum + (p.hasPaid ? parseFloat(p.expectedAmount || (totalAmount / totalCount).toString()) : 0);
+            if (p.hasPaid) {
+              // Use the participant's actual expected amount
+              const participantExpected = parseFloat(p.expectedAmount || '0');
+              return sum + participantExpected;
+            }
+            return sum;
           }, 0);
           const progressPercentage = totalAmount > 0 ? (totalPaid / totalAmount) * 100 : 0;
           
@@ -368,8 +388,8 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
                 </p>
                 <p className="text-sm text-gray-900 leading-tight font-semibold tabular-nums">
                   {participant.isMainBooker 
-                    ? `€ ${(parseFloat(sessionData.session.totalAmount) / totalCount).toFixed(2)} (deel)`
-                    : `€ ${participant.expectedAmount || (parseFloat(sessionData.session.totalAmount) / sessionData.participants.length).toFixed(2)}`
+                    ? `€ ${parseFloat(participant.expectedAmount || '0').toFixed(2)} (deel)`
+                    : `€ ${parseFloat(participant.expectedAmount || '0').toFixed(2)}`
                   }
                 </p>
               </div>
@@ -404,7 +424,10 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
                   Wachtend op deelnemer...
                 </p>
                 <p className="text-sm text-gray-500 leading-tight font-semibold tabular-nums">
-                  € {(parseFloat(sessionData.session.totalAmount) / totalCount).toFixed(2)}
+                  € {sessionData.session.splitMode === 'equal' 
+                    ? (parseFloat(sessionData.session.totalAmount) / actualParticipants).toFixed(2)
+                    : '0.00'
+                  }
                 </p>
               </div>
             </div>

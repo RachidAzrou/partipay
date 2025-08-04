@@ -198,7 +198,9 @@ export default function ParticipantJoin() {
     }
 
     if (isSplitMode) {
-      const expectedAmount = (parseFloat(sessionData.session.totalAmount) / sessionData.session.participantCount).toFixed(2);
+      // Calculate expected amount based on current participant count + 1 (including this new participant)
+      const currentParticipantCount = sessionData.participants.length + 1;
+      const expectedAmount = (parseFloat(sessionData.session.totalAmount) / currentParticipantCount).toFixed(2);
       joinMutation.mutate({
         name: participantName,
         expectedAmount

@@ -152,11 +152,12 @@ export default function PaymentSuccess() {
                     if (sessionData.session.splitMode === 'equal') {
                       return (parseFloat(sessionData.session.totalAmount) / sessionData.participants.length).toFixed(2);
                     }
-                    // For "items" split, try to find current participant's paid amount
-                    // If we can't determine it, show the average expected amount
-                    const paidParticipant = sessionData.participants.find(p => p.hasPaid && !p.isMainBooker);
-                    if (paidParticipant && paidParticipant.paidAmount) {
-                      return parseFloat(paidParticipant.paidAmount).toFixed(2);
+                    // For "items" split, find the current participant's actual expected amount
+                    // We need to identify which participant this receipt is for based on who paid
+                    const paidNonMainBookers = sessionData.participants.filter(p => p.hasPaid && !p.isMainBooker);
+                    if (paidNonMainBookers.length === 1) {
+                      // If only one non-main-booker paid, this must be their receipt
+                      return parseFloat(paidNonMainBookers[0].expectedAmount || '0').toFixed(2);
                     }
                     // Fallback: show average of expected amounts for non-main-bookers
                     const nonMainBookers = sessionData.participants.filter(p => !p.isMainBooker);
