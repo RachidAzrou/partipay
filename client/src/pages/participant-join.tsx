@@ -59,8 +59,9 @@ export default function ParticipantJoin() {
   // WebSocket for real-time updates
   const { connected } = useWebSocket(params?.sessionId || '', (message) => {
     if (message.type === 'items-claimed' || message.type === 'participant-joined' || message.type === 'participant-payment-completed') {
-      // Refresh session data when items are claimed by others or payments are made
+      // Force immediate refresh of session data
       queryClient.invalidateQueries({ queryKey: ['/api/sessions', params?.sessionId] });
+      queryClient.refetchQueries({ queryKey: ['/api/sessions', params?.sessionId] });
       
       if (message.type === 'items-claimed') {
         const sessionData = sessionQuery.data as SessionData;
