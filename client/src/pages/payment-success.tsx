@@ -70,9 +70,42 @@ export default function PaymentSuccess() {
   const handleDownloadPersonalReceipt = async () => {
     if (!sessionQuery.data) return;
     
+    const sessionData = sessionQuery.data as SessionData;
+    
+    // Try to identify which participant should get the personal receipt
+    // For "Pay your Part" mode, find the participant who has claimed items (not main booker)
+    let targetParticipantId: string | undefined;
+    
+    if (sessionData.session.splitMode === 'items') {
+      // Find non-main-booker who has claimed items
+      const participantsWithClaims = sessionData.participants.filter(p => {
+        if (p.isMainBooker) return false;
+        return sessionData.itemClaims.some(claim => claim.participantId === p.id);
+      });
+      
+      // If there's only one participant with claims, use them
+      if (participantsWithClaims.length === 1) {
+        targetParticipantId = participantsWithClaims[0].id;
+      } else {
+        // If multiple participants have claims, try to find the most recently paid one
+        const paidParticipantsWithClaims = participantsWithClaims.filter(p => p.hasPaid);
+        if (paidParticipantsWithClaims.length > 0) {
+          targetParticipantId = paidParticipantsWithClaims[paidParticipantsWithClaims.length - 1].id;
+        } else {
+          targetParticipantId = participantsWithClaims[0]?.id;
+        }
+      }
+    }
+    
+    // Fallback to main booker if no specific participant found
+    if (!targetParticipantId) {
+      const mainBooker = sessionData.participants.find(p => p.isMainBooker);
+      targetParticipantId = mainBooker?.id;
+    }
+    
     setDownloadingPDF('personal');
     try {
-      await generateReceiptPDF(sessionQuery.data, 'personal');
+      await generateReceiptPDF(sessionQuery.data, 'personal', targetParticipantId);
       toast({
         title: "PDF gedownload",
         description: "Persoonlijke rekening is gedownload als PDF",

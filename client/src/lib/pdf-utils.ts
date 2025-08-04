@@ -1,7 +1,9 @@
 // PDF generation utilities for receipts
-export async function generateReceiptPDF(sessionData: any, type: 'full' | 'personal') {
+export async function generateReceiptPDF(sessionData: any, type: 'full' | 'personal', participantId?: string) {
   const { session, participants, billItems, itemClaims } = sessionData;
   const mainBooker = participants.find((p: any) => p.isMainBooker);
+  // For personal receipts, use specified participant or default to main booker
+  const targetParticipant = participantId ? participants.find((p: any) => p.id === participantId) : mainBooker;
   
   // Create PDF content as HTML string
   const today = new Date();
@@ -122,23 +124,23 @@ export async function generateReceiptPDF(sessionData: any, type: 'full' | 'perso
         </div>
   `;
 
-  if (type === 'personal' && mainBooker) {
-    // Personal receipt - only claimed items
+  if (type === 'personal' && targetParticipant) {
+    // Personal receipt - only claimed items for the specific participant
     pdfContent += `
       <div class="personal-note">
         <strong>PERSOONLIJKE REKENING</strong><br>
-        Voor: ${mainBooker.name}<br>
+        Voor: ${targetParticipant.name}<br>
         Via PartiPay - ${session.splitMode === 'items' ? 'Pay your Part' : 'Split the Bill'} modus
       </div>
     `;
 
     const personalItems = billItems.filter((item: any) => {
       return itemClaims.some((claim: any) => 
-        claim.billItemId === item.id && claim.participantId === mainBooker.id
+        claim.billItemId === item.id && claim.participantId === targetParticipant.id
       );
     }).map((item: any) => {
       const claim = itemClaims.find((c: any) => 
-        c.billItemId === item.id && c.participantId === mainBooker.id
+        c.billItemId === item.id && c.participantId === targetParticipant.id
       );
       return {
         ...item,
