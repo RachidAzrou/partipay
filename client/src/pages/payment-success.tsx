@@ -155,7 +155,7 @@ export default function PaymentSuccess() {
         </div>
 
         {/* Receipt Download Options */}
-        <div className="space-y-4 animate-slide-up" style={{animationDelay: '0.2s'}}>
+        <div className="space-y-4 animate-slide-up" style={{animationDelay: '0.05s'}}>
           
           {/* Full Receipt Option */}
           <div className="monarch-card">
@@ -215,7 +215,7 @@ export default function PaymentSuccess() {
         </div>
 
         {/* Session Summary */}
-        <div className="monarch-card animate-slide-up" style={{animationDelay: '0.4s'}}>
+        <div className="monarch-card animate-slide-up" style={{animationDelay: '0.1s'}}>
           <h3 className="font-semibold text-gray-900 mb-3">Sessie overzicht</h3>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">

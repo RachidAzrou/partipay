@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { useMutation } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { IoReceiptOutline } from "react-icons/io5";
 import { MdCallSplit } from "react-icons/md";
@@ -53,6 +53,11 @@ export default function Home() {
       return res.json();
     },
     onSuccess: (session) => {
+      // Prefetch session data for instant loading
+      queryClient.prefetchQuery({
+        queryKey: ['/api/sessions', session.id],
+        staleTime: 5 * 60 * 1000,
+      });
       setLocation(`/session/${session.id}`);
     },
     onError: () => {
@@ -104,11 +109,10 @@ export default function Home() {
       {currentStep === 1 && (
         <div className="flex-1 px-3 py-4 space-y-4 animate-fade-in">
           {loadBillMutation.isPending && (
-            <div className="text-center space-y-4 py-10">
-              <div className="w-8 h-8 border-2 border-gray-300 border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <div className="text-center space-y-3 py-6">
+              <div className="w-6 h-6 border-2 border-gray-300 border-t-transparent rounded-full animate-spin mx-auto"></div>
               <div>
                 <h2 className="monarch-title text-base">Rekening ophalen...</h2>
-                <p className="monarch-body text-xs">Een moment geduld</p>
               </div>
             </div>
           )}

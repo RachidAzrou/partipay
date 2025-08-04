@@ -272,15 +272,14 @@ export async function generateReceiptPDF(sessionData: any, type: 'full' | 'perso
     printWindow.document.write(pdfContent);
     printWindow.document.close();
     
-    // Wait for document to load, then print
-    setTimeout(() => {
+    // Immediate print for super fast experience
+    printWindow.onload = () => {
       printWindow.print();
-      
       // Close window after printing
       setTimeout(() => {
         printWindow.close();
-      }, 1000);
-    }, 500);
+      }, 200);
+    };
   } else {
     // Fallback: create downloadable HTML file
     const blob = new Blob([pdfContent], { type: 'text/html' });
@@ -329,10 +328,10 @@ export async function simulateBankingFlow(
   );
   
   if (userConfirmed) {
-    // Simulate processing time
-    setTimeout(async () => {
-      // Simulate 90% success rate
-      if (Math.random() > 0.1) {
+    // Instant processing for super fast experience
+    (async () => {
+      // Simulate 95% success rate for better UX
+      if (Math.random() > 0.05) {
         try {
           // Complete payment on server
           const response = await fetch(`/api/sessions/${sessionId}/complete-payment`, {
@@ -355,7 +354,7 @@ export async function simulateBankingFlow(
       } else {
         onError('Betaling geannuleerd of mislukt');
       }
-    }, 2000);
+    })();
   } else {
     onError('Betaling geannuleerd door gebruiker');
   }

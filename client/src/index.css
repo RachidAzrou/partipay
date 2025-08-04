@@ -80,6 +80,10 @@
     font-family: system-ui, -apple-system, "SF Pro Display", sans-serif;
     height: 100%;
     height: -webkit-fill-available;
+    /* Performance optimizations */
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   body {
@@ -93,6 +97,10 @@
     min-height: 100vh;
     min-height: -webkit-fill-available;
     overflow-x: hidden;
+    /* Performance optimizations */
+    will-change: transform;
+    backface-visibility: hidden;
+    transform: translateZ(0);
   }
   
   #root {
@@ -460,4 +468,60 @@ button, .button, [role="button"] {
 @keyframes scan-line {
   0% { background-position: 0% 0%; }
   100% { background-position: 100% 100%; }
+}
+
+/* Super fast performance optimizations */
+* {
+  /* Hardware acceleration for all elements */
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* Optimize animations for 60fps */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { 
+    opacity: 0; 
+    transform: translateY(10px) translateZ(0); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0) translateZ(0); 
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.15s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.2s ease-out forwards;
+}
+
+/* Fast transitions */
+.monarch-btn, .parti-btn {
+  transition: all 0.1s ease-out !important;
+}
+
+.monarch-card, .parti-card {
+  transition: transform 0.1s ease-out, box-shadow 0.1s ease-out !important;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -16,7 +16,8 @@ export default function Session() {
   const { data: sessionData, isLoading, error } = useQuery({
     queryKey: ['/api/sessions', id],
     enabled: !!id,
-    refetchInterval: 5000, // Poll every 5 seconds for updates
+    // Remove polling - use WebSocket for real-time updates instead
+    staleTime: 30 * 1000, // 30 seconds stale time for instant loading
   });
 
   if (isLoading) {
@@ -52,7 +53,7 @@ export default function Session() {
   return (
     <div className="parti-container bg-background flex flex-col">
       <ProgressBar currentStep={3} totalSteps={3} onBack={handleBack} />
-      <SharingDashboard sessionData={sessionData} />
+      <SharingDashboard sessionData={sessionData as any} />
     </div>
   );
 }

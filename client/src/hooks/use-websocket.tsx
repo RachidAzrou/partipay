@@ -45,10 +45,10 @@ export function useWebSocket(sessionId: string, onMessage: (message: any) => voi
       console.log('WebSocket disconnected');
       setConnected(false);
       
-      // Attempt to reconnect after 3 seconds
+      // Immediate reconnect for super fast experience
       reconnectTimeoutRef.current = setTimeout(() => {
         connect();
-      }, 3000);
+      }, 100);
     };
 
     ws.onerror = (error) => {
