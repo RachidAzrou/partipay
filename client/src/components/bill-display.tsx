@@ -32,13 +32,13 @@ export default function BillDisplay({ billData, expanded, onToggleExpand }: Bill
           <p className="parti-body mt-1">Restaurant De Blauwe Kater • Tafel 12</p>
           <p className="text-2xl font-bold parti-text-primary mt-3">€ {billData.totalAmount}</p>
         </div>
-        <div className="w-10 h-10 rounded-full parti-surface-muted flex items-center justify-center ml-4 parti-shadow">
-          <i className={`fas fa-chevron-down parti-text-primary transition-transform duration-300 ${expanded ? 'rotate-180' : ''}`}></i>
+        <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center ml-4">
+          <i className={`fas fa-chevron-down text-muted-foreground transition-transform duration-200 text-sm ${expanded ? 'rotate-180' : ''}`}></i>
         </div>
       </button>
       
       {expanded && (
-        <div className="border-t border-border parti-surface-muted p-6 space-y-2 font-mono text-sm animate-fade-in" data-testid="bill-details">
+        <div className="border-t bg-muted/30 p-6 space-y-2 font-mono text-sm animate-fade-in" style={{borderColor: 'var(--parti-border-light)'}} data-testid="bill-details">
           {/* POS Header */}
           <div className="text-center mb-6 border-b border-border pb-4">
             <h4 className="parti-heading-3">DE BLAUWE KATER</h4>
@@ -69,7 +69,7 @@ export default function BillDisplay({ billData, expanded, onToggleExpand }: Bill
               <span>BTW (21%):</span>
               <span>€{btw.toFixed(2)}</span>
             </div>
-            <div className="flex justify-between text-lg font-bold border-t border-border pt-2 parti-text-primary">
+            <div className="flex justify-between text-lg font-bold border-t pt-2 text-foreground" style={{borderColor: 'var(--parti-border-light)'}}>
               <span>TOTAAL:</span>
               <span>€{billData.totalAmount}</span>
             </div>

@@ -104,8 +104,8 @@ export default function Home() {
         <div className="flex-1 px-6 py-8 space-y-8 animate-fade-in">
           {loadBillMutation.isPending && (
             <div className="text-center space-y-6 py-16">
-              <div className="w-20 h-20 parti-gradient rounded-full flex items-center justify-center mx-auto parti-shadow-lg">
-                <div className="w-10 h-10 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto">
+                <div className="w-8 h-8 border-3 border-muted-foreground border-t-transparent rounded-full animate-spin"></div>
               </div>
               <div>
                 <h2 className="parti-heading-2">Rekening ophalen...</h2>
@@ -117,12 +117,12 @@ export default function Home() {
           {billData && dataLoaded && (
             <>
               <div className="text-center space-y-6 mb-8 animate-slide-up">
-                <div className="w-20 h-20 parti-bg-accent rounded-full flex items-center justify-center mx-auto parti-shadow-lg">
-                  <i className="fas fa-check text-3xl text-white"></i>
+                <div className="w-16 h-16 parti-bg-accent rounded-full flex items-center justify-center mx-auto">
+                  <i className="fas fa-check text-2xl text-white"></i>
                 </div>
                 <div>
                   <h1 className="parti-heading-1">Rekening gevonden!</h1>
-                  <p className="parti-body text-lg">Restaurant De Blauwe Kater, Tafel 12</p>
+                  <p className="parti-body">Restaurant De Blauwe Kater, Tafel 12</p>
                 </div>
               </div>
               
@@ -132,22 +132,20 @@ export default function Home() {
                 onToggleExpand={() => setBillExpanded(!billExpanded)}
               />
               
-              <div className="space-y-4 mt-auto animate-slide-up">
+              <div className="space-y-3 mt-auto animate-slide-up">
                 <button 
-                  className="w-full parti-button parti-button-primary touch-target text-base py-4"
+                  className="w-full parti-button parti-button-primary touch-target py-4"
                   onClick={() => handleModeSelect('equal')}
                   data-testid="button-split-bill"
                 >
-                  <i className="fas fa-users mr-3"></i>
                   Split the Bill
                 </button>
                 
                 <button 
-                  className="w-full parti-button parti-button-secondary touch-target text-base py-4"
+                  className="w-full parti-button parti-button-secondary touch-target py-4"
                   onClick={() => handleModeSelect('items')}
                   data-testid="button-pay-part"
                 >
-                  <i className="fas fa-receipt mr-3"></i>
                   Pay Your Part
                 </button>
               </div>

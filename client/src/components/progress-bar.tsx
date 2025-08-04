@@ -8,18 +8,18 @@ interface ProgressBarProps {
 
 export default function ProgressBar({ currentStep, totalSteps, onBack }: ProgressBarProps) {
   return (
-    <div className="sticky top-0 z-50 parti-surface-elevated backdrop-blur-sm border-b border-border px-6 py-4 parti-shadow">
-      <div className="flex items-center justify-center mb-4">
+    <div className="sticky top-0 z-50 bg-background border-b px-6 py-6" style={{borderColor: 'var(--parti-border-light)'}}>
+      <div className="flex items-center justify-center mb-6">
         <div className="text-center">
-          <h1 className="text-2xl font-bold parti-text-primary mb-1">PartiPay</h1>
-          <p className="parti-small">Smart Bill Splitting</p>
+          <h1 className="text-2xl font-semibold text-foreground mb-1">PartiPay</h1>
+          <p className="parti-body">Simple Bill Splitting</p>
         </div>
       </div>
-      <div className="flex space-x-3">
+      <div className="flex space-x-2">
         {Array.from({ length: totalSteps }, (_, index) => (
           <div
             key={index}
-            className={`flex-1 h-2 rounded-full transition-all duration-500 ${
+            className={`flex-1 h-1 rounded-full transition-all duration-300 ${
               index < currentStep
                 ? 'parti-bg-primary'
                 : 'bg-muted'
@@ -27,20 +27,20 @@ export default function ProgressBar({ currentStep, totalSteps, onBack }: Progres
           />
         ))}
       </div>
-      <div className="flex items-center justify-between mt-4">
+      <div className="flex items-center justify-between mt-6">
         {onBack && currentStep > 1 ? (
           <button 
-            className="w-10 h-10 parti-surface-muted rounded-full flex items-center justify-center touch-target hover:parti-shadow-md transition-all parti-shadow"
+            className="w-9 h-9 rounded-lg flex items-center justify-center touch-target hover:bg-muted transition-colors"
             onClick={onBack}
             data-testid="button-back-progress"
           >
-            <i className="fas fa-arrow-left parti-text-primary text-lg"></i>
+            <i className="fas fa-arrow-left text-foreground text-base"></i>
           </button>
         ) : (
-          <div className="w-10"></div>
+          <div className="w-9"></div>
         )}
-        <p className="parti-small font-medium">Stap {currentStep} van {totalSteps}</p>
-        <div className="w-10"></div>
+        <p className="parti-body font-medium">Stap {currentStep} van {totalSteps}</p>
+        <div className="w-9"></div>
       </div>
     </div>
   );
