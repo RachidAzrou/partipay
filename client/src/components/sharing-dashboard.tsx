@@ -237,34 +237,7 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
           </div>
         ))}
         
-        {/* Payment Progress Bar under participants */}
-        <div className="monarch-card animate-slide-up mt-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-base font-semibold text-gray-900">Betalingsvoortgang</h3>
-            <span className="text-base text-gray-900 leading-relaxed font-semibold tabular-nums">
-              € {(() => {
-                const totalPaid = sessionData.participants.reduce((sum, p) => sum + parseFloat(p.paidAmount || '0'), 0);
-                return totalPaid.toFixed(2);
-              })()} / € {(() => {
-                const totalAmount = parseFloat(sessionData.session.totalAmount);
-                const expectedTotal = sessionData.session.splitMode === 'equal' 
-                  ? (totalAmount / totalCount) * actualParticipants
-                  : totalAmount;
-                return expectedTotal.toFixed(2);
-              })()} 
-            </span>
-          </div>
-          <div className="w-full bg-muted rounded-full h-3 mb-4">
-            <div 
-              className="bg-monarch-primary h-3 rounded-full transition-all duration-700 ease-out"
-              style={{ width: `${calculateProgress()}%` }}
-              data-testid="payment-progress-bar"
-            ></div>
-          </div>
-          <p className="monarch-body text-center font-medium">
-            {paidCount} van {actualParticipants} aangesloten personen hebben betaald
-          </p>
-        </div>
+        
         
         {/* Show waiting slots for remaining participants */}
         {waitingForParticipants > 0 && Array.from({ length: waitingForParticipants }, (_, index) => (
