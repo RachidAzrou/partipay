@@ -290,8 +290,16 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                   <p className="parti-body mt-1">personen</p>
                 </div>
                 <button 
-                  className="w-12 h-12 parti-bg-primary rounded-lg flex items-center justify-center touch-target hover:opacity-90 transition-opacity"
-                  onClick={() => setParticipantCount(Math.min(20, participantCount + 1))}
+                  className="w-12 h-12 parti-bg-primary rounded-lg flex items-center justify-center touch-target hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                  onClick={() => {
+                    const totalAmount = parseFloat(billData.totalAmount);
+                    // Ensure minimum 1 cent per person - prevent 0 euro per person
+                    const maxParticipants = Math.min(20, Math.floor(totalAmount * 100));
+                    if (participantCount < maxParticipants) {
+                      setParticipantCount(participantCount + 1);
+                    }
+                  }}
+                  disabled={participantCount >= Math.min(20, Math.floor(parseFloat(billData.totalAmount) * 100))}
                   data-testid="button-increase-participants"
                 >
                   <i className="fas fa-plus text-white text-sm"></i>
@@ -304,6 +312,17 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                   </span>
                 </div>
               </div>
+              
+              {participantCount >= Math.min(20, Math.floor(parseFloat(billData.totalAmount) * 100)) && (
+                <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 mt-4">
+                  <div className="flex items-center space-x-2">
+                    <i className="fas fa-exclamation-triangle text-orange-600"></i>
+                    <p className="text-sm text-orange-800">
+                      Maximum aantal deelnemers bereikt (minimum € 0,01 per persoon)
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         ) : (
