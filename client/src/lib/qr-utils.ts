@@ -1,7 +1,7 @@
 export async function generateQRCode(text: string): Promise<string> {
-  // Using qr-server.com API for QR code generation
-  const size = 200;
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(text)}&bgcolor=FFFFFF&color=000000&qzone=1&margin=10&format=png`;
+  // Using qr-server.com API for QR code generation - larger size for better scanning
+  const size = 400;
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(text)}&bgcolor=FFFFFF&color=000000&qzone=2&margin=20&format=png&ecc=M`;
   
   return qrUrl;
 }

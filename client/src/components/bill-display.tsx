@@ -40,7 +40,7 @@ export default function BillDisplay({ billData, expanded, onToggleExpand }: Bill
         data-testid="button-toggle-bill"
       >
         <div className="flex-1">
-          <h3 className="text-sm font-semibold text-gray-900">Rekening #{today.getDate().toString().padStart(2, '0')}{(today.getMonth() + 1).toString().padStart(2, '0')}{today.getFullYear().toString().slice(-2)}01</h3>
+          
           <p className="monarch-body mt-1">Restaurant De Blauwe Kater • Tafel 12</p>
           <p className="text-sm text-monarch-primary mt-2 font-medium">Klik om volledige rekening te bekijken</p>
         </div>
