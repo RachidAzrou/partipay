@@ -7,6 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { TbPlugConnected } from "react-icons/tb";
+import { MdOutlinePayment } from "react-icons/md";
 
 interface BillItem {
   name: string;
@@ -404,12 +405,13 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
 
         <div className="px-4 mt-auto">
           <button 
-            className="w-full parti-button parti-button-primary disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full parti-button parti-button-primary disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
             onClick={handleContinue}
-            disabled={!bankLinked}
+            disabled={!bankLinked || (splitMode === 'items' && Object.values(selectedItems).every(qty => qty === 0))}
             data-testid="button-continue"
           >
-            Verder naar delen
+            <MdOutlinePayment className="text-lg" />
+            <span>Verder naar delen</span>
           </button>
         </div>
       </div>
