@@ -313,16 +313,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                 </div>
               </div>
               
-              {participantCount >= Math.min(20, Math.floor(parseFloat(billData.totalAmount) / 0.01)) && (
-                <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 mt-4">
-                  <div className="flex items-center space-x-2">
-                    <i className="fas fa-exclamation-triangle text-orange-600"></i>
-                    <p className="text-sm text-orange-800">
-                      Maximum aantal deelnemers bereikt (minimum € 0,01 per persoon)
-                    </p>
-                  </div>
-                </div>
-              )}
+              
             </div>
           </div>
         ) : (
