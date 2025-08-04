@@ -245,19 +245,13 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                             <i className="fas fa-check text-white text-lg"></i>
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-center space-x-2 mb-1">
-                              <h4 className="text-base font-bold text-gray-900">Bankrekening gekoppeld</h4>
-                              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                            </div>
-                            <p className="text-sm text-green-700 mb-3">Klaar voor snelle betalingen</p>
-                            
-                            <div className="space-y-2">
-                              <div className="flex items-center space-x-2">
-                                <i className="fas fa-user text-gray-400 text-xs w-3"></i>
+                            <div className="space-y-3 mt-2">
+                              <div className="flex items-center space-x-3">
+                                <i className="fas fa-check text-green-500 text-sm w-4"></i>
                                 <p className="text-sm font-semibold text-gray-900">{bankInfo?.accountHolder}</p>
                               </div>
-                              <div className="flex items-center space-x-2">
-                                <i className="fas fa-credit-card text-gray-400 text-xs w-3"></i>
+                              <div className="flex items-center space-x-3">
+                                <i className="fas fa-check text-green-500 text-sm w-4"></i>
                                 <p className="text-xs font-mono text-gray-600 bg-gray-50 px-2 py-1 rounded">{bankInfo?.iban}</p>
                               </div>
                             </div>
