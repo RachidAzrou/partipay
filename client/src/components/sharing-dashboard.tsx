@@ -52,6 +52,7 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
   const [qrCodeUrl, setQrCodeUrl] = useState("");
   const [sessionCompleted, setSessionCompleted] = useState(false);
   const [showQRModal, setShowQRModal] = useState(false);
+  const [showPaymentConfirmModal, setShowPaymentConfirmModal] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -163,6 +164,19 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
   };
 
   const handlePayFullBill = () => {
+    const outstandingDetails = calculateOutstandingDetails();
+    
+    // If there are outstanding amounts, show confirmation modal
+    if (outstandingDetails.hasOutstanding) {
+      setShowPaymentConfirmModal(true);
+    } else {
+      // If everyone has paid, proceed directly
+      fullPaymentMutation.mutate();
+    }
+  };
+
+  const confirmFullPayment = () => {
+    setShowPaymentConfirmModal(false);
     fullPaymentMutation.mutate();
   };
 
@@ -428,6 +442,69 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
           </div>
         </div>
       )}
+      
+      {/* Payment Confirmation Modal */}
+      {showPaymentConfirmModal && (() => {
+        const outstandingDetails = calculateOutstandingDetails();
+        return (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl p-6 max-w-md w-full animate-slide-up">
+              <div className="flex items-start space-x-3 mb-4">
+                <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center mt-1">
+                  <i className="fas fa-exclamation-triangle text-white text-sm"></i>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Bevestig volledige betaling</h3>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Niet alle deelnemers hebben hun deel betaald. Wil je toch de volledige rekening betalen?
+                  </p>
+                </div>
+              </div>
+              
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                <h4 className="text-sm font-medium text-red-800 mb-2">Openstaand bedrag</h4>
+                <p className="text-lg font-bold text-red-900 mb-3">
+                  € {outstandingDetails.outstandingAmount.toFixed(2)}
+                </p>
+                <p className="text-sm text-red-700 mb-2">Van de volgende deelnemers:</p>
+                <ul className="text-sm text-red-700 space-y-1">
+                  {outstandingDetails.unpaidParticipants.map(p => (
+                    <li key={p.id} className="flex justify-between items-center" data-testid={`unpaid-participant-${p.id}`}>
+                      <span>• {p.name}</span>
+                      <span className="font-semibold">€ {(parseFloat(p.expectedAmount || (parseFloat(sessionData.session.totalAmount) / totalCount).toString())).toFixed(2)}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              
+              <div className="flex space-x-3">
+                <button
+                  className="flex-1 monarch-btn monarch-btn-secondary"
+                  onClick={() => setShowPaymentConfirmModal(false)}
+                  data-testid="button-cancel-payment"
+                >
+                  Annuleren
+                </button>
+                <button
+                  className="flex-1 monarch-btn monarch-btn-primary"
+                  onClick={confirmFullPayment}
+                  disabled={fullPaymentMutation.isPending}
+                  data-testid="button-confirm-payment"
+                >
+                  {fullPaymentMutation.isPending ? (
+                    <>
+                      <i className="fas fa-spinner fa-spin mr-2"></i>
+                      Betalen...
+                    </>
+                  ) : (
+                    'Ja, betaal alles'
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }
