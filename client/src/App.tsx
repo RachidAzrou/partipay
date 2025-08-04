@@ -31,6 +31,11 @@ function App() {
       <TooltipProvider>
         <Toaster />
         <Router />
+        <footer className="fixed bottom-0 left-0 right-0 bg-transparent text-center py-2 z-10">
+          <p className="text-white font-bold text-sm" data-testid="footer-copyright">
+            © 2025 PartiPay
+          </p>
+        </footer>
       </TooltipProvider>
     </QueryClientProvider>
   );
