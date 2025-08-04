@@ -276,63 +276,6 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
           );
         })()}
         
-        {/* Full Payment Section - Available for all users */}
-        {canPayFullBill && (
-          <div className="monarch-card border-2 border-monarch-primary bg-orange-50">
-            <div className="flex items-start space-x-2 mb-3">
-              <div className="w-6 h-6 bg-monarch-primary rounded-full flex items-center justify-center mt-0.5">
-                <i className="fas fa-crown text-white text-xs"></i>
-              </div>
-              <div className="flex-1">
-                <h3 className="text-sm font-semibold text-gray-900 mb-1">Volledige rekening betalen</h3>
-                <p className="text-xs text-gray-600 mb-3">
-                  Betaal de hele rekening in één keer, ook als anderen nog niet hebben betaald.
-                </p>
-                
-                {outstandingDetails.hasOutstanding && (
-                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-2 mb-3">
-                    <div className="flex items-start space-x-1.5">
-                      <i className="fas fa-exclamation-triangle text-yellow-600 text-xs mt-0.5"></i>
-                      <div className="flex-1">
-                        <h4 className="text-xs font-medium text-yellow-800 mb-1">Nog openstaand</h4>
-                        <p className="text-xs text-yellow-700 mb-1">
-                          <strong>€ {outstandingDetails.outstandingAmount.toFixed(2)}</strong> van de volgende deelnemers:
-                        </p>
-                        <ul className="text-xs text-yellow-700 space-y-0.5">
-                          {outstandingDetails.unpaidParticipants.map(p => (
-                            <li key={p.id} className="flex justify-between">
-                              <span>• {p.name}</span>
-                              <span>€ {(parseFloat(p.expectedAmount || (parseFloat(sessionData.session.totalAmount) / totalCount).toString())).toFixed(2)}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                
-                <button
-                  className="w-full monarch-btn monarch-btn-primary flex items-center justify-center space-x-2"
-                  onClick={handlePayFullBill}
-                  disabled={fullPaymentMutation.isPending}
-                  data-testid="button-pay-full-bill"
-                >
-                  {fullPaymentMutation.isPending ? (
-                    <>
-                      <i className="fas fa-spinner fa-spin"></i>
-                      <span>Betaling verwerken...</span>
-                    </>
-                  ) : (
-                    <>
-                      <i className="fas fa-credit-card"></i>
-                      <span>Betaal volledige rekening (€ {sessionData.session.totalAmount})</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
         
         {sessionData.participants.map((participant, index) => (
           <div key={participant.id} className="monarch-card flex items-center justify-between animate-slide-up" style={{animationDelay: `${index * 0.1}s`}}>
@@ -404,6 +347,30 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
           </div>
         ))}
       </div>
+      
+      {/* Bottom Payment Button */}
+      {canPayFullBill && (
+        <div className="px-4 pb-4 mt-4">
+          <button
+            className="w-full monarch-btn monarch-btn-primary flex items-center justify-center space-x-2"
+            onClick={handlePayFullBill}
+            disabled={fullPaymentMutation.isPending}
+            data-testid="button-pay-full-bill"
+          >
+            {fullPaymentMutation.isPending ? (
+              <>
+                <i className="fas fa-spinner fa-spin"></i>
+                <span>Betaling verwerken...</span>
+              </>
+            ) : (
+              <>
+                <i className="fas fa-credit-card"></i>
+                <span>Betaal volledige rekening</span>
+              </>
+            )}
+          </button>
+        </div>
+      )}
       </div>
       
       {/* QR Code Modal */}
