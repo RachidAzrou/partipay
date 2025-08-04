@@ -180,7 +180,8 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
     fullPaymentMutation.mutate();
   };
 
-  const isMainBooker = sessionData.participants.some(p => p.isMainBooker && !p.hasPaid);
+  const isMainBooker = sessionData.participants.some(p => p.isMainBooker);
+  const canPayFullBill = true; // Allow anyone to pay the full bill
   const outstandingDetails = calculateOutstandingDetails();
 
   const handleShareQR = async () => {
@@ -275,17 +276,17 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
           );
         })()}
         
-        {/* Main Booker Full Payment Section */}
-        {isMainBooker && (
+        {/* Full Payment Section - Available for all users */}
+        {canPayFullBill && (
           <div className="monarch-card border-2 border-monarch-primary bg-orange-50">
             <div className="flex items-start space-x-2 mb-3">
               <div className="w-6 h-6 bg-monarch-primary rounded-full flex items-center justify-center mt-0.5">
                 <i className="fas fa-crown text-white text-xs"></i>
               </div>
               <div className="flex-1">
-                <h3 className="text-sm font-semibold text-gray-900 mb-1">Hoofdboeker opties</h3>
+                <h3 className="text-sm font-semibold text-gray-900 mb-1">Volledige rekening betalen</h3>
                 <p className="text-xs text-gray-600 mb-3">
-                  Je kunt de volledige rekening betalen, ook als niet iedereen zijn deel heeft betaald.
+                  Betaal de hele rekening in één keer, ook als anderen nog niet hebben betaald.
                 </p>
                 
                 {outstandingDetails.hasOutstanding && (
