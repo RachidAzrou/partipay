@@ -41,7 +41,7 @@ export default function BillDisplay({ billData, expanded, onToggleExpand }: Bill
       >
         <div className="flex-1">
           
-          <p className="monarch-body mt-1">Restaurant De Blauwe Kater • Tafel 12</p>
+          
           <p className="text-sm text-monarch-primary mt-2 font-medium">Klik om volledige rekening te bekijken</p>
         </div>
         <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center ml-3">
