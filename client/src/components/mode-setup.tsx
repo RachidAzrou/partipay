@@ -107,9 +107,18 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
     const availableQuantity = availableQuantities[index] || 0;
     const newQuantity = Math.max(0, Math.min(availableQuantity, currentQuantity + change));
     
+    // Calculate the difference in selection
+    const quantityDifference = newQuantity - currentQuantity;
+    
     setSelectedItems(prev => ({
       ...prev,
       [index]: newQuantity
+    }));
+    
+    // Update available quantities - decrease when selecting, increase when deselecting
+    setAvailableQuantities(prev => ({
+      ...prev,
+      [index]: prev[index] - quantityDifference
     }));
   };
 
