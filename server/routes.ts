@@ -67,9 +67,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Get client configuration
   app.get('/api/config', (req, res) => {
+    // Generate the correct redirect URI based on the current request
+    const protocol = req.headers['x-forwarded-proto'] || (req.secure ? 'https' : 'http');
+    const host = req.headers.host;
+    const redirectUri = `${protocol}://${host}/auth/tink/callback`;
+    
     res.json({
       tinkClientId: process.env.TINK_CLIENT_ID,
-      tinkRedirectUri: process.env.TINK_REDIRECT_URI
+      tinkRedirectUri: redirectUri
     });
   });
 
@@ -303,8 +308,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       console.log('Tink callback received with code and state');
       
+      // Generate the same redirect URI that was used in the authorization request
+      const protocol = req.headers['x-forwarded-proto'] || (req.secure ? 'https' : 'http');
+      const host = req.headers.host;
+      const redirectUri = `${protocol}://${host}/auth/tink/callback`;
+      
       // Exchange code for access token
-      const tokenData = await exchangeCodeForToken(code as string);
+      const tokenData = await exchangeCodeForToken(code as string, redirectUri);
       
       if (!tokenData.access_token) {
         console.error('Failed to get access token');

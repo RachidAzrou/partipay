@@ -33,7 +33,7 @@ interface AccountInfo {
   accountHolder: string;
 }
 
-export async function exchangeCodeForToken(authorizationCode: string): Promise<TinkTokenResponse> {
+export async function exchangeCodeForToken(authorizationCode: string, redirectUri: string): Promise<TinkTokenResponse> {
   try {
     // For public client OAuth2 flow (no client_secret required)
     const response = await fetch(`${TINK_BASE_URL}/api/v1/oauth/token`, {
@@ -44,7 +44,7 @@ export async function exchangeCodeForToken(authorizationCode: string): Promise<T
       body: new URLSearchParams({
         grant_type: 'authorization_code',
         code: authorizationCode,
-        redirect_uri: TINK_REDIRECT_URI,
+        redirect_uri: redirectUri,
         client_id: TINK_CLIENT_ID
       })
     });
