@@ -185,7 +185,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
     try {
       const userData = {
         name: bankInfo.accountHolder || 'Onbekend',
-        bankInfo: bankInfo,
+        bankAccount: bankInfo.iban, // Convert bankInfo to bankAccount string
         ...(splitMode === 'equal' 
           ? { participantCount }
           : { selectedItems: Object.entries(selectedItems).filter(([_, quantity]) => quantity > 0).map(([index, quantity]) => ({ index: parseInt(index), quantity })) }
