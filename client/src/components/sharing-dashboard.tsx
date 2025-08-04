@@ -408,10 +408,7 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
                   {participant.isMainBooker && <span className="monarch-caption ml-1 text-muted-foreground text-xs">• Hoofdboeker</span>}
                 </p>
                 <p className="text-sm text-gray-900 leading-tight font-semibold tabular-nums">
-                  {participant.isMainBooker 
-                    ? `€ ${parseFloat(participant.expectedAmount || '0').toFixed(2)} (deel)`
-                    : `€ ${parseFloat(participant.expectedAmount || '0').toFixed(2)}`
-                  }
+                  € {parseFloat(participant.expectedAmount || '0').toFixed(2)}
                 </p>
               </div>
             </div>
