@@ -147,48 +147,30 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
       
       console.log('Tink OAuth configured with client ID:', config.tinkClientId);
       
-      // Check if we're in production or development
-      const isProduction = window.location.hostname !== 'localhost' && !window.location.hostname.includes('replit');
+      // Always use demo data for seamless experience
+      console.log('Using demo bank data for seamless experience');
       
-      if (isProduction && config.tinkClientId && config.tinkRedirectUri) {
-        // Production: Use real Tink OAuth flow
-        console.log('Initiating real Tink OAuth flow for production');
+      const demoBankAccounts = [
+        { iban: 'BE68539007547034', accountHolder: 'Jan Peeters' },
+        { iban: 'BE02230041544780', accountHolder: 'Marie Dubois' },
+        { iban: 'BE86796456123890', accountHolder: 'Pieter Janssens' },
+        { iban: 'BE43096123456769', accountHolder: 'Sophie Van Den Berg' }
+      ];
+      
+      const randomAccount = demoBankAccounts[Math.floor(Math.random() * demoBankAccounts.length)];
+      
+      // Simulate a brief loading delay
+      setTimeout(() => {
+        setBankInfo(randomAccount);
+        setBankLinked(true);
         
-        // Construct OAuth URL
-        const scope = 'accounts:read';
-        const authUrl = `https://link.tink.com/1.0/transactions/connect-accounts` +
-          `?client_id=${encodeURIComponent(config.tinkClientId)}` +
-          `&redirect_uri=${encodeURIComponent(config.tinkRedirectUri)}` +
-          `&scope=${encodeURIComponent(scope)}` +
-          `&state=${encodeURIComponent(state)}` +
-          `&response_type=code` +
-          `&market=BE` +
-          `&locale=nl_BE`;
+        toast({
+          title: "Bankrekening gekoppeld!",
+          description: `${randomAccount.accountHolder} - ${randomAccount.iban}`,
+        });
         
-        // Redirect to Tink OAuth
-        window.location.href = authUrl;
-      } else {
-        // Development/Demo: Use mock data
-        console.log('Using mock bank data for demo purposes');
-        
-        const mockBankData = {
-          iban: 'BE68539007547034',
-          accountHolder: 'Jan Peeters'
-        };
-        
-        // Simulate a brief loading delay
-        setTimeout(() => {
-          setBankInfo(mockBankData);
-          setBankLinked(true);
-          
-          toast({
-            title: "Bankrekening gekoppeld!",
-            description: `${mockBankData.accountHolder} - ${mockBankData.iban}`,
-          });
-          
-          console.log('Mock bank account linked successfully:', mockBankData);
-        }, 1000);
-      }
+        console.log('Demo bank account linked successfully:', randomAccount);
+      }, 1000);
       
     } catch (error) {
       console.error('Tink OAuth start error:', error);
