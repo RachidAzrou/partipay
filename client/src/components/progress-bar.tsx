@@ -28,7 +28,7 @@ export default function ProgressBar({ currentStep, totalSteps }: ProgressBarProp
           />
         ))}
       </div>
-      <p className="text-sm text-muted-foreground mt-3 font-medium">Stap {currentStep} van {totalSteps}</p>
+      <p className="text-sm text-muted-foreground mt-3 font-medium text-center">Stap {currentStep} van {totalSteps}</p>
     </div>
   );
 }
