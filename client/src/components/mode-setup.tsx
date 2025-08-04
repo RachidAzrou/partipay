@@ -256,7 +256,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                           <div className="flex-1">
                             <p className="text-sm font-semibold text-gray-900">{bankInfo?.accountHolder}</p>
                             <p className="text-xs text-green-600 font-medium">
-                              {bankInfo?.bankName || 'Bankrekening gekoppeld'}
+                              Koppeling rekening succesvol
                             </p>
                             <p className="text-xs text-gray-500 font-mono">
                               IBAN: {bankInfo?.iban ? `${bankInfo.iban.slice(0, 2)}** **** **** ${bankInfo.iban.slice(-4)}` : ''}
