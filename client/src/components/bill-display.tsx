@@ -42,7 +42,7 @@ export default function BillDisplay({ billData, expanded, onToggleExpand }: Bill
         <div className="flex-1">
           
           
-          <p className="text-sm text-monarch-primary mt-2 font-medium">Klik om volledige rekening te bekijken</p>
+          <p className="text-sm text-monarch-primary mt-2 font-medium text-center">Klik om volledige rekening te bekijken</p>
         </div>
         <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center ml-3">
           <i className={`fas fa-chevron-down text-monarch-primary transition-transform duration-200 text-sm ${expanded ? 'rotate-180' : ''}`}></i>
