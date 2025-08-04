@@ -4,6 +4,7 @@ import { useLocation } from "wouter";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { IoReceiptOutline } from "react-icons/io5";
 import ProgressBar from "@/components/progress-bar";
 import BillDisplay from "@/components/bill-display";
 import ModeSetup from "@/components/mode-setup";
@@ -116,7 +117,7 @@ export default function Home() {
             <>
               <div className="text-center space-y-8 mb-12 animate-slide-up">
                 <div className="w-20 h-20 bg-monarch-green rounded-full flex items-center justify-center mx-auto">
-                  <i className="fas fa-check text-3xl text-white"></i>
+                  <IoReceiptOutline className="text-3xl text-white" />
                 </div>
                 <div>
                   <h1 className="monarch-title text-2xl">Rekening gevonden!</h1>
