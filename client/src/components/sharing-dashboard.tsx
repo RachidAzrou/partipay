@@ -54,6 +54,7 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
   
   // Sync local state with props when data changes
   useEffect(() => {
+    console.log('SharingDashboard: Props updated:', initialData);
     setSessionData(initialData);
   }, [initialData]);
   const [qrCodeUrl, setQrCodeUrl] = useState("");
@@ -82,9 +83,11 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
         });
       }
     } else if (message.type === 'participant-payment-completed' || message.type === 'payment-completed') {
+      console.log('WebSocket payment message received:', message);
       queryClient.invalidateQueries({ queryKey: ['/api/sessions', sessionData.session.id] });
       const paidParticipant = message.participant || sessionData.participants.find(p => p.id === message.participantId);
       if (paidParticipant) {
+        console.log('Found paid participant:', paidParticipant);
         toast({
           title: "Betaling ontvangen! 💰",
           description: `${paidParticipant.name} heeft €${parseFloat(message.payment.amount).toFixed(2)} betaald`,
@@ -342,6 +345,8 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
               </div>
             </div>
             <div className="flex items-center space-x-2">
+              {/* Debug info */}
+              {console.log(`Participant ${participant.name}: hasPaid=${participant.hasPaid}`)}
               {participant.hasPaid ? (
                 <>
                   <div className="w-2 h-2 bg-monarch-green rounded-full"></div>

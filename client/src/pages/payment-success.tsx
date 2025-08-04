@@ -187,9 +187,6 @@ export default function PaymentSuccess() {
               <div className="flex items-center justify-between">
                 <div className="flex-1">
                   <h3 className="font-semibold text-gray-900 mb-1">Persoonlijke rekening</h3>
-                  <p className="text-sm text-gray-600">
-                    Alleen jouw bestelde items voor {mainBooker.name}
-                  </p>
                 </div>
                 <Button
                   onClick={handleDownloadPersonalReceipt}
