@@ -51,6 +51,11 @@ interface SharingDashboardProps {
 
 export default function SharingDashboard({ sessionData: initialData }: SharingDashboardProps) {
   const [sessionData, setSessionData] = useState(initialData);
+  
+  // Sync local state with props when data changes
+  useEffect(() => {
+    setSessionData(initialData);
+  }, [initialData]);
   const [qrCodeUrl, setQrCodeUrl] = useState("");
   const [sessionCompleted, setSessionCompleted] = useState(false);
   const [showQRModal, setShowQRModal] = useState(false);
