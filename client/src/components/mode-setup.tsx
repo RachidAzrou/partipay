@@ -480,6 +480,17 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
               }
             </span>
           </button>
+          
+          {/* Debug info - remove this after fixing */}
+          {process.env.NODE_ENV === 'development' && (
+            <div className="mt-2 p-2 bg-gray-100 rounded text-xs">
+              <div>Bank linked: {bankLinked ? 'Yes' : 'No'}</div>
+              <div>Split mode: {splitMode}</div>
+              <div>Selected items: {JSON.stringify(selectedItems)}</div>
+              <div>Items selected: {Object.values(selectedItems).some(qty => qty > 0) ? 'Yes' : 'No'}</div>
+              <div>Button disabled: {(!bankLinked || (splitMode === 'items' && Object.values(selectedItems).every(qty => qty === 0))).toString()}</div>
+            </div>
+          )}
         </div>
       </div>
     </div>
