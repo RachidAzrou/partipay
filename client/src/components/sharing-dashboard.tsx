@@ -308,9 +308,9 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
       
       
       <div className="monarch-widget text-center animate-slide-up">
-        <h1 className="monarch-title mb-2">Deel met je vrienden</h1>
-        <p className="monarch-body mb-3">Laat anderen deze QR-code scannen om mee te betalen</p>
-        <p className="monarch-body mb-4">Sessie: <span className="font-mono monarch-caption bg-muted px-2 py-0.5 rounded-full text-xs">{sessionData.session.id.slice(0, 8).toUpperCase()}</span></p>
+        <h1 className="monarch-title mb-2">{sessionData.session.splitMode === 'equal' ? 'Split the Bill' : 'Pay your Part'}</h1>
+        <p className="monarch-body mb-3">Sessie: <span className="font-mono monarch-caption bg-muted px-2 py-0.5 rounded-full text-xs">{sessionData.session.id.slice(0, 8).toUpperCase()}</span></p>
+        <p className="monarch-body mb-4">Laat anderen deze QR-code scannen om mee te betalen</p>
         <button 
           className="monarch-btn monarch-btn-primary touch-target"
           onClick={() => setShowQRModal(true)}
