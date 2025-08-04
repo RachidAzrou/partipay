@@ -251,7 +251,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                           </div>
                           <div className="flex-1">
                             <p className="text-sm font-semibold text-gray-900">{bankInfo?.accountHolder}</p>
-                            <p className="text-xs text-green-600 font-medium">Bankrekening gekoppeld</p>
+                            <p className="text-xs font-medium bg-[#ffffff] text-[#f97315]">Bankrekening gekoppeld</p>
                           </div>
                         </div>
                         
