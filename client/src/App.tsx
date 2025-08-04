@@ -31,7 +31,6 @@ function App() {
       <TooltipProvider>
         <Toaster />
         <Router />
-        
       </TooltipProvider>
     </QueryClientProvider>
   );
