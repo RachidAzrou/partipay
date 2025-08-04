@@ -233,7 +233,26 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
       }
       return sum;
     }, 0);
-    const outstandingAmount = totalAmount - totalPaid;
+    
+    // Calculate outstanding amount with better precision handling
+    let outstandingAmount = totalAmount - totalPaid;
+    
+    // For items mode, also check if there are unclaimed items
+    if (sessionData.session.splitMode === 'items') {
+      const totalItemsValue = sessionData.billItems.reduce((sum, item) => {
+        const claimedQuantity = sessionData.itemClaims
+          .filter(claim => claim.billItemId === item.id)
+          .reduce((claimSum, claim) => claimSum + claim.quantity, 0);
+        const unclaimedQuantity = item.quantity - claimedQuantity;
+        return sum + (parseFloat(item.price) * unclaimedQuantity);
+      }, 0);
+      
+      // If there are unclaimed items, use their value as outstanding
+      if (totalItemsValue > 0.01) {
+        outstandingAmount = totalItemsValue;
+      }
+    }
+    
     const unpaidParticipants = sessionData.participants.filter(p => !p.hasPaid);
     
     return {

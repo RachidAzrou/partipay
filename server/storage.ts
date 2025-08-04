@@ -184,7 +184,7 @@ export class DatabaseStorage implements IStorage {
           { name: "Jupiler (25cl)", price: "3.50", quantity: 1, availableQuantity: 1 },
           { name: "Belgische Wafels", price: "8.00", quantity: 1, availableQuantity: 1 },
         ],
-        totalAmount: "75.40"
+        totalAmount: "73.40"
       }
     };
 
