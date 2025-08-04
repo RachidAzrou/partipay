@@ -173,12 +173,9 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
       <div className="flex-1 px-6 py-8 space-y-8">
       
       
-      <div className="text-center animate-fade-in mb-12">
-        <h1 className="monarch-title text-2xl">Deel met je vrienden</h1>
-        <p className="monarch-body text-lg">Laat anderen deze QR-code scannen om mee te betalen</p>
-      </div>
-
       <div className="monarch-widget text-center animate-slide-up">
+        <h1 className="monarch-title text-2xl mb-3">Deel met je vrienden</h1>
+        <p className="monarch-body text-lg mb-6">Laat anderen deze QR-code scannen om mee te betalen</p>
         <p className="monarch-body mb-6">Sessie: <span className="font-mono monarch-caption bg-muted px-3 py-1 rounded-full">{sessionData.session.id.slice(0, 8).toUpperCase()}</span></p>
         <button 
           className="monarch-btn monarch-btn-primary touch-target"
