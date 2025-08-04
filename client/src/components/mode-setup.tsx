@@ -184,8 +184,8 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
     <div className="parti-container bg-background flex flex-col">
       <div className="flex-1 px-6 py-8 space-y-8">
         <div className="text-center animate-fade-in">
-          <h1 className="text-3xl font-bold text-foreground mt-2">Koppel je bankrekening</h1>
-          <p className="text-lg text-muted-foreground mt-2">Koppel je bankrekening om deel te nemen</p>
+          <h1 className="parti-heading-1">Koppel je bankrekening</h1>
+          <p className="parti-body text-lg">Koppel je bankrekening om deel te nemen</p>
         </div>
 
         <div className="space-y-6 animate-slide-up">
@@ -195,37 +195,46 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
             <Label className="block text-lg font-semibold text-foreground mb-4">Bankrekening koppelen (hoofdboeker)</Label>
             
             {!bankLinked ? (
-              <div className="parti-card-elevated p-6 bg-gradient-to-r from-orange-50 to-yellow-50 border-orange-200">
+              <div className="parti-card-elevated bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border-blue-200 dark:border-blue-800">
                 <div className="text-center space-y-4">
-                  <div className="w-16 h-16 parti-gradient rounded-full flex items-center justify-center mx-auto parti-shadow">
+                  <div className="w-16 h-16 parti-bg-primary rounded-full flex items-center justify-center mx-auto parti-shadow-md">
                     <i className="fas fa-university text-white text-2xl"></i>
                   </div>
-                  <h3 className="text-xl font-bold text-orange-900">
+                  <h3 className="parti-heading-3 parti-text-primary">
                     Koppel je bankrekening
                   </h3>
-                  <p className="text-base text-orange-800">
+                  <p className="parti-body">
                     Automatisch je IBAN koppelen voor snelle betalingen van deelnemers.
                   </p>
                   
-                  <p className="text-sm text-orange-700">
+                  <p className="parti-small parti-text-primary">
                     Veilig via Tink - Ondersteunt alle Belgische banken
                   </p>
+                  
+                  <button 
+                    className="parti-button parti-button-primary mt-4"
+                    onClick={handleLinkBank}
+                    data-testid="button-link-bank"
+                  >
+                    <i className="fas fa-link mr-2"></i>
+                    Koppel bankrekening
+                  </button>
                 </div>
               </div>
             ) : (
-              <div className="parti-card-elevated p-6 bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
+              <div className="parti-card-elevated bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 border-green-200 dark:border-green-800">
                 <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center">
+                  <div className="w-12 h-12 parti-bg-accent rounded-full flex items-center justify-center parti-shadow">
                     <i className="fas fa-check text-white text-lg"></i>
                   </div>
                   <div className="flex-1">
-                    <h4 className="text-lg font-semibold text-green-900">Bankrekening gekoppeld</h4>
-                    <p className="text-sm text-green-800">{bankInfo?.accountHolder}</p>
-                    <p className="text-sm text-green-700 font-mono">{bankInfo?.iban}</p>
+                    <h4 className="parti-heading-3 parti-text-accent">Bankrekening gekoppeld</h4>
+                    <p className="parti-body font-medium">{bankInfo?.accountHolder}</p>
+                    <p className="parti-small font-mono text-muted-foreground">{bankInfo?.iban}</p>
                   </div>
                   <button
                     type="button"
-                    className="text-green-600 hover:text-green-800 transition-colors"
+                    className="parti-text-accent hover:opacity-70 transition-opacity p-2"
                     onClick={() => {
                       setBankLinked(false);
                       setBankInfo(null);
@@ -242,22 +251,22 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
 
         {splitMode === 'equal' ? (
           <div className="space-y-6 animate-slide-up">
-            <div className="parti-card p-6">
-              <Label className="block text-lg font-semibold text-foreground mb-4">Aantal deelnemers</Label>
+            <div className="parti-card">
+              <Label className="block parti-heading-3 mb-4">Aantal deelnemers</Label>
               <div className="flex items-center space-x-6">
                 <button 
-                  className="w-14 h-14 bg-muted rounded-full flex items-center justify-center touch-target hover:bg-muted/80 transition-colors"
+                  className="w-14 h-14 parti-surface-muted rounded-full flex items-center justify-center touch-target hover:opacity-80 transition-opacity parti-shadow"
                   onClick={() => setParticipantCount(Math.max(2, participantCount - 1))}
                   data-testid="button-decrease-participants"
                 >
                   <i className="fas fa-minus text-foreground text-lg"></i>
                 </button>
                 <div className="flex-1 text-center">
-                  <span className="text-4xl font-bold text-foreground" data-testid="text-participant-count">{participantCount}</span>
-                  <p className="text-base text-muted-foreground mt-1">personen</p>
+                  <span className="text-4xl font-bold parti-text-primary" data-testid="text-participant-count">{participantCount}</span>
+                  <p className="parti-body mt-1">personen</p>
                 </div>
                 <button 
-                  className="w-14 h-14 parti-gradient rounded-full flex items-center justify-center touch-target parti-shadow hover:parti-shadow-lg transition-all"
+                  className="w-14 h-14 parti-bg-primary rounded-full flex items-center justify-center touch-target parti-shadow-md hover:parti-shadow-lg transition-all"
                   onClick={() => setParticipantCount(Math.min(8, participantCount + 1))}
                   data-testid="button-increase-participants"
                 >
@@ -265,8 +274,8 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                 </button>
               </div>
               <div className="flex justify-center mt-6">
-                <div className="parti-card px-6 py-3">
-                  <span className="text-lg font-bold text-primary">
+                <div className="parti-card parti-surface-muted">
+                  <span className="text-lg font-bold parti-text-primary">
                     € {(parseFloat(billData.totalAmount) / participantCount).toFixed(2)} per persoon
                   </span>
                 </div>
@@ -275,18 +284,18 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
           </div>
         ) : (
           <div className="space-y-6 animate-slide-up">
-            <div className="parti-card-elevated p-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
-              <h3 className="text-xl font-bold text-blue-900 mb-3">
+            <div className="parti-card-elevated bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border-blue-200 dark:border-blue-800">
+              <h3 className="parti-heading-3 parti-text-primary mb-3">
                 <i className="fas fa-receipt mr-3"></i>
                 Pay Your Part
               </h3>
-              <p className="text-base text-blue-800">Selecteer de items die jij hebt besteld.</p>
+              <p className="parti-body">Selecteer de items die jij hebt besteld.</p>
             </div>
           
             <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-foreground">Selecteer jouw items:</h3>
+              <h3 className="parti-heading-3">Selecteer jouw items:</h3>
               {billData.items.map((item, index) => (
-                <div key={index} className="parti-card p-4 flex items-center justify-between hover:parti-shadow-lg transition-all">
+                <div key={index} className="parti-card !p-4 flex items-center justify-between hover:parti-shadow-md transition-all">
                   <div className="flex items-center space-x-4">
                     <Checkbox 
                       checked={selectedItems[index] || false}
@@ -295,21 +304,21 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                       data-testid={`checkbox-item-${index}`}
                     />
                     <div>
-                      <span className="text-base font-semibold text-foreground">{item.name}</span>
-                      <p className="text-sm text-muted-foreground mt-1">€ {item.price}</p>
+                      <span className="parti-body font-semibold">{item.name}</span>
+                      <p className="parti-small mt-1">€ {item.price}</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="text-sm text-muted-foreground">x{item.quantity} beschikbaar</span>
+                    <span className="parti-small">x{item.quantity} beschikbaar</span>
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="parti-card-elevated p-6">
+            <div className="parti-card-elevated">
               <div className="flex justify-between items-center">
-                <span className="text-xl font-semibold text-foreground">Jouw totaal:</span>
-                <span className="text-2xl font-bold text-primary" data-testid="text-selected-total">
+                <span className="parti-heading-3">Jouw totaal:</span>
+                <span className="text-2xl font-bold parti-text-primary" data-testid="text-selected-total">
                   € {calculateSelectedTotal()}
                 </span>
               </div>
@@ -318,7 +327,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
         )}
 
         <button 
-          className="w-full parti-button parti-button-primary mt-auto disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full parti-button parti-button-primary mt-auto disabled:opacity-50 disabled:cursor-not-allowed text-base py-4"
           onClick={handleContinue}
           disabled={!bankLinked}
           data-testid="button-continue"

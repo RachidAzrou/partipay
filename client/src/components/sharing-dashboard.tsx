@@ -141,19 +141,19 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
   if (sessionCompleted) {
     return (
       <div className="px-4 py-6">
-        <div className="bg-green-50 border border-green-200 rounded-xl p-6 text-center" data-testid="success-state">
-          <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="parti-card-elevated bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 border-green-200 dark:border-green-800 text-center" data-testid="success-state">
+          <div className="w-16 h-16 parti-bg-accent rounded-full flex items-center justify-center mx-auto mb-4 parti-shadow">
             <i className="fas fa-check text-white text-2xl"></i>
           </div>
-          <h3 className="text-lg font-semibold text-green-900 mb-2">Alle betalingen voltooid!</h3>
-          <p className="text-sm text-green-800 mb-4">Bedankt voor het gebruik van PartiPay</p>
-          <Button 
-            className="bg-green-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-700"
+          <h3 className="parti-heading-3 parti-text-accent mb-2">Alle betalingen voltooid!</h3>
+          <p className="parti-body mb-4">Bedankt voor het gebruik van PartiPay</p>
+          <button 
+            className="parti-button parti-button-accent"
             onClick={() => window.location.href = '/'}
             data-testid="button-new-session"
           >
             Nieuwe rekening
-          </Button>
+          </button>
         </div>
       </div>
     );
@@ -165,8 +165,8 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
       
       
       <div className="text-center animate-fade-in">
-        <h1 className="text-3xl font-bold text-foreground">Deel met je vrienden</h1>
-        <p className="text-lg text-muted-foreground mt-2">Laat anderen deze QR-code scannen</p>
+        <h1 className="parti-heading-1">Deel met je vrienden</h1>
+        <p className="parti-body text-lg mt-2">Laat anderen deze QR-code scannen</p>
       </div>
 
       <div className="parti-card-elevated p-8 text-center animate-slide-up">
@@ -178,11 +178,11 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
             data-testid="qr-code"
           />
         ) : (
-          <div className="w-56 h-56 bg-muted rounded-2xl mx-auto mb-6 flex items-center justify-center">
-            <div className="text-muted-foreground text-lg">QR-code laden...</div>
+          <div className="w-56 h-56 parti-surface-muted rounded-2xl mx-auto mb-6 flex items-center justify-center parti-shadow">
+            <div className="parti-body">QR-code laden...</div>
           </div>
         )}
-        <p className="text-base text-muted-foreground mb-4">Sessie: <span className="font-mono text-sm bg-muted px-2 py-1 rounded">{sessionData.session.id.slice(0, 8).toUpperCase()}</span></p>
+        <p className="parti-body mb-4">Sessie: <span className="font-mono parti-small parti-surface-muted px-2 py-1 rounded">{sessionData.session.id.slice(0, 8).toUpperCase()}</span></p>
         <button 
           className="parti-button parti-button-primary touch-target"
           onClick={handleShareQR}
@@ -194,22 +194,22 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
       </div>
 
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold text-foreground">Deelnemers ({paidCount}/{totalCount})</h2>
+        <h2 className="parti-heading-2">Deelnemers ({paidCount}/{totalCount})</h2>
         
         {sessionData.participants.map((participant, index) => (
-          <div key={participant.id} className="parti-card p-6 flex items-center justify-between animate-slide-up" style={{animationDelay: `${index * 0.1}s`}}>
+          <div key={participant.id} className="parti-card !p-6 flex items-center justify-between animate-slide-up" style={{animationDelay: `${index * 0.1}s`}}>
             <div className="flex items-center space-x-4">
-              <div className="w-14 h-14 parti-gradient rounded-full flex items-center justify-center parti-shadow">
+              <div className="w-14 h-14 parti-bg-primary rounded-full flex items-center justify-center parti-shadow-md">
                 <span className="text-white font-bold text-lg">
                   {participant.name.split(' ').map(n => n[0]).join('').toUpperCase()}
                 </span>
               </div>
               <div>
-                <p className="text-lg font-semibold text-foreground">
+                <p className="parti-body font-semibold text-lg">
                   {participant.name}
-                  {participant.isMainBooker && <span className="text-sm text-muted-foreground ml-2">• Hoofdboeker</span>}
+                  {participant.isMainBooker && <span className="parti-small ml-2">• Hoofdboeker</span>}
                 </p>
-                <p className="text-base text-muted-foreground mt-1">
+                <p className="parti-body mt-1">
                   € {participant.expectedAmount || (parseFloat(sessionData.session.totalAmount) / sessionData.participants.length).toFixed(2)}
                 </p>
               </div>
@@ -217,15 +217,15 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
             <div className="flex items-center space-x-3">
               {participant.hasPaid ? (
                 <>
-                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                  <span className="text-base font-semibold text-green-600">Betaald</span>
+                  <div className="w-3 h-3 parti-bg-accent rounded-full"></div>
+                  <span className="parti-body font-semibold parti-text-accent">Betaald</span>
                 </>
               ) : (
                 <>
                   <div className="w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></div>
-                  <span className="text-base font-semibold text-yellow-600">Wachtend</span>
+                  <span className="parti-body font-semibold text-yellow-600">Wachtend</span>
                   <button
-                    className="ml-3 parti-button parti-button-primary text-sm px-4 py-2"
+                    className="ml-3 parti-button parti-button-primary parti-small px-4 py-2"
                     onClick={() => handleMockPayment(participant)}
                     disabled={paymentMutation.isPending}
                     data-testid={`button-pay-${participant.id}`}
@@ -241,19 +241,19 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
 
       <div className="parti-card-elevated p-6 animate-slide-up">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-bold text-foreground">Betalingsvoortgang</h3>
-          <span className="text-lg font-semibold text-muted-foreground">
+          <h3 className="parti-heading-3">Betalingsvoortgang</h3>
+          <span className="parti-body font-semibold">
             € {sessionData.participants.reduce((sum, p) => sum + parseFloat(p.paidAmount || '0'), 0).toFixed(2)} / € {sessionData.session.totalAmount}
           </span>
         </div>
-        <div className="w-full bg-muted rounded-full h-3 mb-4">
+        <div className="w-full parti-surface-muted rounded-full h-3 mb-4">
           <div 
-            className="parti-gradient h-3 rounded-full transition-all duration-700 ease-out"
+            className="parti-bg-primary h-3 rounded-full transition-all duration-700 ease-out"
             style={{ width: `${calculateProgress()}%` }}
             data-testid="progress-bar"
           ></div>
         </div>
-        <p className="text-base text-muted-foreground text-center">{paidCount} van {totalCount} personen hebben betaald</p>
+        <p className="parti-body text-center">{paidCount} van {totalCount} personen hebben betaald</p>
       </div>
 
       

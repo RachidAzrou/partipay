@@ -3,70 +3,78 @@
 @tailwind utilities;
 
 :root {
-  --background: hsl(0, 0%, 98%);
-  --foreground: hsl(240, 10%, 3.9%);
-  --muted: hsl(0, 0%, 96%);
-  --muted-foreground: hsl(240, 3.7%, 45%);
+  /* Monarch-inspired color system */
+  --background: hsl(210, 20%, 98%);
+  --foreground: hsl(215, 25%, 15%);
+  --muted: hsl(210, 20%, 96%);
+  --muted-foreground: hsl(215, 15%, 50%);
   --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(215, 25%, 15%);
   --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(240, 10%, 3.9%);
-  --border: hsl(240, 5.9%, 90%);
-  --input: hsl(240, 5.9%, 90%);
-  --primary: hsl(24, 95%, 53%);
+  --card-foreground: hsl(215, 25%, 15%);
+  --border: hsl(215, 20%, 88%);
+  --input: hsl(215, 15%, 94%);
+  --primary: hsl(200, 95%, 40%);
   --primary-foreground: hsl(0, 0%, 100%);
-  --secondary: hsl(0, 0%, 96%);
-  --secondary-foreground: hsl(240, 5.9%, 10%);
-  --accent: hsl(0, 0%, 96%);
-  --accent-foreground: hsl(240, 5.9%, 10%);
-  --destructive: hsl(0, 84.2%, 60.2%);
+  --secondary: hsl(210, 20%, 96%);
+  --secondary-foreground: hsl(215, 25%, 15%);
+  --accent: hsl(142, 52%, 50%);
+  --accent-foreground: hsl(0, 0%, 100%);
+  --destructive: hsl(0, 84%, 55%);
   --destructive-foreground: hsl(0, 0%, 98%);
-  --ring: hsl(24, 95%, 53%);
-  --radius: 1rem;
+  --ring: hsl(200, 95%, 40%);
+  --radius: 0.5rem;
   
-  /* PartiPay oranje brand colors */
-  --parti-primary: hsl(24, 95%, 53%);
-  --parti-primary-light: hsl(38, 92%, 50%);
-  --parti-gradient: linear-gradient(135deg, hsl(24, 95%, 53%) 0%, hsl(38, 92%, 50%) 100%);
-  --parti-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  /* Monarch-inspired brand colors */
+  --parti-primary: hsl(200, 95%, 40%);
+  --parti-secondary: hsl(200, 85%, 45%);
+  --parti-accent: hsl(142, 52%, 50%);
+  --parti-gradient: linear-gradient(135deg, hsl(200, 95%, 40%) 0%, hsl(200, 85%, 45%) 100%);
+  --parti-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --parti-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --parti-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --parti-success: hsl(142, 71%, 45%);
-  --parti-warning: hsl(38, 92%, 50%);
+  --parti-success: hsl(142, 70%, 45%);
+  --parti-warning: hsl(45, 93%, 55%);
   --parti-surface: hsl(0, 0%, 100%);
-  --parti-surface-elevated: hsl(0, 0%, 100%);
+  --parti-surface-elevated: hsl(210, 25%, 99%);
+  --parti-surface-muted: hsl(210, 20%, 97%);
 }
 
 .dark {
-  --background: hsl(240, 10%, 3.9%);
-  --foreground: hsl(0, 0%, 98%);
-  --muted: hsl(240, 3.7%, 15.9%);
-  --muted-foreground: hsl(240, 5%, 64.9%);
-  --popover: hsl(240, 10%, 3.9%);
-  --popover-foreground: hsl(0, 0%, 98%);
-  --card: hsl(240, 5%, 5%);
-  --card-foreground: hsl(0, 0%, 98%);
-  --border: hsl(240, 3.7%, 15.9%);
-  --input: hsl(240, 3.7%, 15.9%);
-  --primary: hsl(24, 95%, 53%);
-  --primary-foreground: hsl(0, 0%, 100%);
-  --secondary: hsl(240, 3.7%, 15.9%);
-  --secondary-foreground: hsl(0, 0%, 98%);
-  --accent: hsl(240, 3.7%, 15.9%);
-  --accent-foreground: hsl(0, 0%, 98%);
-  --destructive: hsl(0, 62.8%, 30.6%);
-  --destructive-foreground: hsl(0, 0%, 98%);
-  --ring: hsl(24, 95%, 53%);
+  /* Dark mode Monarch-inspired colors */
+  --background: hsl(215, 25%, 6%);
+  --foreground: hsl(210, 20%, 95%);
+  --muted: hsl(215, 25%, 12%);
+  --muted-foreground: hsl(215, 15%, 60%);
+  --popover: hsl(215, 25%, 8%);
+  --popover-foreground: hsl(210, 20%, 95%);
+  --card: hsl(215, 25%, 8%);
+  --card-foreground: hsl(210, 20%, 95%);
+  --border: hsl(215, 20%, 18%);
+  --input: hsl(215, 20%, 15%);
+  --primary: hsl(200, 95%, 50%);
+  --primary-foreground: hsl(215, 25%, 6%);
+  --secondary: hsl(215, 25%, 12%);
+  --secondary-foreground: hsl(210, 20%, 95%);
+  --accent: hsl(142, 52%, 55%);
+  --accent-foreground: hsl(215, 25%, 6%);
+  --destructive: hsl(0, 75%, 60%);
+  --destructive-foreground: hsl(210, 20%, 95%);
+  --ring: hsl(200, 95%, 50%);
   
-  /* Dark mode PartiPay oranje colors */
-  --parti-primary: hsl(24, 95%, 53%);
-  --parti-primary-light: hsl(38, 92%, 50%);
-  --parti-gradient: linear-gradient(135deg, hsl(24, 95%, 53%) 0%, hsl(38, 92%, 50%) 100%);
-  --parti-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  /* Dark mode Monarch brand colors */
+  --parti-primary: hsl(200, 95%, 50%);
+  --parti-secondary: hsl(200, 85%, 55%);
+  --parti-accent: hsl(142, 52%, 55%);
+  --parti-gradient: linear-gradient(135deg, hsl(200, 95%, 50%) 0%, hsl(200, 85%, 55%) 100%);
+  --parti-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --parti-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
   --parti-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
-  --parti-success: hsl(142, 71%, 45%);
-  --parti-warning: hsl(38, 92%, 50%);
-  --parti-surface: hsl(240, 5%, 6%);
-  --parti-surface-elevated: hsl(240, 5%, 8%);
+  --parti-success: hsl(142, 70%, 50%);
+  --parti-warning: hsl(45, 93%, 60%);
+  --parti-surface: hsl(215, 25%, 8%);
+  --parti-surface-elevated: hsl(215, 25%, 10%);
+  --parti-surface-muted: hsl(215, 25%, 12%);
 }
 
 @layer base {
@@ -107,6 +115,7 @@
     transform: scale(0.98);
   }
   
+  /* Monarch-inspired utilities */
   .parti-gradient {
     background: var(--parti-gradient);
   }
@@ -115,27 +124,48 @@
     box-shadow: var(--parti-shadow);
   }
   
+  .parti-shadow-md {
+    box-shadow: var(--parti-shadow-md);
+  }
+  
   .parti-shadow-lg {
     box-shadow: var(--parti-shadow-lg);
   }
   
+  /* Clean Monarch-style cards */
   .parti-card {
     background: var(--parti-surface);
-    border-radius: 1rem;
+    border-radius: var(--radius);
     box-shadow: var(--parti-shadow);
     border: 1px solid hsl(var(--border));
+    padding: 1.5rem;
+    transition: all 0.2s ease;
+  }
+  
+  .parti-card:hover {
+    box-shadow: var(--parti-shadow-md);
+    transform: translateY(-1px);
   }
   
   .parti-card-elevated {
     background: var(--parti-surface-elevated);
-    border-radius: 1rem;
-    box-shadow: var(--parti-shadow-lg);
+    border-radius: var(--radius);
+    box-shadow: var(--parti-shadow-md);
     border: 1px solid hsl(var(--border));
+    padding: 1.5rem;
+    transition: all 0.2s ease;
   }
   
+  .parti-card-elevated:hover {
+    box-shadow: var(--parti-shadow-lg);
+    transform: translateY(-1px);
+  }
+  
+  /* Professional Monarch-style buttons */
   .parti-button {
-    @apply rounded-xl px-6 py-4 font-semibold text-base transition-all duration-200;
+    @apply rounded-lg px-4 py-3 font-medium text-sm transition-all duration-200;
     box-shadow: var(--parti-shadow);
+    border: 1px solid transparent;
   }
   
   .parti-button:active {
@@ -143,23 +173,38 @@
   }
   
   .parti-button-primary {
-    background: var(--parti-gradient);
-    color: white;
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    border-color: hsl(var(--primary));
   }
   
   .parti-button-primary:hover {
+    background: hsl(var(--primary) / 0.9);
+    box-shadow: var(--parti-shadow-md);
     transform: translateY(-1px);
-    box-shadow: var(--parti-shadow-lg);
   }
   
   .parti-button-secondary {
     background: var(--parti-surface);
     color: hsl(var(--foreground));
-    border: 2px solid hsl(var(--primary));
+    border-color: hsl(var(--border));
   }
   
   .parti-button-secondary:hover {
-    background: hsl(var(--primary) / 0.05);
+    background: hsl(var(--muted));
+    border-color: hsl(var(--primary));
+    transform: translateY(-1px);
+  }
+  
+  .parti-button-accent {
+    background: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
+    border-color: hsl(var(--accent));
+  }
+  
+  .parti-button-accent:hover {
+    background: hsl(var(--accent) / 0.9);
+    box-shadow: var(--parti-shadow-md);
     transform: translateY(-1px);
   }
   
@@ -263,16 +308,70 @@ button, .button, [role="button"] {
   animation: spin 1s linear infinite;
 }
 
-/* QR Scanner specific styles */
+/* QR Scanner with Monarch colors */
 .qr-scanner-overlay {
   background: linear-gradient(
     45deg,
     transparent 30%,
-    rgba(229, 116, 42, 0.1) 30%,
-    rgba(229, 116, 42, 0.1) 70%,
+    rgba(0, 149, 204, 0.1) 30%,
+    rgba(0, 149, 204, 0.1) 70%,
     transparent 70%
   );
   animation: scan-line 2s linear infinite;
+}
+
+/* Additional Monarch-inspired utilities */
+.parti-surface-muted {
+  background: var(--parti-surface-muted);
+}
+
+.parti-text-primary {
+  color: hsl(var(--primary));
+}
+
+.parti-text-accent {
+  color: hsl(var(--accent));
+}
+
+.parti-bg-primary {
+  background: hsl(var(--primary));
+}
+
+.parti-bg-accent {
+  background: hsl(var(--accent));
+}
+
+/* Sophisticated form inputs */
+.parti-input {
+  @apply rounded-lg border border-border bg-background px-3 py-2.5 text-sm transition-colors;
+  box-shadow: var(--parti-shadow);
+}
+
+.parti-input:focus {
+  outline: none;
+  border-color: hsl(var(--primary));
+  box-shadow: 0 0 0 2px hsl(var(--primary) / 0.1);
+}
+
+/* Clean typography hierarchy */
+.parti-heading-1 {
+  @apply text-3xl font-bold text-foreground mb-2;
+}
+
+.parti-heading-2 {
+  @apply text-2xl font-semibold text-foreground mb-2;
+}
+
+.parti-heading-3 {
+  @apply text-xl font-medium text-foreground mb-1;
+}
+
+.parti-body {
+  @apply text-base text-muted-foreground leading-relaxed;
+}
+
+.parti-small {
+  @apply text-sm text-muted-foreground;
 }
 
 @keyframes scan-line {

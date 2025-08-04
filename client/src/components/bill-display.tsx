@@ -28,23 +28,23 @@ export default function BillDisplay({ billData, expanded, onToggleExpand }: Bill
         data-testid="button-toggle-bill"
       >
         <div className="flex-1">
-          <h3 className="text-lg font-bold text-foreground">Rekening #{today.getDate().toString().padStart(2, '0')}{(today.getMonth() + 1).toString().padStart(2, '0')}{today.getFullYear().toString().slice(-2)}01</h3>
-          <p className="text-base text-muted-foreground mt-1">Restaurant De Blauwe Kater • Tafel 12</p>
-          <p className="text-2xl font-bold text-primary mt-3">€ {billData.totalAmount}</p>
+          <h3 className="parti-heading-3">Rekening #{today.getDate().toString().padStart(2, '0')}{(today.getMonth() + 1).toString().padStart(2, '0')}{today.getFullYear().toString().slice(-2)}01</h3>
+          <p className="parti-body mt-1">Restaurant De Blauwe Kater • Tafel 12</p>
+          <p className="text-2xl font-bold parti-text-primary mt-3">€ {billData.totalAmount}</p>
         </div>
-        <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center ml-4">
-          <i className={`fas fa-chevron-down text-muted-foreground transition-transform duration-300 ${expanded ? 'rotate-180' : ''}`}></i>
+        <div className="w-10 h-10 rounded-full parti-surface-muted flex items-center justify-center ml-4 parti-shadow">
+          <i className={`fas fa-chevron-down parti-text-primary transition-transform duration-300 ${expanded ? 'rotate-180' : ''}`}></i>
         </div>
       </button>
       
       {expanded && (
-        <div className="border-t border-border bg-muted/30 p-6 space-y-2 font-mono text-sm animate-fade-in" data-testid="bill-details">
+        <div className="border-t border-border parti-surface-muted p-6 space-y-2 font-mono text-sm animate-fade-in" data-testid="bill-details">
           {/* POS Header */}
           <div className="text-center mb-6 border-b border-border pb-4">
-            <h4 className="text-lg font-bold text-foreground">DE BLAUWE KATER</h4>
-            <p className="text-sm text-muted-foreground mt-1">Grote Markt 8, 9000 Gent</p>
-            <p className="text-sm text-muted-foreground">Tel: 09-123-45-67</p>
-            <p className="text-sm text-muted-foreground mt-2">Tafel: 12 • {today.toLocaleDateString('nl-BE')} {today.toLocaleTimeString('nl-BE', { hour: '2-digit', minute: '2-digit' })}</p>
+            <h4 className="parti-heading-3">DE BLAUWE KATER</h4>
+            <p className="parti-small mt-1">Grote Markt 8, 9000 Gent</p>
+            <p className="parti-small">Tel: 09-123-45-67</p>
+            <p className="parti-small mt-2">Tafel: 12 • {today.toLocaleDateString('nl-BE')} {today.toLocaleTimeString('nl-BE', { hour: '2-digit', minute: '2-digit' })}</p>
           </div>
           
           {/* Items */}
@@ -54,7 +54,7 @@ export default function BillDisplay({ billData, expanded, onToggleExpand }: Bill
                 <div className="col-span-6 truncate text-foreground">{item.name}</div>
                 <div className="col-span-2 text-center text-muted-foreground">{item.quantity}x</div>
                 <div className="col-span-2 text-right text-muted-foreground">€{parseFloat(item.price).toFixed(2)}</div>
-                <div className="col-span-2 text-right font-semibold text-foreground">€{(parseFloat(item.price) * item.quantity).toFixed(2)}</div>
+                <div className="col-span-2 text-right font-semibold parti-text-primary">€{(parseFloat(item.price) * item.quantity).toFixed(2)}</div>
               </div>
             ))}
           </div>
@@ -69,7 +69,7 @@ export default function BillDisplay({ billData, expanded, onToggleExpand }: Bill
               <span>BTW (21%):</span>
               <span>€{btw.toFixed(2)}</span>
             </div>
-            <div className="flex justify-between text-lg font-bold border-t border-border pt-2 text-foreground">
+            <div className="flex justify-between text-lg font-bold border-t border-border pt-2 parti-text-primary">
               <span>TOTAAL:</span>
               <span>€{billData.totalAmount}</span>
             </div>

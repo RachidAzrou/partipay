@@ -108,8 +108,8 @@ export default function Home() {
                 <div className="w-10 h-10 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-foreground mb-3">Rekening ophalen...</h2>
-                <p className="text-base text-muted-foreground">Een moment geduld</p>
+                <h2 className="parti-heading-2">Rekening ophalen...</h2>
+                <p className="parti-body">Een moment geduld</p>
               </div>
             </div>
           )}
@@ -117,12 +117,12 @@ export default function Home() {
           {billData && dataLoaded && (
             <>
               <div className="text-center space-y-6 mb-8 animate-slide-up">
-                <div className="w-20 h-20 parti-gradient rounded-full flex items-center justify-center mx-auto parti-shadow-lg">
+                <div className="w-20 h-20 parti-bg-accent rounded-full flex items-center justify-center mx-auto parti-shadow-lg">
                   <i className="fas fa-check text-3xl text-white"></i>
                 </div>
                 <div>
-                  <h1 className="text-3xl font-bold text-foreground mb-3">Rekening gevonden!</h1>
-                  <p className="text-lg text-muted-foreground">Restaurant De Blauwe Kater, Tafel 12</p>
+                  <h1 className="parti-heading-1">Rekening gevonden!</h1>
+                  <p className="parti-body text-lg">Restaurant De Blauwe Kater, Tafel 12</p>
                 </div>
               </div>
               
@@ -134,18 +134,20 @@ export default function Home() {
               
               <div className="space-y-4 mt-auto animate-slide-up">
                 <button 
-                  className="w-full parti-button parti-button-primary touch-target"
+                  className="w-full parti-button parti-button-primary touch-target text-base py-4"
                   onClick={() => handleModeSelect('equal')}
                   data-testid="button-split-bill"
                 >
+                  <i className="fas fa-users mr-3"></i>
                   Split the Bill
                 </button>
                 
                 <button 
-                  className="w-full parti-button parti-button-secondary touch-target"
+                  className="w-full parti-button parti-button-secondary touch-target text-base py-4"
                   onClick={() => handleModeSelect('items')}
                   data-testid="button-pay-part"
                 >
+                  <i className="fas fa-receipt mr-3"></i>
                   Pay Your Part
                 </button>
               </div>
