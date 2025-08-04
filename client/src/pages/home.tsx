@@ -50,18 +50,73 @@ export default function Home() {
   const createSessionMutation = useMutation({
     mutationFn: async (sessionData: any) => {
       console.log('Creating session with data:', sessionData);
+      console.log('Environment check:', {
+        isDev: import.meta.env.DEV,
+        baseURL: import.meta.env.BASE_URL,
+        currentURL: window.location.href
+      });
+      
       try {
+        // Use apiRequest but with additional error handling for production
         const res = await apiRequest('POST', '/api/sessions', sessionData);
-        if (!res.ok) {
-          const errorText = await res.text();
-          console.error('Session creation failed:', res.status, errorText);
-          throw new Error(`Session creation failed: ${res.status} ${errorText}`);
-        }
         const result = await res.json();
         console.log('Session created successfully:', result);
         return result;
       } catch (error) {
         console.error('Session creation error in mutationFn:', error);
+        
+        // In production, try multiple fallback methods
+        if (!import.meta.env.DEV) {
+          console.log('Trying production fallbacks...');
+          
+          // First try: Direct fetch with relative URL
+          try {
+            console.log('Fallback 1: Direct fetch with relative URL');
+            const directRes = await fetch('/api/sessions', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(sessionData),
+              credentials: 'include'
+            });
+            
+            if (directRes.ok) {
+              const result = await directRes.json();
+              console.log('Direct fetch (relative) succeeded:', result);
+              return result;
+            }
+            console.log('Direct fetch (relative) failed:', directRes.status);
+          } catch (e) {
+            console.log('Direct fetch (relative) error:', e);
+          }
+          
+          // Second try: Absolute URL
+          try {
+            console.log('Fallback 2: Absolute URL fetch');
+            const absoluteUrl = `${window.location.origin}/api/sessions`;
+            const absoluteRes = await fetch(absoluteUrl, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(sessionData),
+              credentials: 'include'
+            });
+            
+            if (absoluteRes.ok) {
+              const result = await absoluteRes.json();
+              console.log('Absolute URL fetch succeeded:', result);
+              return result;
+            }
+            console.log('Absolute URL fetch failed:', absoluteRes.status);
+            const errorText = await absoluteRes.text();
+            throw new Error(`All fallbacks failed. Last error: ${absoluteRes.status} ${errorText}`);
+          } catch (absoluteError) {
+            console.error('All production fallbacks failed:', absoluteError);
+            throw absoluteError;
+          }
+        }
         throw error;
       }
     },
@@ -101,9 +156,16 @@ export default function Home() {
     },
     onError: (error) => {
       console.error('Session creation error:', error);
+      
+      // Show more detailed error in production
+      const errorMessage = error instanceof Error ? error.message : 'Onbekende fout';
+      const isProduction = !import.meta.env.DEV;
+      
       toast({
-        title: "Fout",
-        description: "Kon sessie niet aanmaken. Probeer opnieuw.",
+        title: "Fout bij sessie aanmaken",
+        description: isProduction 
+          ? `Productie fout: ${errorMessage}. Controleer je internetverbinding.`
+          : "Kon sessie niet aanmaken. Probeer opnieuw.",
         variant: "destructive",
       });
     },
