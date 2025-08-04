@@ -163,6 +163,24 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
     };
   };
 
+  const calculateUnpaidItems = () => {
+    if (sessionData.session.splitMode !== 'items') return [];
+    
+    return sessionData.billItems.map(item => {
+      const totalClaimed = sessionData.itemClaims
+        .filter(claim => claim.billItemId === item.id)
+        .reduce((sum, claim) => sum + claim.quantity, 0);
+      
+      const unclaimed = item.quantity - totalClaimed;
+      
+      return {
+        ...item,
+        unclaimed,
+        hasUnclaimed: unclaimed > 0
+      };
+    }).filter(item => item.hasUnclaimed);
+  };
+
   const handlePayFullBill = () => {
     const outstandingDetails = calculateOutstandingDetails();
     
@@ -414,6 +432,7 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
       {/* Payment Confirmation Modal */}
       {showPaymentConfirmModal && (() => {
         const outstandingDetails = calculateOutstandingDetails();
+        const unpaidItems = calculateUnpaidItems();
         return (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-3">
             <div className="bg-white rounded-xl p-4 max-w-sm w-full animate-slide-up">
@@ -424,16 +443,35 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
                 <div className="flex-1">
                   <h3 className="text-base font-semibold text-gray-900 mb-1">Bevestig volledige betaling</h3>
                   <p className="text-xs text-gray-600 mb-3">
-                    Niet alle deelnemers hebben hun deel betaald. Wil je toch de volledige rekening betalen?
+                    {sessionData.session.splitMode === 'items' 
+                      ? 'Er zijn nog items die niet zijn geselecteerd. Wil je toch de volledige rekening betalen?'
+                      : 'Niet alle deelnemers hebben hun deel betaald. Wil je toch de volledige rekening betalen?'
+                    }
                   </p>
                 </div>
               </div>
               
               <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
                 <h4 className="text-xs font-medium text-red-800 mb-1">Openstaand bedrag</h4>
-                <p className="text-base font-bold text-red-900">
+                <p className="text-base font-bold text-red-900 mb-2">
                   € {outstandingDetails.outstandingAmount.toFixed(2)}
                 </p>
+                
+                {sessionData.session.splitMode === 'items' && unpaidItems.length > 0 && (
+                  <div className="mt-3">
+                    <p className="text-xs text-red-700 mb-2">Niet geselecteerde items:</p>
+                    <ul className="text-xs text-red-700 space-y-1">
+                      {unpaidItems.map(item => (
+                        <li key={item.id} className="flex justify-between items-center">
+                          <span>• {item.name}</span>
+                          <span className="font-semibold">
+                            {item.unclaimed}x € {parseFloat(item.price).toFixed(2)}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
               
               <div className="flex space-x-2">
