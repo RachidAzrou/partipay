@@ -600,20 +600,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const redirectUri = `${protocol}://${host}/auth/tink/callback`;
       
       // Exchange code for access token
+      console.log('Exchanging authorization code for access token...');
       const tokenData = await exchangeCodeForToken(code as string, redirectUri);
       
       if (!tokenData.access_token) {
-        console.error('Failed to get access token');
+        console.error('Failed to get access token from Tink');
         return res.redirect('/tink-callback?bank_linked=error&error=no_token');
       }
       
       console.log('Access token obtained successfully');
       
       // Get IBAN and account info from Tink
+      console.log('Fetching account information...');
       const accountInfo = await getIbanFromTink(tokenData.access_token);
       
       if (!accountInfo) {
-        console.error('Could not retrieve account information');
+        console.error('Could not retrieve account information from Tink API');
         return res.redirect('/tink-callback?bank_linked=error&error=no_account_info');
       }
       
