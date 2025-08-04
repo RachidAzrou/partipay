@@ -67,10 +67,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Get client configuration
   app.get('/api/config', (req, res) => {
-    // Generate the correct redirect URI based on the current request
-    const protocol = req.headers['x-forwarded-proto'] || (req.secure ? 'https' : 'http');
-    const host = req.headers.host;
-    const redirectUri = `${protocol}://${host}/auth/tink/callback`;
+    // Use fixed redirect URI from environment variable or generate dynamically
+    let redirectUri = process.env.TINK_REDIRECT_URI;
+    
+    if (!redirectUri) {
+      // Fallback to dynamic generation if not set
+      const protocol = req.headers['x-forwarded-proto'] || (req.secure ? 'https' : 'http');
+      const host = req.headers.host;
+      redirectUri = `${protocol}://${host}/auth/tink/callback`;
+    }
+    
+    console.log('Using Tink redirect URI:', redirectUri);
     
     res.json({
       tinkClientId: process.env.TINK_CLIENT_ID?.trim(),
@@ -594,10 +601,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       console.log('Tink callback received with code and state');
       
-      // Generate the same redirect URI that was used in the authorization request
-      const protocol = req.headers['x-forwarded-proto'] || (req.secure ? 'https' : 'http');
-      const host = req.headers.host;
-      const redirectUri = `${protocol}://${host}/auth/tink/callback`;
+      // Use the same redirect URI that was used in the authorization request
+      let redirectUri = process.env.TINK_REDIRECT_URI;
+      
+      if (!redirectUri) {
+        // Fallback to dynamic generation if not set
+        const protocol = req.headers['x-forwarded-proto'] || (req.secure ? 'https' : 'http');
+        const host = req.headers.host;
+        redirectUri = `${protocol}://${host}/auth/tink/callback`;
+      }
+      
+      console.log('Using callback redirect URI:', redirectUri);
       
       // Exchange code for access token
       console.log('Exchanging authorization code for access token...');

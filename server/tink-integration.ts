@@ -41,6 +41,9 @@ export async function exchangeCodeForToken(authorizationCode: string, redirectUr
     }
 
     console.log('Attempting token exchange with Tink API...');
+    console.log('Using Client ID:', TINK_CLIENT_ID);
+    console.log('Using Redirect URI:', redirectUri);
+    console.log('Authorization Code:', authorizationCode.substring(0, 10) + '...');
     
     // For public client OAuth2 flow (no client_secret required)
     const response = await fetch(`${TINK_BASE_URL}/api/v1/oauth/token`, {
