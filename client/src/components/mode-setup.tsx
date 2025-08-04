@@ -198,9 +198,6 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                     <i className="fas fa-university text-white text-2xl"></i>
                   </div>
                   <div>
-                    <h3 className="text-base font-semibold text-gray-900 mb-3">
-                      Koppel je bankrekening
-                    </h3>
                     <p className="monarch-body mb-4">
                       Automatisch je IBAN koppelen voor snelle betalingen van deelnemers.
                     </p>
