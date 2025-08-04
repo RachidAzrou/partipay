@@ -1,3 +1,5 @@
+import { IoReceiptOutline } from "react-icons/io5";
+
 interface BillItem {
   name: string;
   price: string;
@@ -22,6 +24,16 @@ export default function BillDisplay({ billData, expanded, onToggleExpand }: Bill
   
   return (
     <div className="monarch-widget overflow-hidden animate-slide-up">
+      {/* Header with icon and title */}
+      <div className="text-center space-y-6 p-6 border-b border-gray-200">
+        <div className="w-20 h-20 bg-monarch-green rounded-full flex items-center justify-center mx-auto">
+          <IoReceiptOutline className="text-3xl text-white" />
+        </div>
+        <div>
+          <h1 className="monarch-title text-2xl">Rekening gevonden!</h1>
+          <p className="monarch-body text-lg">Restaurant De Blauwe Kater, Tafel 12</p>
+        </div>
+      </div>
       <button 
         className="w-full p-6 text-left flex items-center justify-between touch-target hover:bg-gray-50 transition-colors rounded-2xl"
         onClick={onToggleExpand}

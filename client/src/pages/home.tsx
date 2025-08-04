@@ -115,43 +115,33 @@ export default function Home() {
           )}
           
           {billData && dataLoaded && (
-            <>
-              <div className="text-center space-y-8 animate-slide-up px-4">
-                <div className="w-20 h-20 bg-monarch-green rounded-full flex items-center justify-center mx-auto">
-                  <IoReceiptOutline className="text-3xl text-white" />
-                </div>
-                <div>
-                  <h1 className="monarch-title text-2xl">Rekening gevonden!</h1>
-                  <p className="monarch-body text-lg">Restaurant De Blauwe Kater, Tafel 12</p>
-                </div>
+            <div className="text-center space-y-8 animate-slide-up px-4">
+              <BillDisplay 
+                billData={billData}
+                expanded={billExpanded}
+                onToggleExpand={() => setBillExpanded(!billExpanded)}
+              />
+              
+              <div className="space-y-4 mt-auto">
+                <button 
+                  className="w-full monarch-btn monarch-btn-primary py-4 touch-target flex items-center justify-center space-x-2"
+                  onClick={() => handleModeSelect('equal')}
+                  data-testid="button-split-bill"
+                >
+                  <MdCallSplit className="text-xl" />
+                  <span>Split the Bill</span>
+                </button>
                 
-                <BillDisplay 
-                  billData={billData}
-                  expanded={billExpanded}
-                  onToggleExpand={() => setBillExpanded(!billExpanded)}
-                />
-                
-                <div className="space-y-4 mt-auto">
-                  <button 
-                    className="w-full monarch-btn monarch-btn-primary py-4 touch-target flex items-center justify-center space-x-2"
-                    onClick={() => handleModeSelect('equal')}
-                    data-testid="button-split-bill"
-                  >
-                    <MdCallSplit className="text-xl" />
-                    <span>Split the Bill</span>
-                  </button>
-                  
-                  <button 
-                    className="w-full monarch-btn monarch-btn-secondary py-4 touch-target flex items-center justify-center space-x-2"
-                    onClick={() => handleModeSelect('items')}
-                    data-testid="button-pay-part"
-                  >
-                    <BiSelectMultiple className="text-xl" />
-                    <span>Pay your Part</span>
-                  </button>
-                </div>
+                <button 
+                  className="w-full monarch-btn monarch-btn-secondary py-4 touch-target flex items-center justify-center space-x-2"
+                  onClick={() => handleModeSelect('items')}
+                  data-testid="button-pay-part"
+                >
+                  <BiSelectMultiple className="text-xl" />
+                  <span>Pay your Part</span>
+                </button>
               </div>
-            </>
+            </div>
           )}
         </div>
       )}
