@@ -107,8 +107,8 @@ export default function Home() {
         onBack={currentStep > 1 ? () => setCurrentStep(currentStep - 1) : undefined}
       />
       {currentStep === 1 && (
-        <div className="flex-1 flex items-center justify-center px-3 py-4 animate-fade-in">
-          <div className="w-full max-w-md space-y-4">
+        <div className="flex-1 flex items-center justify-center min-h-0 px-3 animate-fade-in">
+          <div className="w-full max-w-md space-y-6 py-4">
           {loadBillMutation.isPending && (
             <div className="text-center space-y-3 py-6">
               <div className="w-6 h-6 border-2 border-gray-300 border-t-transparent rounded-full animate-spin mx-auto"></div>
