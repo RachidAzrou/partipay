@@ -3,7 +3,6 @@ import { useLocation, useRoute } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { generateReceiptPDF } from "@/lib/pdf-utils";
 
 interface SessionData {
   session: {
@@ -39,54 +38,20 @@ export default function PaymentSuccess() {
   const [, setLocation] = useLocation();
   const [match, params] = useRoute("/payment-success/:sessionId");
   const { toast } = useToast();
-  const [downloadingPDF, setDownloadingPDF] = useState<'full' | 'personal' | null>(null);
+  const [showConfetti, setShowConfetti] = useState(true);
 
   const sessionQuery = useQuery({
     queryKey: ['/api/sessions', params?.sessionId],
     enabled: !!params?.sessionId,
   });
 
-  const handleDownloadFullReceipt = async () => {
-    if (!sessionQuery.data) return;
-    
-    setDownloadingPDF('full');
-    try {
-      await generateReceiptPDF(sessionQuery.data, 'full');
-      toast({
-        title: "PDF gedownload",
-        description: "Volledige rekening is gedownload als PDF",
-      });
-    } catch (error) {
-      toast({
-        title: "Fout",
-        description: "Kon PDF niet genereren. Probeer opnieuw.",
-        variant: "destructive",
-      });
-    } finally {
-      setDownloadingPDF(null);
-    }
-  };
-
-  const handleDownloadPersonalReceipt = async () => {
-    if (!sessionQuery.data) return;
-    
-    setDownloadingPDF('personal');
-    try {
-      await generateReceiptPDF(sessionQuery.data, 'personal');
-      toast({
-        title: "PDF gedownload",
-        description: "Persoonlijke rekening is gedownload als PDF",
-      });
-    } catch (error) {
-      toast({
-        title: "Fout",
-        description: "Kon PDF niet genereren. Probeer opnieuw.",
-        variant: "destructive",
-      });
-    } finally {
-      setDownloadingPDF(null);
-    }
-  };
+  // Hide confetti after 4 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowConfetti(false);
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, []);
 
   if (!match || !params?.sessionId) {
     return (
@@ -130,23 +95,57 @@ export default function PaymentSuccess() {
   const mainBooker = sessionData.participants.find(p => p.isMainBooker);
 
   return (
-    <div className="monarch-container flex flex-col min-h-screen">
-      <div className="flex-1 px-4 py-6 space-y-6">
+    <div className="monarch-container flex flex-col min-h-screen relative">
+      {/* Confetti Animation */}
+      {showConfetti && (
+        <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
+          {Array.from({ length: 50 }, (_, i) => (
+            <div
+              key={i}
+              className="absolute"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `-${Math.random() * 20 + 10}px`,
+                animation: `confetti-fall ${3 + Math.random() * 2}s linear infinite`,
+                animationDelay: `${Math.random() * 2}s`,
+              }}
+            >
+              <div
+                className="w-3 h-3 rounded-full opacity-80"
+                style={{
+                  backgroundColor: [
+                    '#F97316', // Orange
+                    '#FB923C', // Light orange
+                    '#FBBF24', // Yellow
+                    '#34D399', // Green
+                    '#60A5FA', // Blue
+                    '#A78BFA', // Purple
+                    '#F472B6', // Pink
+                  ][Math.floor(Math.random() * 7)],
+                  transform: `rotate(${Math.random() * 360}deg)`,
+                }}
+              />
+            </div>
+          ))}
+        </div>
+      )}
+      
+      <div className="flex-1 px-4 py-6 space-y-6 flex flex-col items-center justify-center text-center">
         
         {/* Success Header */}
-        <div className="text-center space-y-4 animate-slide-up">
-          <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto bg-[#f97315]">
-            <i className="fas fa-check text-white text-3xl"></i>
+        <div className="space-y-4 animate-slide-up">
+          <div className="w-24 h-24 rounded-full flex items-center justify-center mx-auto bg-green-500">
+            <i className="fas fa-check text-white text-4xl"></i>
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">Betaling succesvol!</h1>
-            <p className="text-gray-600 mb-4">
+            <h1 className="text-3xl font-bold text-gray-900 mb-3">Betaling succesvol!</h1>
+            <p className="text-gray-600 mb-6 text-lg">
               Je betaling voor {sessionData.session.restaurantName} is verwerkt
             </p>
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+            <div className="bg-green-50 border border-green-200 rounded-lg p-6 max-w-sm mx-auto">
               <div className="flex items-center justify-between">
-                <span className="text-green-800 font-medium">Totaal betaald:</span>
-                <span className="text-green-900 font-bold text-lg">
+                <span className="text-green-800 font-medium text-lg">Totaal betaald:</span>
+                <span className="text-green-900 font-bold text-2xl">
                   € {sessionData.session.totalAmount}
                 </span>
               </div>
@@ -154,74 +153,8 @@ export default function PaymentSuccess() {
           </div>
         </div>
 
-        {/* Receipt Download Options */}
-        <div className="space-y-4 animate-slide-up" style={{animationDelay: '0.2s'}}>
-          
-          {/* Full Receipt Option */}
-          <div className="monarch-card">
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <h3 className="font-semibold text-gray-900 mb-1">Volledige rekening</h3>
-                <p className="text-sm text-gray-600">
-                  Alle items van {sessionData.session.restaurantName}, Tafel {sessionData.session.tableNumber}
-                </p>
-              </div>
-              <Button
-                onClick={handleDownloadFullReceipt}
-                disabled={downloadingPDF === 'full'}
-                className="monarch-btn monarch-btn-primary"
-                data-testid="button-download-full-receipt"
-              >
-                {downloadingPDF === 'full' ? (
-                  <>
-                    <i className="fas fa-spinner fa-spin mr-2"></i>
-                    Genereren...
-                  </>
-                ) : (
-                  <>
-                    <i className="fas fa-download mr-2"></i>
-                    Download PDF
-                  </>
-                )}
-              </Button>
-            </div>
-          </div>
-
-          {/* Personal Receipt Option (only for Pay Your Part) */}
-          {isPayYourPart && mainBooker && (
-            <div className="monarch-card">
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <h3 className="font-semibold text-gray-900 mb-1">Persoonlijke rekening</h3>
-                  <p className="text-sm text-gray-600">
-                    Alleen jouw bestelde items voor {mainBooker.name}
-                  </p>
-                </div>
-                <Button
-                  onClick={handleDownloadPersonalReceipt}
-                  disabled={downloadingPDF === 'personal'}
-                  className="monarch-btn monarch-btn-secondary"
-                  data-testid="button-download-personal-receipt"
-                >
-                  {downloadingPDF === 'personal' ? (
-                    <>
-                      <i className="fas fa-spinner fa-spin mr-2"></i>
-                      Genereren...
-                    </>
-                  ) : (
-                    <>
-                      <i className="fas fa-download mr-2"></i>
-                      Download PDF
-                    </>
-                  )}
-                </Button>
-              </div>
-            </div>
-          )}
-        </div>
-
         {/* Session Summary */}
-        <div className="monarch-card animate-slide-up" style={{animationDelay: '0.4s'}}>
+        <div className="monarch-card animate-slide-up max-w-sm mx-auto" style={{animationDelay: '0.4s'}}>
           <h3 className="font-semibold text-gray-900 mb-3">Sessie overzicht</h3>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
@@ -245,6 +178,30 @@ export default function PaymentSuccess() {
           </div>
         </div>
       </div>
+
+      {/* Bottom Action */}
+      <div className="px-4 pb-6">
+        <Button
+          onClick={() => setLocation('/')}
+          className="w-full monarch-btn monarch-btn-primary text-lg py-4"
+          data-testid="button-new-session"
+        >
+          Nieuwe rekening splitsen
+        </Button>
+      </div>
+      
+      <style jsx>{`
+        @keyframes confetti-fall {
+          0% {
+            transform: translateY(-100vh) rotate(0deg);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(100vh) rotate(720deg);
+            opacity: 0;
+          }
+        }
+      `}</style>
     </div>
   );
 }
