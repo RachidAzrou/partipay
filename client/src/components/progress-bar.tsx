@@ -1,4 +1,4 @@
-import logoPath from "@assets/Scherm­afbeelding 2025-07-27 om 01.39.50_1754260283738.png";
+import logoPath from "@assets/Scherm­afbeelding 2025-08-04 om 10.42.08_1754296942837.png";
 
 interface ProgressBarProps {
   currentStep: number;
