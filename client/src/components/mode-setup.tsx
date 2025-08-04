@@ -316,6 +316,9 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                         <span className="text-sm text-gray-500">per stuk</span>
                       </div>
                       
+                      <div className="text-sm text-gray-600">
+                        {availableQuantity} beschikbaar
+                      </div>
                     </div>
                     
                     {/* Quantity controls or unavailable message */}
