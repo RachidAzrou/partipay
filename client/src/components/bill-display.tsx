@@ -26,7 +26,7 @@ export default function BillDisplay({ billData, expanded, onToggleExpand }: Bill
     <div className="monarch-widget overflow-hidden animate-slide-up">
       {/* Header with icon and title */}
       <div className="text-center space-y-3 p-3 border-b border-gray-200">
-        <div className="w-14 h-14 bg-monarch-green rounded-full flex items-center justify-center mx-auto">
+        <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto bg-[#f97315]">
           <IoReceiptOutline className="text-xl text-white" />
         </div>
         <div>
@@ -48,7 +48,6 @@ export default function BillDisplay({ billData, expanded, onToggleExpand }: Bill
           <i className={`fas fa-chevron-down text-monarch-primary transition-transform duration-200 text-sm ${expanded ? 'rotate-180' : ''}`}></i>
         </div>
       </button>
-      
       {expanded && (
         <div className="border-t border-gray-200 bg-white p-4 font-mono text-xs animate-fade-in" data-testid="bill-details">
           {/* POS Header */}
