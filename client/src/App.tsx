@@ -31,7 +31,11 @@ function App() {
       <TooltipProvider>
         <Toaster />
         <Router />
-        <footer className="fixed bottom-0 left-0 right-0 bg-transparent text-center py-2 z-10">
+        <footer className="fixed bottom-0 left-0 right-0 text-center py-2 z-10" style={{
+          background: "url('@assets/a76a0c1a-43da-4af1-92f3-6326f9b4de38_1754313248853.jpg') no-repeat center center fixed",
+          backgroundSize: "cover",
+          backgroundAttachment: "fixed"
+        }}>
           <p className="text-white font-bold text-sm" data-testid="footer-copyright">
             © 2025 PartiPay
           </p>
