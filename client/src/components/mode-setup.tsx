@@ -225,7 +225,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
               <div className="monarch-card">
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 bg-monarch-green rounded-full flex items-center justify-center">
-                    <i className="fas fa-check text-white text-lg"></i>
+                    <TbPlugConnected className="text-white text-lg" />
                   </div>
                   <div className="flex-1">
                     <h4 className="text-base font-semibold text-gray-900">Bankrekening gekoppeld</h4>
