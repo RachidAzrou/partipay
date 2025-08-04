@@ -94,7 +94,11 @@ export default function Home() {
 
   return (
     <div className="parti-container bg-background flex flex-col">
-      <ProgressBar currentStep={currentStep} totalSteps={3} />
+      <ProgressBar 
+        currentStep={currentStep} 
+        totalSteps={3} 
+        onBack={currentStep > 1 ? () => setCurrentStep(currentStep - 1) : undefined}
+      />
       
       {currentStep === 1 && (
         <div className="flex-1 px-6 py-8 space-y-8 animate-fade-in">
