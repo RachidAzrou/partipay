@@ -226,29 +226,32 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
             ) : (
               <div className="monarch-widget bg-green-50 border-green-200">
                 <div className="text-center space-y-6">
-                  <div className="w-20 h-20 bg-green-600 rounded-2xl flex items-center justify-center mx-auto">
+                  <div className="w-20 h-20 bg-monarch-primary rounded-2xl flex items-center justify-center mx-auto">
                     <MdCallSplit className="text-white text-3xl" />
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">Split the Bill</h3>
-                    <div className="bg-white rounded-lg p-3 mb-2 border border-green-200">
-                      <p className="text-xs text-green-700 mb-1">✓ Bankrekening gekoppeld</p>
-                      <p className="monarch-body font-semibold mb-1">{bankInfo?.accountHolder}</p>
-                      <p className="monarch-caption font-mono">{bankInfo?.iban}</p>
+                    <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 mb-3 border border-green-100 shadow-sm">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center space-x-2">
+                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                          <p className="text-sm font-medium text-green-800">Bankrekening gekoppeld</p>
+                        </div>
+                        <button
+                          className="text-gray-400 hover:text-gray-600 transition-colors p-1"
+                          onClick={() => {
+                            setBankLinked(false);
+                            setBankInfo(null);
+                          }}
+                          data-testid="button-unlink-bank"
+                        >
+                          <i className="fas fa-times text-xs"></i>
+                        </button>
+                      </div>
+                      <p className="text-sm font-semibold text-gray-900 mb-1">{bankInfo?.accountHolder}</p>
+                      <p className="text-xs font-mono text-gray-600">{bankInfo?.iban}</p>
                     </div>
                   </div>
-                  
-                  <button 
-                    className="monarch-btn monarch-btn-secondary flex items-center justify-center space-x-2 mx-auto"
-                    onClick={() => {
-                      setBankLinked(false);
-                      setBankInfo(null);
-                    }}
-                    data-testid="button-unlink-bank"
-                  >
-                    <i className="fas fa-times text-sm"></i>
-                    <span>Ontkoppelen</span>
-                  </button>
                 </div>
               </div>
             )}
