@@ -323,7 +323,7 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
         {sessionData.participants.map((participant, index) => (
           <div key={participant.id} className="monarch-card flex items-center justify-between animate-slide-up" style={{animationDelay: `${index * 0.02}s`}}>
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-monarch-primary rounded-full flex items-center justify-center">
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center ${participant.isMainBooker ? 'bg-monarch-primary' : ''}`} style={participant.isMainBooker ? {} : { backgroundColor: '#f9731691' }}>
                 <span className="text-white font-semibold text-xs">
                   {participant.name.split(' ').map(n => n[0]).join('').toUpperCase()}
                 </span>
