@@ -72,6 +72,7 @@ export default function Home() {
   // Auto-load bill data when component mounts (simulating QR scan at table)
   useEffect(() => {
     if (!dataLoaded && !loadBillMutation.isPending) {
+      // Simulate QR scan with mock restaurant data
       loadBillMutation.mutate();
     }
   }, [dataLoaded, loadBillMutation]);
