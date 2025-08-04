@@ -242,16 +242,16 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
                           <div className="relative w-9 h-9">
-                            <div className="w-9 h-9 bg-blue-500 rounded-lg flex items-center justify-center">
+                            <div className="w-9 h-9 bg-green-500 rounded-lg flex items-center justify-center">
                               <i className="fas fa-university text-white text-sm"></i>
                             </div>
-                            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center border-2 border-white">
+                            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-600 rounded-full flex items-center justify-center border-2 border-white">
                               <i className="fas fa-check text-white text-xs"></i>
                             </div>
                           </div>
                           <div className="flex-1">
                             <p className="text-sm font-semibold text-gray-900">{bankInfo?.accountHolder}</p>
-                            <p className="text-xs text-gray-500 font-mono">{bankInfo?.iban}</p>
+                            <p className="text-xs text-green-600 font-medium">Bankrekening gekoppeld</p>
                           </div>
                         </div>
                         
