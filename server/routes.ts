@@ -335,6 +335,70 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Main booker pays full bill
+  app.post('/api/sessions/:id/pay-full', async (req, res) => {
+    try {
+      const sessionId = req.params.id;
+      
+      // Get session and participants
+      const session = await storage.getSession(sessionId);
+      if (!session) {
+        return res.status(404).json({ message: 'Session not found' });
+      }
+      
+      const participants = await storage.getParticipantsBySession(sessionId);
+      const mainBooker = participants.find(p => p.isMainBooker);
+      
+      if (!mainBooker) {
+        return res.status(400).json({ message: 'Main booker not found' });
+      }
+      
+      const totalAmount = parseFloat(session.totalAmount);
+      
+      // Create payment record for the full amount
+      const payment = await storage.createPayment({
+        sessionId,
+        participantId: mainBooker.id,
+        amount: totalAmount.toString(),
+        status: 'completed'
+      });
+      
+      // Mark main booker as having paid the full amount
+      await storage.updateParticipant(mainBooker.id, {
+        hasPaid: true,
+        paidAmount: totalAmount.toString()
+      });
+      
+      // Mark all other participants as paid (since main booker covered them)
+      for (const participant of participants) {
+        if (!participant.isMainBooker) {
+          await storage.updateParticipant(participant.id, {
+            hasPaid: true,
+            paidAmount: participant.expectedAmount || '0'
+          });
+        }
+      }
+      
+      // Mark session as completed
+      await storage.updateSession(sessionId, { isActive: false });
+      
+      // Broadcast session completion
+      broadcastToSession(sessionId, {
+        type: 'session-completed'
+      });
+      
+      res.json({ 
+        success: true, 
+        payment,
+        message: 'Full bill paid successfully'
+      });
+      
+    } catch (error) {
+      console.error('Full payment error:', error);
+      res.status(400).json({ message: 'Failed to process full payment' });
+    }
+  });
+
   // Tink OAuth2 callback
   app.get('/auth/tink/callback', async (req, res) => {
     try {

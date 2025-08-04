@@ -97,6 +97,27 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
     },
   });
 
+  const fullPaymentMutation = useMutation({
+    mutationFn: async () => {
+      const res = await apiRequest('POST', `/api/sessions/${sessionData.session.id}/pay-full`, {});
+      return res.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Volledige rekening betaald",
+        description: "Je hebt de volledige rekening betaald!",
+      });
+      setSessionCompleted(true);
+    },
+    onError: () => {
+      toast({
+        title: "Betalingsfout",
+        description: "Er is iets misgegaan bij de betaling. Probeer opnieuw.",
+        variant: "destructive",
+      });
+    },
+  });
+
   useEffect(() => {
     const sessionUrl = `${window.location.origin}/session/${sessionData.session.id}`;
     generateQRCode(sessionUrl).then(setQrCodeUrl);
@@ -125,6 +146,28 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
       amount
     });
   };
+
+  const calculateOutstandingDetails = () => {
+    const totalAmount = parseFloat(sessionData.session.totalAmount);
+    const totalPaid = sessionData.participants.reduce((sum, p) => {
+      return sum + (p.hasPaid ? parseFloat(p.expectedAmount || (totalAmount / totalCount).toString()) : 0);
+    }, 0);
+    const outstandingAmount = totalAmount - totalPaid;
+    const unpaidParticipants = sessionData.participants.filter(p => !p.hasPaid);
+    
+    return {
+      outstandingAmount,
+      unpaidParticipants,
+      hasOutstanding: outstandingAmount > 0.01 // Small threshold for floating point precision
+    };
+  };
+
+  const handlePayFullBill = () => {
+    fullPaymentMutation.mutate();
+  };
+
+  const isMainBooker = sessionData.participants.some(p => p.isMainBooker && !p.hasPaid);
+  const outstandingDetails = calculateOutstandingDetails();
 
   const handleShareQR = async () => {
     if (navigator.share) {
@@ -217,6 +260,64 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
             </div>
           );
         })()}
+        
+        {/* Main Booker Full Payment Section */}
+        {isMainBooker && (
+          <div className="monarch-card p-4 border-2 border-monarch-primary bg-orange-50">
+            <div className="flex items-start space-x-3 mb-4">
+              <div className="w-8 h-8 bg-monarch-primary rounded-full flex items-center justify-center mt-1">
+                <i className="fas fa-crown text-white text-sm"></i>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-base font-semibold text-gray-900 mb-2">Hoofdboeker opties</h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  Je kunt de volledige rekening betalen, ook als niet iedereen zijn deel heeft betaald.
+                </p>
+                
+                {outstandingDetails.hasOutstanding && (
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4">
+                    <div className="flex items-start space-x-2">
+                      <i className="fas fa-exclamation-triangle text-yellow-600 text-sm mt-0.5"></i>
+                      <div className="flex-1">
+                        <h4 className="text-sm font-medium text-yellow-800 mb-2">Nog openstaand</h4>
+                        <p className="text-sm text-yellow-700 mb-2">
+                          <strong>€ {outstandingDetails.outstandingAmount.toFixed(2)}</strong> van de volgende deelnemers:
+                        </p>
+                        <ul className="text-xs text-yellow-700 space-y-1">
+                          {outstandingDetails.unpaidParticipants.map(p => (
+                            <li key={p.id} className="flex justify-between">
+                              <span>• {p.name}</span>
+                              <span>€ {(parseFloat(p.expectedAmount || (parseFloat(sessionData.session.totalAmount) / totalCount).toString())).toFixed(2)}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
+                <button
+                  className="w-full monarch-btn monarch-btn-primary flex items-center justify-center space-x-2"
+                  onClick={handlePayFullBill}
+                  disabled={fullPaymentMutation.isPending}
+                  data-testid="button-pay-full-bill"
+                >
+                  {fullPaymentMutation.isPending ? (
+                    <>
+                      <i className="fas fa-spinner fa-spin"></i>
+                      <span>Betaling verwerken...</span>
+                    </>
+                  ) : (
+                    <>
+                      <i className="fas fa-credit-card"></i>
+                      <span>Betaal volledige rekening (€ {sessionData.session.totalAmount})</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         
         {sessionData.participants.map((participant, index) => (
           <div key={participant.id} className="monarch-card flex items-center justify-between animate-slide-up" style={{animationDelay: `${index * 0.1}s`}}>
