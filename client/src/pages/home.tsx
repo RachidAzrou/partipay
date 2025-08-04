@@ -142,7 +142,7 @@ export default function Home() {
                   onClick={() => handleModeSelect('items')}
                   data-testid="button-pay-part"
                 >
-                  Jouw deel betalen
+                  Pay your Part
                 </button>
               </div>
             </>
