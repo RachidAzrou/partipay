@@ -243,7 +243,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                         <div className="flex-1">
                           <div className="flex items-center space-x-3 mb-2">
                             <div className="relative w-8 h-8">
-                              <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                              <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-[#effdf4]">
                                 <i className="fas fa-university text-white text-sm"></i>
                               </div>
                               <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
