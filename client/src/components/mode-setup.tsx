@@ -294,12 +294,12 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                   onClick={() => {
                     const totalAmount = parseFloat(billData.totalAmount);
                     // Ensure minimum 1 cent per person - prevent 0 euro per person
-                    const maxParticipants = Math.min(20, Math.floor(totalAmount * 100));
+                    const maxParticipants = Math.min(20, Math.floor(totalAmount / 0.01));
                     if (participantCount < maxParticipants) {
                       setParticipantCount(participantCount + 1);
                     }
                   }}
-                  disabled={participantCount >= Math.min(20, Math.floor(parseFloat(billData.totalAmount) * 100))}
+                  disabled={participantCount >= Math.min(20, Math.floor(parseFloat(billData.totalAmount) / 0.01))}
                   data-testid="button-increase-participants"
                 >
                   <i className="fas fa-plus text-white text-sm"></i>
@@ -313,7 +313,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                 </div>
               </div>
               
-              {participantCount >= Math.min(20, Math.floor(parseFloat(billData.totalAmount) * 100)) && (
+              {participantCount >= Math.min(20, Math.floor(parseFloat(billData.totalAmount) / 0.01)) && (
                 <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 mt-4">
                   <div className="flex items-center space-x-2">
                     <i className="fas fa-exclamation-triangle text-orange-600"></i>
