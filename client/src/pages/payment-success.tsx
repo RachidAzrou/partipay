@@ -159,9 +159,7 @@ export default function PaymentSuccess() {
           
           {/* Full Receipt Option */}
           <div className="monarch-card">
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-              </div>
+            <div className="flex items-center justify-center">
               <Button
                 onClick={handleDownloadFullReceipt}
                 disabled={downloadingPDF === 'full'}
@@ -176,7 +174,7 @@ export default function PaymentSuccess() {
                 ) : (
                   <>
                     <i className="fas fa-download mr-2"></i>
-                    Download PDF
+                    Download de rekening
                   </>
                 )}
               </Button>
