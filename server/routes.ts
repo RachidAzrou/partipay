@@ -590,13 +590,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Handle OAuth errors
       if (error) {
         console.error('OAuth error:', error);
-        const errorUrl = `/tink-callback?bank_linked=error&error=${encodeURIComponent(error as string)}`;
+        const errorUrl = `/auth/tink/callback?bank_linked=error&error=${encodeURIComponent(error as string)}`;
         return res.redirect(errorUrl);
       }
       
       if (!code || !state) {
         console.error('Missing authorization code or state');
-        return res.redirect('/tink-callback?bank_linked=error&error=missing_params');
+        return res.redirect('/auth/tink/callback?bank_linked=error&error=missing_params');
       }
       
       console.log('Tink callback received with code and state');
@@ -619,7 +619,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       if (!tokenData.access_token) {
         console.error('Failed to get access token from Tink');
-        return res.redirect('/tink-callback?bank_linked=error&error=no_token');
+        return res.redirect('/auth/tink/callback?bank_linked=error&error=no_token');
       }
       
       console.log('Access token obtained successfully');
@@ -630,7 +630,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       if (!accountInfo) {
         console.error('Could not retrieve account information from Tink API');
-        return res.redirect('/tink-callback?bank_linked=error&error=no_account_info');
+        return res.redirect('/auth/tink/callback?bank_linked=error&error=no_account_info');
       }
       
       console.log('Account info retrieved:', { iban: accountInfo.iban.substring(0, 4) + '****', accountHolder: accountInfo.accountHolder });
@@ -643,12 +643,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       };
       
       // Redirect to callback page with success data
-      const redirectUrl = `/tink-callback?bank_linked=success&data=${encodeURIComponent(JSON.stringify(bankData))}`;
+      const redirectUrl = `/auth/tink/callback?bank_linked=success&data=${encodeURIComponent(JSON.stringify(bankData))}`;
       res.redirect(redirectUrl);
       
     } catch (error) {
       console.error('Tink callback error:', error);
-      res.redirect('/tink-callback?bank_linked=error&error=server_error');
+      res.redirect('/auth/tink/callback?bank_linked=error&error=server_error');
     }
   });
   
