@@ -42,7 +42,7 @@ export default function BillDisplay({ billData, expanded, onToggleExpand }: Bill
         <div className="flex-1">
           <h3 className="text-sm font-semibold text-gray-900">Rekening #{today.getDate().toString().padStart(2, '0')}{(today.getMonth() + 1).toString().padStart(2, '0')}{today.getFullYear().toString().slice(-2)}01</h3>
           <p className="monarch-body mt-1">Restaurant De Blauwe Kater • Tafel 12</p>
-          <p className="text-lg font-bold tabular-nums text-gray-900 mt-2">Totaalbedrag: € {billData.totalAmount}</p>
+          <p className="text-sm text-monarch-primary mt-2 font-medium">Klik om volledige rekening te bekijken</p>
         </div>
         <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center ml-3">
           <i className={`fas fa-chevron-down text-monarch-primary transition-transform duration-200 text-sm ${expanded ? 'rotate-180' : ''}`}></i>
