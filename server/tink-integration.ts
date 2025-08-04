@@ -2,8 +2,14 @@
 // Using Tink's PSD2 API for Belgian banks
 
 const TINK_BASE_URL = 'https://api.tink.com';
-const TINK_CLIENT_ID = process.env.TINK_CLIENT_ID!;
-const TINK_REDIRECT_URI = process.env.TINK_REDIRECT_URI!;
+const TINK_CLIENT_ID = process.env.TINK_CLIENT_ID?.trim();
+const TINK_CLIENT_SECRET = process.env.TINK_CLIENT_SECRET?.trim();
+const TINK_REDIRECT_URI = process.env.TINK_REDIRECT_URI?.trim();
+
+// Validate required environment variables
+if (!TINK_CLIENT_ID) {
+  console.warn('TINK_CLIENT_ID not configured - bank integration will use mock data');
+}
 
 interface TinkTokenResponse {
   access_token: string;
@@ -35,18 +41,29 @@ interface AccountInfo {
 
 export async function exchangeCodeForToken(authorizationCode: string, redirectUri: string): Promise<TinkTokenResponse> {
   try {
-    // For public client OAuth2 flow (no client_secret required)
+    // Check if we have the required configuration
+    if (!TINK_CLIENT_ID) {
+      throw new Error('TINK_CLIENT_ID not configured');
+    }
+
+    const params: Record<string, string> = {
+      grant_type: 'authorization_code',
+      code: authorizationCode,
+      redirect_uri: redirectUri,
+      client_id: TINK_CLIENT_ID
+    };
+
+    // Add client_secret if available (for confidential clients)
+    if (TINK_CLIENT_SECRET) {
+      params.client_secret = TINK_CLIENT_SECRET;
+    }
+
     const response = await fetch(`${TINK_BASE_URL}/api/v1/oauth/token`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
-      body: new URLSearchParams({
-        grant_type: 'authorization_code',
-        code: authorizationCode,
-        redirect_uri: redirectUri,
-        client_id: TINK_CLIENT_ID
-      })
+      body: new URLSearchParams(params)
     });
 
     if (!response.ok) {
