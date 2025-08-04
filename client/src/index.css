@@ -15,22 +15,22 @@
   --card-foreground: #111827;
   --border: #D1D5DB; /* Light gray borders */
   --input: #F9FAFB;
-  --primary: #6366F1; /* Deep blue-violet */
+  --primary: #F97316; /* Vibrant orange */
   --primary-foreground: #FFFFFF;
   --secondary: #F3F4F6;
   --secondary-foreground: #111827;
-  --accent: #34D399; /* Pastel green */
+  --accent: #FB923C; /* Light orange */
   --accent-foreground: #FFFFFF;
   --destructive: #EF4444;
   --destructive-foreground: #FFFFFF;
-  --ring: #6366F1;
+  --ring: #F97316;
   --radius: 1rem; /* rounded-2xl equivalent */
   
-  /* Monarch iOS specific colors */
-  --monarch-primary: #6366F1; /* Deep blue-violet */
-  --monarch-purple: #A78BFA; /* Soft purple */
-  --monarch-green: #34D399; /* Pastel green */
-  --monarch-orange: #FBBF24; /* Soft orange */
+  /* Monarch iOS specific colors - Orange theme */
+  --monarch-primary: #F97316; /* Vibrant orange */
+  --monarch-purple: #FB923C; /* Light orange */
+  --monarch-green: #FED7AA; /* Peach */
+  --monarch-orange: #FFEDD5; /* Very light orange */
   --monarch-gray-400: #9CA3AF; /* Medium gray */
   --monarch-gray-300: #D1D5DB; /* Light gray */
   --monarch-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -50,21 +50,21 @@
   --card-foreground: #F9FAFB;
   --border: #374151; /* Dark borders */
   --input: #111827;
-  --primary: #6366F1; /* Keep vibrant colors */
+  --primary: #F97316; /* Keep vibrant colors */
   --primary-foreground: #FFFFFF;
   --secondary: #374151;
   --secondary-foreground: #F9FAFB;
-  --accent: #34D399;
+  --accent: #FB923C;
   --accent-foreground: #FFFFFF;
   --destructive: #EF4444;
   --destructive-foreground: #FFFFFF;
-  --ring: #6366F1;
+  --ring: #F97316;
   
-  /* Dark mode specific */
-  --monarch-primary: #6366F1;
-  --monarch-purple: #A78BFA;
-  --monarch-green: #34D399;
-  --monarch-orange: #FBBF24;
+  /* Dark mode specific - Orange theme */
+  --monarch-primary: #F97316;
+  --monarch-purple: #FB923C;
+  --monarch-green: #FED7AA;
+  --monarch-orange: #FFEDD5;
   --monarch-gray-400: #9CA3AF;
   --monarch-gray-300: #6B7280;
   --monarch-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
@@ -146,7 +146,7 @@
   }
   
   .monarch-btn-primary:hover {
-    background: #5855EB;
+    background: #EA580C;
   }
   
   .monarch-btn-secondary {

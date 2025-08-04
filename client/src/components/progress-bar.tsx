@@ -7,29 +7,55 @@ interface ProgressBarProps {
 }
 
 export default function ProgressBar({ currentStep, totalSteps, onBack }: ProgressBarProps) {
+  const progressPercentage = (currentStep / totalSteps) * 100;
+
   return (
     <div className="sticky top-0 z-50 bg-white px-6 py-6 border-b border-gray-100">
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-6">
         {onBack && currentStep > 1 ? (
           <button 
-            className="monarch-icon-btn touch-target"
+            className="w-12 h-12 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center touch-target transition-all duration-200 shadow-sm"
             onClick={onBack}
             data-testid="button-back-progress"
           >
-            <i className="fas fa-arrow-left text-gray-600 text-lg"></i>
+            <i className="fas fa-arrow-left text-gray-700 text-lg"></i>
           </button>
         ) : (
-          <div className="w-10"></div>
+          <div className="w-12"></div>
         )}
         <p className="monarch-section-title">Stap {currentStep} van {totalSteps}</p>
-        <div className="w-10"></div>
+        <div className="w-12"></div>
       </div>
-      <div className="flex items-center justify-center mb-6">
+      
+      <div className="flex items-center justify-center mb-4">
         <img 
           src={logoPath} 
           alt="PartiPay Logo" 
-          className="h-16 w-auto object-contain"
+          className="h-24 w-auto object-contain max-w-xs"
         />
+      </div>
+      
+      {/* Visual Progress Bar */}
+      <div className="mb-6">
+        <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+          <div 
+            className="bg-monarch-primary h-2 rounded-full transition-all duration-700 ease-out"
+            style={{ width: `${progressPercentage}%` }}
+            data-testid="visual-progress-bar"
+          ></div>
+        </div>
+        <div className="flex justify-between px-1">
+          {Array.from({ length: totalSteps }, (_, index) => (
+            <div 
+              key={index + 1}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                index + 1 <= currentStep 
+                  ? 'bg-monarch-primary' 
+                  : 'bg-gray-300'
+              }`}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
