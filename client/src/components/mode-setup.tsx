@@ -195,10 +195,10 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
             <Label className="block text-lg font-semibold text-foreground mb-4">Bankrekening koppelen (hoofdboeker)</Label>
             
             {!bankLinked ? (
-              <div className="bg-background rounded-2xl p-8 border" style={{borderColor: 'var(--parti-border-light)'}}>
+              <div className="parti-card-elevated">
                 <div className="text-center space-y-6">
-                  <div className="w-20 h-20 bg-muted rounded-2xl flex items-center justify-center mx-auto">
-                    <i className="fas fa-university text-muted-foreground text-2xl"></i>
+                  <div className="w-20 h-20 parti-bg-primary-light rounded-2xl flex items-center justify-center mx-auto">
+                    <i className="fas fa-university text-white text-2xl"></i>
                   </div>
                   <div>
                     <h3 className="parti-heading-3 mb-3">
@@ -223,9 +223,9 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                 </div>
               </div>
             ) : (
-              <div className="bg-background rounded-2xl p-6 border" style={{borderColor: 'var(--parti-border-light)'}}>
+              <div className="parti-card">
                 <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 parti-bg-accent rounded-full flex items-center justify-center">
+                  <div className="w-12 h-12 parti-bg-primary rounded-full flex items-center justify-center">
                     <i className="fas fa-check text-white text-lg"></i>
                   </div>
                   <div className="flex-1">
@@ -263,7 +263,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                   <i className="fas fa-minus text-muted-foreground text-sm"></i>
                 </button>
                 <div className="flex-1 text-center">
-                  <span className="text-3xl font-semibold text-foreground" data-testid="text-participant-count">{participantCount}</span>
+                  <span className="parti-amount-large" data-testid="text-participant-count">{participantCount}</span>
                   <p className="parti-body mt-1">personen</p>
                 </div>
                 <button 
@@ -319,7 +319,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
             <div className="parti-card-elevated">
               <div className="flex justify-between items-center">
                 <span className="parti-heading-3">Jouw totaal:</span>
-                <span className="text-2xl font-bold parti-text-primary" data-testid="text-selected-total">
+                <span className="parti-amount-large parti-text-primary" data-testid="text-selected-total">
                   € {calculateSelectedTotal()}
                 </span>
               </div>

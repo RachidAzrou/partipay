@@ -141,8 +141,8 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
   if (sessionCompleted) {
     return (
       <div className="px-4 py-6">
-        <div className="bg-background rounded-2xl border p-8 text-center" style={{borderColor: 'var(--parti-border-light)'}} data-testid="success-state">
-          <div className="w-20 h-20 parti-bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
+        <div className="parti-card-elevated text-center" data-testid="success-state">
+          <div className="w-20 h-20 parti-bg-primary rounded-full flex items-center justify-center mx-auto mb-6">
             <i className="fas fa-check text-white text-2xl"></i>
           </div>
           <h3 className="parti-heading-2 mb-4">Alle betalingen voltooid!</h3>
@@ -169,7 +169,7 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
         <p className="parti-body text-lg">Laat anderen deze QR-code scannen om mee te betalen</p>
       </div>
 
-      <div className="bg-background rounded-2xl border p-8 text-center animate-slide-up" style={{borderColor: 'var(--parti-border-light)'}}>
+      <div className="parti-card-elevated text-center animate-slide-up">
         {qrCodeUrl ? (
           <img 
             src={qrCodeUrl} 
@@ -197,7 +197,7 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
         <h2 className="parti-heading-2">Deelnemers ({paidCount}/{totalCount})</h2>
         
         {sessionData.participants.map((participant, index) => (
-          <div key={participant.id} className="bg-background rounded-2xl border p-4 flex items-center justify-between animate-slide-up" style={{borderColor: 'var(--parti-border-light)', animationDelay: `${index * 0.1}s`}}>
+          <div key={participant.id} className="parti-card flex items-center justify-between animate-slide-up" style={{animationDelay: `${index * 0.1}s`}}>
             <div className="flex items-center space-x-4">
               <div className="w-12 h-12 parti-bg-primary rounded-full flex items-center justify-center">
                 <span className="text-white font-semibold text-sm">
@@ -209,7 +209,7 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
                   {participant.name}
                   {participant.isMainBooker && <span className="parti-small ml-2 text-muted-foreground">• Hoofdboeker</span>}
                 </p>
-                <p className="parti-body font-medium">
+                <p className="parti-body-semibold parti-amount">
                   € {participant.expectedAmount || (parseFloat(sessionData.session.totalAmount) / sessionData.participants.length).toFixed(2)}
                 </p>
               </div>
@@ -218,7 +218,7 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
               {participant.hasPaid ? (
                 <>
                   <div className="w-2 h-2 parti-bg-accent rounded-full"></div>
-                  <span className="parti-body font-medium parti-text-accent">Betaald</span>
+                  <span className="parti-body-semibold parti-text-accent">Betaald</span>
                 </>
               ) : (
                 <>
@@ -239,10 +239,10 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
         ))}
       </div>
 
-      <div className="bg-background rounded-2xl border p-6 animate-slide-up" style={{borderColor: 'var(--parti-border-light)'}}>
+      <div className="parti-card animate-slide-up">
         <div className="flex items-center justify-between mb-6">
           <h3 className="parti-heading-3">Betalingsvoortgang</h3>
-          <span className="parti-body font-semibold">
+          <span className="parti-body-semibold parti-amount">
             € {sessionData.participants.reduce((sum, p) => sum + parseFloat(p.paidAmount || '0'), 0).toFixed(2)} / € {sessionData.session.totalAmount}
           </span>
         </div>

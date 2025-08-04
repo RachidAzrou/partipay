@@ -115,7 +115,7 @@ export default function Home() {
           {billData && dataLoaded && (
             <>
               <div className="text-center space-y-8 mb-12 animate-slide-up">
-                <div className="w-20 h-20 parti-bg-accent rounded-full flex items-center justify-center mx-auto">
+                <div className="w-20 h-20 parti-bg-primary rounded-full flex items-center justify-center mx-auto">
                   <i className="fas fa-check text-3xl text-white"></i>
                 </div>
                 <div>
@@ -136,7 +136,7 @@ export default function Home() {
                   onClick={() => handleModeSelect('equal')}
                   data-testid="button-split-bill"
                 >
-                  Split the Bill
+                  Rekening splitten
                 </button>
                 
                 <button 
@@ -144,7 +144,7 @@ export default function Home() {
                   onClick={() => handleModeSelect('items')}
                   data-testid="button-pay-part"
                 >
-                  Pay Your Part
+                  Jouw deel betalen
                 </button>
               </div>
             </>

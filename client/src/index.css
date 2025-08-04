@@ -3,78 +3,82 @@
 @tailwind utilities;
 
 :root {
-  /* Exact Monarch Money colors */
+  /* True Monarch Money color system */
   --background: hsl(0, 0%, 100%);
-  --foreground: hsl(0, 0%, 9%);
-  --muted: hsl(240, 5%, 96%);
-  --muted-foreground: hsl(240, 4%, 46%);
+  --foreground: hsl(217, 33%, 17%); /* Dark navy text */
+  --muted: hsl(215, 23%, 94%); /* Light blue-gray */
+  --muted-foreground: hsl(217, 19%, 38%); /* Medium blue-gray */
   --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(0, 0%, 9%);
+  --popover-foreground: hsl(217, 33%, 17%);
   --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(0, 0%, 9%);
-  --border: hsl(240, 6%, 90%);
-  --input: hsl(240, 6%, 95%);
-  --primary: hsl(16, 100%, 66%); /* Monarch orange */
+  --card-foreground: hsl(217, 33%, 17%);
+  --border: hsl(215, 20%, 88%); /* Light blue border */
+  --input: hsl(215, 23%, 94%);
+  --primary: hsl(217, 44%, 51%); /* #395384 Monarch navy blue */
   --primary-foreground: hsl(0, 0%, 100%);
-  --secondary: hsl(240, 5%, 96%);
-  --secondary-foreground: hsl(0, 0%, 9%);
-  --accent: hsl(142, 71%, 45%); /* Monarch green */
+  --secondary: hsl(215, 23%, 94%);
+  --secondary-foreground: hsl(217, 33%, 17%);
+  --accent: hsl(142, 71%, 45%); /* Green for positive amounts */
   --accent-foreground: hsl(0, 0%, 100%);
-  --destructive: hsl(0, 84%, 55%);
+  --destructive: hsl(0, 84%, 60%);
   --destructive-foreground: hsl(0, 0%, 98%);
-  --ring: hsl(16, 100%, 66%);
-  --radius: 0.5rem;
+  --ring: hsl(217, 44%, 51%);
+  --radius: 0.75rem; /* Slightly more rounded like Monarch */
   
-  /* Monarch exact colors */
-  --parti-primary: hsl(16, 100%, 66%); /* #FF6B47 orange */
-  --parti-secondary: hsl(0, 0%, 20%);
-  --parti-accent: hsl(142, 71%, 45%); /* #4CAF50 green */
-  --parti-shadow: none;
-  --parti-shadow-md: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  --parti-shadow-lg: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --parti-success: hsl(142, 71%, 45%);
-  --parti-warning: hsl(45, 93%, 47%);
+  /* Monarch Money specific colors */
+  --parti-primary: hsl(217, 44%, 51%); /* #395384 navy blue */
+  --parti-primary-light: hsl(217, 35%, 71%); /* #a2b4d7 light blue */
+  --parti-primary-dark: hsl(217, 92%, 19%); /* #042463 dark navy */
+  --parti-secondary: hsl(217, 19%, 38%); /* Medium blue-gray */
+  --parti-accent: hsl(142, 71%, 45%); /* Green for success/cash */
+  --parti-warning: hsl(45, 93%, 47%); /* Yellow for loans */
+  --parti-error: hsl(0, 84%, 60%); /* Red for credit cards */
+  --parti-shadow: 0 1px 3px 0 rgba(57, 83, 132, 0.08), 0 1px 2px 0 rgba(57, 83, 132, 0.06);
+  --parti-shadow-md: 0 4px 6px -1px rgba(57, 83, 132, 0.08), 0 2px 4px -1px rgba(57, 83, 132, 0.06);
+  --parti-shadow-lg: 0 10px 15px -3px rgba(57, 83, 132, 0.08), 0 4px 6px -2px rgba(57, 83, 132, 0.06);
   --parti-surface: hsl(0, 0%, 100%);
   --parti-surface-elevated: hsl(0, 0%, 100%);
-  --parti-surface-muted: hsl(240, 5%, 98%);
-  --parti-border-light: hsl(240, 6%, 90%);
+  --parti-surface-muted: hsl(215, 28%, 98%);
+  --parti-border-light: hsl(215, 20%, 88%);
 }
 
 .dark {
-  /* True Monarch dark mode */
-  --background: hsl(0, 0%, 3.9%);
+  /* Monarch Money dark mode */
+  --background: hsl(217, 33%, 6%); /* Dark navy background */
   --foreground: hsl(0, 0%, 98%);
-  --muted: hsl(0, 0%, 14.9%);
-  --muted-foreground: hsl(0, 0%, 63.9%);
-  --popover: hsl(0, 0%, 3.9%);
+  --muted: hsl(217, 33%, 12%); /* Darker navy for muted elements */
+  --muted-foreground: hsl(217, 19%, 65%); /* Light blue-gray text */
+  --popover: hsl(217, 33%, 8%);
   --popover-foreground: hsl(0, 0%, 98%);
-  --card: hsl(0, 0%, 3.9%);
+  --card: hsl(217, 33%, 8%);
   --card-foreground: hsl(0, 0%, 98%);
-  --border: hsl(0, 0%, 14.9%);
-  --input: hsl(0, 0%, 14.9%);
-  --primary: hsl(0, 0%, 98%);
-  --primary-foreground: hsl(0, 0%, 9%);
-  --secondary: hsl(0, 0%, 14.9%);
+  --border: hsl(217, 33%, 18%); /* Dark blue border */
+  --input: hsl(217, 33%, 12%);
+  --primary: hsl(217, 35%, 71%); /* Light blue for dark mode */
+  --primary-foreground: hsl(217, 33%, 6%);
+  --secondary: hsl(217, 33%, 12%);
   --secondary-foreground: hsl(0, 0%, 98%);
   --accent: hsl(142, 76%, 36%);
   --accent-foreground: hsl(0, 0%, 98%);
   --destructive: hsl(0, 62.8%, 30.6%);
   --destructive-foreground: hsl(0, 0%, 98%);
-  --ring: hsl(0, 0%, 83.1%);
+  --ring: hsl(217, 35%, 71%);
   
-  /* Dark Monarch neutral palette */
-  --parti-primary: hsl(0, 0%, 98%);
-  --parti-secondary: hsl(0, 0%, 80%);
+  /* Dark Monarch specific colors */
+  --parti-primary: hsl(217, 35%, 71%); /* Light blue for dark mode */
+  --parti-primary-light: hsl(217, 35%, 80%);
+  --parti-primary-dark: hsl(217, 44%, 51%);
+  --parti-secondary: hsl(217, 19%, 65%);
   --parti-accent: hsl(142, 76%, 36%);
+  --parti-warning: hsl(45, 93%, 55%);
+  --parti-error: hsl(0, 84%, 65%);
   --parti-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
   --parti-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
   --parti-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
-  --parti-success: hsl(142, 76%, 36%);
-  --parti-warning: hsl(45, 93%, 47%);
-  --parti-surface: hsl(0, 0%, 3.9%);
-  --parti-surface-elevated: hsl(0, 0%, 6%);
-  --parti-surface-muted: hsl(0, 0%, 8%);
-  --parti-border-light: hsl(0, 0%, 20%);
+  --parti-surface: hsl(217, 33%, 8%);
+  --parti-surface-elevated: hsl(217, 33%, 10%);
+  --parti-surface-muted: hsl(217, 33%, 12%);
+  --parti-border-light: hsl(217, 33%, 18%);
 }
 
 @layer base {
@@ -128,17 +132,18 @@
     box-shadow: var(--parti-shadow-lg);
   }
   
-  /* Clean Monarch Money cards */
+  /* True Monarch Money cards */
   .parti-card {
     background: var(--parti-surface);
     border-radius: var(--radius);
     border: 1px solid var(--parti-border-light);
     padding: 1.5rem;
-    transition: all 0.15s ease;
+    transition: all 0.2s ease;
   }
   
   .parti-card:hover {
-    box-shadow: var(--parti-shadow);
+    box-shadow: var(--parti-shadow-md);
+    border-color: hsl(217, 35%, 80%);
   }
   
   .parti-card-elevated {
@@ -147,11 +152,12 @@
     box-shadow: var(--parti-shadow);
     border: 1px solid var(--parti-border-light);
     padding: 1.5rem;
-    transition: all 0.15s ease;
+    transition: all 0.2s ease;
   }
   
   .parti-card-elevated:hover {
-    box-shadow: var(--parti-shadow-md);
+    box-shadow: var(--parti-shadow-lg);
+    transform: translateY(-1px);
   }
   
   /* Exact Monarch buttons */
@@ -168,10 +174,11 @@
   .parti-button-primary {
     background: hsl(var(--primary));
     color: hsl(var(--primary-foreground));
+    font-weight: 600;
   }
   
   .parti-button-primary:hover {
-    background: hsl(16, 100%, 64%);
+    background: hsl(217, 44%, 48%); /* Darker navy on hover */
   }
   
   .parti-button-secondary {
@@ -180,7 +187,7 @@
   }
   
   .parti-button-secondary:hover {
-    background: hsl(240, 5%, 94%);
+    background: hsl(215, 23%, 92%); /* Light blue-gray hover */
   }
   
   .parti-button-accent {
@@ -313,16 +320,32 @@ button, .button, [role="button"] {
   color: hsl(var(--primary));
 }
 
+.parti-text-primary-light {
+  color: hsl(217, 35%, 71%); /* Light blue */
+}
+
 .parti-text-accent {
   color: hsl(var(--accent));
+}
+
+.parti-text-secondary {
+  color: hsl(var(--parti-secondary));
 }
 
 .parti-bg-primary {
   background: hsl(var(--primary));
 }
 
+.parti-bg-primary-light {
+  background: hsl(217, 35%, 71%); /* Light blue background */
+}
+
 .parti-bg-accent {
   background: hsl(var(--accent));
+}
+
+.parti-bg-surface-muted {
+  background: var(--parti-surface-muted);
 }
 
 /* Clean Monarch inputs */
@@ -337,29 +360,49 @@ button, .button, [role="button"] {
   box-shadow: 0 0 0 1px hsl(var(--primary));
 }
 
-/* Exact Monarch typography */
+/* True Monarch Money typography */
 .parti-heading-1 {
   @apply text-3xl font-bold text-foreground mb-4;
+  letter-spacing: -0.025em;
 }
 
 .parti-heading-2 {
   @apply text-xl font-semibold text-foreground mb-3;
+  letter-spacing: -0.02em;
 }
 
 .parti-heading-3 {
   @apply text-lg font-semibold text-foreground mb-2;
+  letter-spacing: -0.015em;
 }
 
 .parti-body {
   @apply text-base text-muted-foreground leading-relaxed;
+  font-weight: 400;
+}
+
+.parti-body-semibold {
+  @apply text-base text-foreground leading-relaxed;
+  font-weight: 600;
 }
 
 .parti-small {
   @apply text-sm text-muted-foreground;
+  font-weight: 400;
 }
 
 .parti-step-indicator {
   @apply text-base font-medium text-muted-foreground;
+}
+
+.parti-amount {
+  @apply font-semibold tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.parti-amount-large {
+  @apply text-2xl font-bold tabular-nums text-foreground;
+  letter-spacing: -0.02em;
 }
 
 @keyframes scan-line {

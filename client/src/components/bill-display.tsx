@@ -21,7 +21,7 @@ export default function BillDisplay({ billData, expanded, onToggleExpand }: Bill
   const today = new Date();
   
   return (
-    <div className="bg-background rounded-2xl border overflow-hidden animate-slide-up" style={{borderColor: 'var(--parti-border-light)'}}>
+    <div className="parti-card overflow-hidden animate-slide-up">
       <button 
         className="w-full p-6 text-left flex items-center justify-between touch-target hover:bg-muted/30 transition-colors"
         onClick={onToggleExpand}
@@ -30,15 +30,15 @@ export default function BillDisplay({ billData, expanded, onToggleExpand }: Bill
         <div className="flex-1">
           <h3 className="parti-heading-3">Rekening #{today.getDate().toString().padStart(2, '0')}{(today.getMonth() + 1).toString().padStart(2, '0')}{today.getFullYear().toString().slice(-2)}01</h3>
           <p className="parti-body mt-2">Restaurant De Blauwe Kater • Tafel 12</p>
-          <p className="text-3xl font-bold text-foreground mt-4">€ {billData.totalAmount}</p>
+          <p className="parti-amount-large mt-4">€ {billData.totalAmount}</p>
         </div>
         <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center ml-4">
-          <i className={`fas fa-chevron-down text-muted-foreground transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}></i>
+          <i className={`fas fa-chevron-down parti-text-primary transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}></i>
         </div>
       </button>
       
       {expanded && (
-        <div className="border-t bg-muted/30 p-6 space-y-2 font-mono text-sm animate-fade-in" style={{borderColor: 'var(--parti-border-light)'}} data-testid="bill-details">
+        <div className="border-t parti-bg-surface-muted p-6 space-y-2 font-mono text-sm animate-fade-in" style={{borderColor: 'var(--parti-border-light)'}} data-testid="bill-details">
           {/* POS Header */}
           <div className="text-center mb-6 border-b border-border pb-4">
             <h4 className="parti-heading-3">DE BLAUWE KATER</h4>
@@ -54,7 +54,7 @@ export default function BillDisplay({ billData, expanded, onToggleExpand }: Bill
                 <div className="col-span-6 truncate text-foreground">{item.name}</div>
                 <div className="col-span-2 text-center text-muted-foreground">{item.quantity}x</div>
                 <div className="col-span-2 text-right text-muted-foreground">€{parseFloat(item.price).toFixed(2)}</div>
-                <div className="col-span-2 text-right font-semibold parti-text-primary">€{(parseFloat(item.price) * item.quantity).toFixed(2)}</div>
+                <div className="col-span-2 text-right font-semibold parti-text-primary parti-amount">€{(parseFloat(item.price) * item.quantity).toFixed(2)}</div>
               </div>
             ))}
           </div>
