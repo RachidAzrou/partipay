@@ -192,6 +192,37 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
       <div className="space-y-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-3">Deelnemers ({actualParticipants}/{totalCount})</h2>
         
+        {/* Payment Progress Bar */}
+        {(() => {
+          const totalAmount = parseFloat(sessionData.session.totalAmount);
+          const totalPaid = sessionData.participants.reduce((sum, p) => {
+            return sum + (p.hasPaid ? parseFloat(p.expectedAmount || (totalAmount / totalCount).toString()) : 0);
+          }, 0);
+          const progressPercentage = totalAmount > 0 ? (totalPaid / totalAmount) * 100 : 0;
+          
+          return (
+            <div className="monarch-card p-4 mb-6">
+              <div className="flex justify-between items-center mb-3">
+                <span className="text-sm font-medium text-gray-700">Betalingsvoortgang</span>
+                <span className="text-sm font-medium text-gray-900">
+                  € {totalPaid.toFixed(2)} / € {totalAmount.toFixed(2)}
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
+                <div 
+                  className="bg-monarch-primary h-3 rounded-full transition-all duration-700 ease-out"
+                  style={{ width: `${Math.min(progressPercentage, 100)}%` }}
+                  data-testid="payment-progress-bar"
+                />
+              </div>
+              <div className="flex justify-between text-xs text-gray-500">
+                <span>{Math.round(progressPercentage)}% betaald</span>
+                <span>Nog € {(totalAmount - totalPaid).toFixed(2)} te gaan</span>
+              </div>
+            </div>
+          );
+        })()}
+        
         {sessionData.participants.map((participant, index) => (
           <div key={participant.id} className="monarch-card flex items-center justify-between animate-slide-up" style={{animationDelay: `${index * 0.1}s`}}>
             <div className="flex items-center space-x-4">
