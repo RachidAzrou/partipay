@@ -156,7 +156,6 @@ export default function PaymentSuccess() {
 
         {/* Receipt Download Options */}
         <div className="space-y-4 animate-slide-up" style={{animationDelay: '0.2s'}}>
-          <h2 className="text-lg font-semibold text-gray-900 text-center">Download je rekening</h2>
           
           {/* Full Receipt Option */}
           <div className="monarch-card">
