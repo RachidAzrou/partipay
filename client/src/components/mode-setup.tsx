@@ -309,11 +309,6 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                       <h4 className={`text-base font-semibold ${isUnavailable ? 'text-gray-500' : 'text-gray-900'}`}>
                         {item.name}
                       </h4>
-                      {selectedQuantity > 0 && (
-                        <div className="bg-monarch-primary text-white px-2 py-1 rounded-full text-xs font-medium">
-                          {selectedQuantity}x
-                        </div>
-                      )}
                     </div>
                     
                     {/* Price and availability row */}
@@ -337,7 +332,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                         {availableQuantity === 0 ? (
                           <>
                             <i className="fas fa-times mr-1"></i>
-                            Uitverkocht
+                            Onbeschikbaar
                           </>
                         ) : (
                           <>
