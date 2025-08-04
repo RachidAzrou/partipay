@@ -183,9 +183,9 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
   return (
     <div className="parti-container bg-background flex flex-col">
       <div className="flex-1 px-6 py-8 space-y-8">
-        <div className="text-center animate-fade-in">
+        <div className="text-center animate-fade-in mb-8">
           <h1 className="parti-heading-1">Koppel je bankrekening</h1>
-          <p className="parti-body text-lg">Koppel je bankrekening om deel te nemen</p>
+          <p className="parti-body text-lg">Koppel je bankrekening om deel te nemen aan de betaling</p>
         </div>
 
         <div className="space-y-6 animate-slide-up">
@@ -195,24 +195,26 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
             <Label className="block text-lg font-semibold text-foreground mb-4">Bankrekening koppelen (hoofdboeker)</Label>
             
             {!bankLinked ? (
-              <div className="parti-card-elevated">
-                <div className="text-center space-y-4">
-                  <div className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center mx-auto">
-                    <i className="fas fa-university text-muted-foreground text-lg"></i>
+              <div className="bg-background rounded-2xl p-8 border" style={{borderColor: 'var(--parti-border-light)'}}>
+                <div className="text-center space-y-6">
+                  <div className="w-20 h-20 bg-muted rounded-2xl flex items-center justify-center mx-auto">
+                    <i className="fas fa-university text-muted-foreground text-2xl"></i>
                   </div>
-                  <h3 className="parti-heading-3">
-                    Koppel je bankrekening
-                  </h3>
-                  <p className="parti-body">
-                    Automatisch je IBAN koppelen voor snelle betalingen van deelnemers.
-                  </p>
-                  
-                  <p className="parti-small">
-                    Veilig via Tink - Ondersteunt alle Belgische banken
-                  </p>
+                  <div>
+                    <h3 className="parti-heading-3 mb-3">
+                      Koppel je bankrekening
+                    </h3>
+                    <p className="parti-body mb-4">
+                      Automatisch je IBAN koppelen voor snelle betalingen van deelnemers.
+                    </p>
+                    
+                    <p className="parti-small">
+                      Veilig via Tink - Ondersteunt alle Belgische banken
+                    </p>
+                  </div>
                   
                   <button 
-                    className="parti-button parti-button-primary mt-4"
+                    className="parti-button parti-button-primary"
                     onClick={handleLinkBank}
                     data-testid="button-link-bank"
                   >
@@ -221,14 +223,14 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                 </div>
               </div>
             ) : (
-              <div className="parti-card-elevated">
+              <div className="bg-background rounded-2xl p-6 border" style={{borderColor: 'var(--parti-border-light)'}}>
                 <div className="flex items-center space-x-4">
-                  <div className="w-10 h-10 parti-bg-accent rounded-lg flex items-center justify-center">
-                    <i className="fas fa-check text-white text-sm"></i>
+                  <div className="w-12 h-12 parti-bg-accent rounded-full flex items-center justify-center">
+                    <i className="fas fa-check text-white text-lg"></i>
                   </div>
                   <div className="flex-1">
                     <h4 className="parti-heading-3">Bankrekening gekoppeld</h4>
-                    <p className="parti-body font-medium">{bankInfo?.accountHolder}</p>
+                    <p className="parti-body font-semibold">{bankInfo?.accountHolder}</p>
                     <p className="parti-small font-mono">{bankInfo?.iban}</p>
                   </div>
                   <button
@@ -325,14 +327,16 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
           </div>
         )}
 
-        <button 
-          className="w-full parti-button parti-button-primary mt-auto disabled:opacity-50 disabled:cursor-not-allowed py-4"
-          onClick={handleContinue}
-          disabled={!bankLinked}
-          data-testid="button-continue"
-        >
-          Verder naar delen
-        </button>
+        <div className="px-4 mt-auto">
+          <button 
+            className="w-full parti-button parti-button-primary disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={handleContinue}
+            disabled={!bankLinked}
+            data-testid="button-continue"
+          >
+            Verder naar delen
+          </button>
+        </div>
       </div>
     </div>
   );

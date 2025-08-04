@@ -141,12 +141,12 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
   if (sessionCompleted) {
     return (
       <div className="px-4 py-6">
-        <div className="parti-card-elevated text-center" data-testid="success-state">
-          <div className="w-12 h-12 parti-bg-accent rounded-lg flex items-center justify-center mx-auto mb-4">
-            <i className="fas fa-check text-white text-lg"></i>
+        <div className="bg-background rounded-2xl border p-8 text-center" style={{borderColor: 'var(--parti-border-light)'}} data-testid="success-state">
+          <div className="w-20 h-20 parti-bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
+            <i className="fas fa-check text-white text-2xl"></i>
           </div>
-          <h3 className="parti-heading-3 mb-2">Alle betalingen voltooid!</h3>
-          <p className="parti-body mb-4">Bedankt voor het gebruik van PartiPay</p>
+          <h3 className="parti-heading-2 mb-4">Alle betalingen voltooid!</h3>
+          <p className="parti-body mb-8">Bedankt voor het gebruik van PartiPay</p>
           <button 
             className="parti-button parti-button-primary"
             onClick={() => window.location.href = '/'}
@@ -164,31 +164,31 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
       <div className="flex-1 px-6 py-8 space-y-8">
       
       
-      <div className="text-center animate-fade-in">
+      <div className="text-center animate-fade-in mb-12">
         <h1 className="parti-heading-1">Deel met je vrienden</h1>
-        <p className="parti-body text-lg mt-2">Laat anderen deze QR-code scannen</p>
+        <p className="parti-body text-lg">Laat anderen deze QR-code scannen om mee te betalen</p>
       </div>
 
-      <div className="parti-card-elevated p-8 text-center animate-slide-up">
+      <div className="bg-background rounded-2xl border p-8 text-center animate-slide-up" style={{borderColor: 'var(--parti-border-light)'}}>
         {qrCodeUrl ? (
           <img 
             src={qrCodeUrl} 
             alt="QR Code" 
-            className="w-48 h-48 mx-auto mb-6 rounded-xl"
+            className="w-48 h-48 mx-auto mb-6 rounded-2xl border"
+            style={{borderColor: 'var(--parti-border-light)'}}
             data-testid="qr-code"
           />
         ) : (
-          <div className="w-48 h-48 bg-muted rounded-xl mx-auto mb-6 flex items-center justify-center">
+          <div className="w-48 h-48 bg-muted rounded-2xl mx-auto mb-6 flex items-center justify-center">
             <div className="parti-body">QR-code laden...</div>
           </div>
         )}
-        <p className="parti-body mb-4">Sessie: <span className="font-mono parti-small bg-muted px-2 py-1 rounded">{sessionData.session.id.slice(0, 8).toUpperCase()}</span></p>
+        <p className="parti-body mb-6">Sessie: <span className="font-mono parti-small bg-muted px-3 py-1 rounded-full">{sessionData.session.id.slice(0, 8).toUpperCase()}</span></p>
         <button 
           className="parti-button parti-button-primary touch-target"
           onClick={handleShareQR}
           data-testid="button-share-qr"
         >
-          <i className="fas fa-share mr-3"></i>
           Deel QR-code
         </button>
       </div>
@@ -197,19 +197,19 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
         <h2 className="parti-heading-2">Deelnemers ({paidCount}/{totalCount})</h2>
         
         {sessionData.participants.map((participant, index) => (
-          <div key={participant.id} className="parti-card !p-4 flex items-center justify-between animate-slide-up" style={{animationDelay: `${index * 0.1}s`}}>
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 parti-bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-medium text-sm">
+          <div key={participant.id} className="bg-background rounded-2xl border p-4 flex items-center justify-between animate-slide-up" style={{borderColor: 'var(--parti-border-light)', animationDelay: `${index * 0.1}s`}}>
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 parti-bg-primary rounded-full flex items-center justify-center">
+                <span className="text-white font-semibold text-sm">
                   {participant.name.split(' ').map(n => n[0]).join('').toUpperCase()}
                 </span>
               </div>
               <div>
-                <p className="parti-body font-semibold text-lg">
+                <p className="parti-heading-3">
                   {participant.name}
-                  {participant.isMainBooker && <span className="parti-small ml-2">• Hoofdboeker</span>}
+                  {participant.isMainBooker && <span className="parti-small ml-2 text-muted-foreground">• Hoofdboeker</span>}
                 </p>
-                <p className="parti-body mt-1">
+                <p className="parti-body font-medium">
                   € {participant.expectedAmount || (parseFloat(sessionData.session.totalAmount) / sessionData.participants.length).toFixed(2)}
                 </p>
               </div>
@@ -239,21 +239,21 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
         ))}
       </div>
 
-      <div className="parti-card-elevated p-6 animate-slide-up">
-        <div className="flex items-center justify-between mb-4">
+      <div className="bg-background rounded-2xl border p-6 animate-slide-up" style={{borderColor: 'var(--parti-border-light)'}}>
+        <div className="flex items-center justify-between mb-6">
           <h3 className="parti-heading-3">Betalingsvoortgang</h3>
           <span className="parti-body font-semibold">
             € {sessionData.participants.reduce((sum, p) => sum + parseFloat(p.paidAmount || '0'), 0).toFixed(2)} / € {sessionData.session.totalAmount}
           </span>
         </div>
-        <div className="w-full bg-muted rounded-full h-2 mb-4">
+        <div className="w-full bg-muted rounded-full h-3 mb-6">
           <div 
-            className="parti-bg-primary h-2 rounded-full transition-all duration-700 ease-out"
+            className="parti-bg-primary h-3 rounded-full transition-all duration-700 ease-out"
             style={{ width: `${calculateProgress()}%` }}
             data-testid="progress-bar"
           ></div>
         </div>
-        <p className="parti-body text-center">{paidCount} van {totalCount} personen hebben betaald</p>
+        <p className="parti-body text-center font-medium">{paidCount} van {totalCount} personen hebben betaald</p>
       </div>
 
       

@@ -21,19 +21,19 @@ export default function BillDisplay({ billData, expanded, onToggleExpand }: Bill
   const today = new Date();
   
   return (
-    <div className="parti-card overflow-hidden animate-slide-up">
+    <div className="bg-background rounded-2xl border overflow-hidden animate-slide-up" style={{borderColor: 'var(--parti-border-light)'}}>
       <button 
-        className="w-full p-6 text-left flex items-center justify-between touch-target hover:bg-muted/50 transition-colors"
+        className="w-full p-6 text-left flex items-center justify-between touch-target hover:bg-muted/30 transition-colors"
         onClick={onToggleExpand}
         data-testid="button-toggle-bill"
       >
         <div className="flex-1">
           <h3 className="parti-heading-3">Rekening #{today.getDate().toString().padStart(2, '0')}{(today.getMonth() + 1).toString().padStart(2, '0')}{today.getFullYear().toString().slice(-2)}01</h3>
-          <p className="parti-body mt-1">Restaurant De Blauwe Kater • Tafel 12</p>
-          <p className="text-2xl font-bold parti-text-primary mt-3">€ {billData.totalAmount}</p>
+          <p className="parti-body mt-2">Restaurant De Blauwe Kater • Tafel 12</p>
+          <p className="text-3xl font-bold text-foreground mt-4">€ {billData.totalAmount}</p>
         </div>
-        <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center ml-4">
-          <i className={`fas fa-chevron-down text-muted-foreground transition-transform duration-200 text-sm ${expanded ? 'rotate-180' : ''}`}></i>
+        <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center ml-4">
+          <i className={`fas fa-chevron-down text-muted-foreground transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}></i>
         </div>
       </button>
       

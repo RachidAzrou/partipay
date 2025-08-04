@@ -3,41 +3,41 @@
 @tailwind utilities;
 
 :root {
-  /* True Monarch Money color system */
+  /* Exact Monarch Money colors */
   --background: hsl(0, 0%, 100%);
   --foreground: hsl(0, 0%, 9%);
-  --muted: hsl(0, 0%, 96%);
-  --muted-foreground: hsl(0, 0%, 45%);
+  --muted: hsl(240, 5%, 96%);
+  --muted-foreground: hsl(240, 4%, 46%);
   --popover: hsl(0, 0%, 100%);
   --popover-foreground: hsl(0, 0%, 9%);
   --card: hsl(0, 0%, 100%);
   --card-foreground: hsl(0, 0%, 9%);
-  --border: hsl(0, 0%, 90%);
-  --input: hsl(0, 0%, 96%);
-  --primary: hsl(0, 0%, 9%);
+  --border: hsl(240, 6%, 90%);
+  --input: hsl(240, 6%, 95%);
+  --primary: hsl(16, 100%, 66%); /* Monarch orange */
   --primary-foreground: hsl(0, 0%, 100%);
-  --secondary: hsl(0, 0%, 96%);
+  --secondary: hsl(240, 5%, 96%);
   --secondary-foreground: hsl(0, 0%, 9%);
-  --accent: hsl(142, 76%, 36%);
+  --accent: hsl(142, 71%, 45%); /* Monarch green */
   --accent-foreground: hsl(0, 0%, 100%);
   --destructive: hsl(0, 84%, 55%);
   --destructive-foreground: hsl(0, 0%, 98%);
-  --ring: hsl(0, 0%, 9%);
-  --radius: 0.75rem;
+  --ring: hsl(16, 100%, 66%);
+  --radius: 0.5rem;
   
-  /* Monarch Money neutral palette */
-  --parti-primary: hsl(0, 0%, 9%);
+  /* Monarch exact colors */
+  --parti-primary: hsl(16, 100%, 66%); /* #FF6B47 orange */
   --parti-secondary: hsl(0, 0%, 20%);
-  --parti-accent: hsl(142, 76%, 36%);
-  --parti-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  --parti-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --parti-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --parti-success: hsl(142, 76%, 36%);
+  --parti-accent: hsl(142, 71%, 45%); /* #4CAF50 green */
+  --parti-shadow: none;
+  --parti-shadow-md: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --parti-shadow-lg: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --parti-success: hsl(142, 71%, 45%);
   --parti-warning: hsl(45, 93%, 47%);
   --parti-surface: hsl(0, 0%, 100%);
-  --parti-surface-elevated: hsl(0, 0%, 99%);
-  --parti-surface-muted: hsl(0, 0%, 98%);
-  --parti-border-light: hsl(0, 0%, 93%);
+  --parti-surface-elevated: hsl(0, 0%, 100%);
+  --parti-surface-muted: hsl(240, 5%, 98%);
+  --parti-border-light: hsl(240, 6%, 90%);
 }
 
 .dark {
@@ -154,10 +154,11 @@
     box-shadow: var(--parti-shadow-md);
   }
   
-  /* Minimal Monarch buttons */
+  /* Exact Monarch buttons */
   .parti-button {
-    @apply rounded-lg px-6 py-3 font-medium text-sm transition-all duration-150;
-    border: 1px solid transparent;
+    @apply rounded-full px-8 py-4 font-semibold text-base transition-all duration-200;
+    border: none;
+    box-shadow: none;
   }
   
   .parti-button:active {
@@ -167,31 +168,28 @@
   .parti-button-primary {
     background: hsl(var(--primary));
     color: hsl(var(--primary-foreground));
-    border-color: hsl(var(--primary));
   }
   
   .parti-button-primary:hover {
-    background: var(--parti-secondary);
+    background: hsl(16, 100%, 64%);
   }
   
   .parti-button-secondary {
-    background: transparent;
+    background: hsl(var(--muted));
     color: hsl(var(--foreground));
-    border-color: hsl(var(--border));
   }
   
   .parti-button-secondary:hover {
-    background: hsl(var(--muted));
+    background: hsl(240, 5%, 94%);
   }
   
   .parti-button-accent {
     background: hsl(var(--accent));
     color: hsl(var(--accent-foreground));
-    border-color: hsl(var(--accent));
   }
   
   .parti-button-accent:hover {
-    opacity: 0.9;
+    background: hsl(142, 71%, 43%);
   }
   
   /* Custom scrollbar for mobile */
@@ -339,25 +337,29 @@ button, .button, [role="button"] {
   box-shadow: 0 0 0 1px hsl(var(--primary));
 }
 
-/* Monarch typography system */
+/* Exact Monarch typography */
 .parti-heading-1 {
-  @apply text-2xl font-semibold text-foreground mb-1;
+  @apply text-3xl font-bold text-foreground mb-4;
 }
 
 .parti-heading-2 {
-  @apply text-xl font-semibold text-foreground mb-1;
+  @apply text-xl font-semibold text-foreground mb-3;
 }
 
 .parti-heading-3 {
-  @apply text-lg font-medium text-foreground mb-0.5;
+  @apply text-lg font-semibold text-foreground mb-2;
 }
 
 .parti-body {
-  @apply text-sm text-muted-foreground leading-relaxed;
+  @apply text-base text-muted-foreground leading-relaxed;
 }
 
 .parti-small {
-  @apply text-xs text-muted-foreground;
+  @apply text-sm text-muted-foreground;
+}
+
+.parti-step-indicator {
+  @apply text-base font-medium text-muted-foreground;
 }
 
 @keyframes scan-line {
