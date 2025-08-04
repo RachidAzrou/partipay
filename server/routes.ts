@@ -104,15 +104,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create new session
   app.post('/api/sessions', async (req, res) => {
     try {
+      console.log('POST /api/sessions - Raw request body:', JSON.stringify(req.body, null, 2));
+      
       const { userData, billItems, ...sessionFields } = req.body;
+      
+      console.log('Extracted sessionFields:', sessionFields);
+      console.log('userData:', userData);
+      console.log('billItems length:', billItems?.length);
       
       // Extract participant count from userData
       const participantCount = userData?.participantCount || 4;
       
-      const sessionData = insertSessionSchema.parse({
+      const sessionDataForValidation = {
         ...sessionFields,
         participantCount
-      });
+      };
+      
+      console.log('Session data before validation:', sessionDataForValidation);
+      
+      const sessionData = insertSessionSchema.parse(sessionDataForValidation);
+      
+      console.log('Session data after validation:', sessionData);
       
       const session = await storage.createSession(sessionData);
       
@@ -202,10 +214,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
       
+      console.log('Session created successfully:', session);
       res.json(session);
     } catch (error) {
       console.error('Create session error:', error);
-      res.status(400).json({ message: 'Invalid session data' });
+      
+      // More detailed error reporting
+      if (error instanceof Error) {
+        console.error('Error message:', error.message);
+        console.error('Error stack:', error.stack);
+      }
+      
+      res.status(400).json({ 
+        message: 'Invalid session data',
+        error: error instanceof Error ? error.message : String(error)
+      });
     }
   });
 

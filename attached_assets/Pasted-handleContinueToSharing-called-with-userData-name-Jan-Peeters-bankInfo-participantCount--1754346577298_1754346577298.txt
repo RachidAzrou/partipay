@@ -1,0 +1,38 @@
+handleContinueToSharing called with userData: {name: 'Jan Peeters', bankInfo: {…}, participantCount: 4}
+index-CvI3PBwF.js:78 Creating session with data: {restaurantName: 'De Blauwe Kater', tableNumber: '12', splitMode: 'equal', totalAmount: '73.40', isActive: true, …}
+sessions:1  Failed to load resource: the server responded with a status of 400 ()Understand this error
+sessions:1  Failed to load resource: the server responded with a status of 400 ()Understand this error
+sessions:1  Failed to load resource: the server responded with a status of 400 ()Understand this error
+sessions:1  Failed to load resource: the server responded with a status of 400 ()Understand this error
+sessions:1  Failed to load resource: the server responded with a status of 400 ()Understand this error
+index-CvI3PBwF.js:48  POST https://partipay.onrender.com/api/sessions 400 (Bad Request)
+Yn @ index-CvI3PBwF.js:48
+mutationFn @ index-CvI3PBwF.js:78
+fn @ index-CvI3PBwF.js:48
+m @ index-CvI3PBwF.js:48
+start @ index-CvI3PBwF.js:48
+execute @ index-CvI3PBwF.js:48
+await in execute
+mutate @ index-CvI3PBwF.js:48
+(anonymous) @ index-CvI3PBwF.js:48
+x @ index-CvI3PBwF.js:78
+v @ index-CvI3PBwF.js:78
+dy @ index-CvI3PBwF.js:37
+hy @ index-CvI3PBwF.js:37
+py @ index-CvI3PBwF.js:37
+qc @ index-CvI3PBwF.js:37
+Th @ index-CvI3PBwF.js:37
+(anonymous) @ index-CvI3PBwF.js:37
+zu @ index-CvI3PBwF.js:40
+th @ index-CvI3PBwF.js:37
+xl @ index-CvI3PBwF.js:37
+hu @ index-CvI3PBwF.js:37
+Oy @ index-CvI3PBwF.js:37Understand this error
+partipay.onrender.com/:1 Error in event handler: TypeError: Cannot read properties of null (reading 'tagName')
+    at Readability._grabArticle (chrome-extension://llimhhconnjiflfimocjggfjdlmlhblm/js/plugins/readability.js:1140:37)
+    at Readability.parse (chrome-extension://llimhhconnjiflfimocjggfjdlmlhblm/js/plugins/readability.js:2248:31)
+    at Object.original_article (chrome-extension://llimhhconnjiflfimocjggfjdlmlhblm/content-script.js:94:61)
+    at Object.article (chrome-extension://llimhhconnjiflfimocjggfjdlmlhblm/content-script.js:148:44)
+    at Object.article (chrome-extension://llimhhconnjiflfimocjggfjdlmlhblm/content-script.js:198:23)
+    at Object.init (chrome-extension://llimhhconnjiflfimocjggfjdlmlhblm/content-script.js:570:19)
+    at chrome-extension://llimhhconnjiflfimocjggfjdlmlhblm/content-script.js:514:23Understand this error
