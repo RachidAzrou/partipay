@@ -62,11 +62,10 @@ export default function BillDisplay({ billData, expanded, onToggleExpand }: Bill
           {/* Items */}
           <div className="space-y-1">
             {billData.items.map((item, index) => (
-              <div key={index} className="grid grid-cols-12 gap-1 text-xs py-0.5">
+              <div key={index} className="grid grid-cols-10 gap-1 text-xs py-0.5">
                 <div className="col-span-6 truncate text-gray-900">{item.name}</div>
                 <div className="col-span-2 text-center text-gray-500">{item.quantity}x</div>
                 <div className="col-span-2 text-right text-gray-500">€{parseFloat(item.price).toFixed(2)}</div>
-                <div className="col-span-2 text-right font-semibold text-monarch-primary tabular-nums">€{(parseFloat(item.price) * item.quantity).toFixed(2)}</div>
               </div>
             ))}
           </div>
