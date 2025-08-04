@@ -16,7 +16,7 @@ export default function ProgressBar({ currentStep, totalSteps, onBack }: Progres
         <img 
           src={logoPath} 
           alt="PartiPay Logo" 
-          className="h-16 w-auto object-contain max-w-xs"
+          className="h-16 w-auto object-contain max-w-xs filter drop-shadow-none shadow-none border-none bg-transparent"
         />
       </div>
       
