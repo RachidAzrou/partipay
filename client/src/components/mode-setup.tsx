@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { TbPlugConnected } from "react-icons/tb";
 
 interface BillItem {
   name: string;
@@ -211,11 +212,12 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                   </div>
                   
                   <button 
-                    className="monarch-btn monarch-btn-primary"
+                    className="monarch-btn monarch-btn-primary flex items-center justify-center space-x-2"
                     onClick={handleLinkBank}
                     data-testid="button-link-bank"
                   >
-                    Koppel bankrekening
+                    <TbPlugConnected className="text-xl" />
+                    <span>Koppel bankrekening</span>
                   </button>
                 </div>
               </div>
