@@ -385,7 +385,7 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
               </div>
               <div className="flex justify-between text-xs text-gray-500">
                 <span>{Math.round(progressPercentage)}% betaald</span>
-                <span>Nog € {(totalAmount - totalPaid).toFixed(2)} te gaan</span>
+                <span>Nog € {calculateOutstandingDetails().outstandingAmount.toFixed(2)} te gaan</span>
               </div>
             </div>
           );
