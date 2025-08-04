@@ -166,10 +166,10 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
   };
 
   const handleContinue = () => {
-    if (!name.trim()) return;
+    if (!bankLinked || !bankInfo) return;
 
     const userData = {
-      name: name.trim(),
+      name: bankInfo.accountHolder,
       bankInfo: bankInfo,
       ...(splitMode === 'equal' 
         ? { participantCount }
@@ -191,8 +191,8 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
           >
             <i className="fas fa-arrow-left text-foreground text-lg"></i>
           </button>
-          <h1 className="text-3xl font-bold text-foreground mt-2">Jouw gegevens</h1>
-          <p className="text-lg text-muted-foreground mt-2">Vul je naam in om deel te nemen</p>
+          <h1 className="text-3xl font-bold text-foreground mt-2">Koppel je bankrekening</h1>
+          <p className="text-lg text-muted-foreground mt-2">Koppel je bankrekening om deel te nemen</p>
         </div>
 
         <div className="space-y-6 animate-slide-up">
@@ -335,7 +335,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
         <button 
           className="w-full parti-button parti-button-primary mt-auto disabled:opacity-50 disabled:cursor-not-allowed"
           onClick={handleContinue}
-          disabled={!name.trim()}
+          disabled={!bankLinked}
           data-testid="button-continue"
         >
           <i className="fas fa-arrow-right mr-3"></i>
