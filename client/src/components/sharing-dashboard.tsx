@@ -56,8 +56,9 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
   useEffect(() => {
     setSessionData(initialData);
     
-    // Check if session is completed
-    if (initialData.session && !initialData.session.isActive) {
+    // Check if session is completed - only for 'equal' split mode
+    // For 'items' mode, main booker should stay on dashboard regardless of session status
+    if (initialData.session && !initialData.session.isActive && initialData.session.splitMode === 'equal') {
       setSessionCompleted(true);
     }
   }, [initialData]);
@@ -96,12 +97,23 @@ export default function SharingDashboard({ sessionData: initialData }: SharingDa
       forceRefresh();
       
       if (message.type === 'session-completed') {
-        toast({
-          title: "Sessie voltooid! 🎉",
-          description: "Alle betalingen zijn ontvangen",
-          duration: 5000,
-        });
-        setSessionCompleted(true);
+        // Only show completion for 'equal' split mode
+        // For 'items' mode, main booker should stay on dashboard to manually pay full bill
+        if (sessionData.session.splitMode === 'equal') {
+          toast({
+            title: "Sessie voltooid! 🎉",
+            description: "Alle betalingen zijn ontvangen",
+            duration: 5000,
+          });
+          setSessionCompleted(true);
+        } else {
+          // For 'items' mode, just show a notification but don't complete the session
+          toast({
+            title: "Alle deelnemers hebben betaald! 💰",
+            description: "Je kunt nu de volledige rekening betalen",
+            duration: 5000,
+          });
+        }
       } else {
         const paidParticipant = message.participant || sessionData.participants.find(p => p.id === message.participantId);
         if (paidParticipant) {
