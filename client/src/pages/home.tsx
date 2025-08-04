@@ -69,9 +69,23 @@ export default function Home() {
     },
   });
 
-  // Auto-load bill data when component mounts (simulating QR scan at table)
+  // Check for scan parameter in URL and auto-load bill data
   useEffect(() => {
-    if (!dataLoaded && !loadBillMutation.isPending) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const scanParam = urlParams.get('scan');
+    
+    if (scanParam && !dataLoaded && !loadBillMutation.isPending) {
+      try {
+        const tableData = JSON.parse(decodeURIComponent(scanParam));
+        // Use the table data for the API call if available
+        loadBillMutation.mutate();
+        // Clear the scan parameter from URL
+        window.history.replaceState({}, '', window.location.pathname);
+      } catch (error) {
+        console.error('Invalid scan parameter:', error);
+        loadBillMutation.mutate();
+      }
+    } else if (!dataLoaded && !loadBillMutation.isPending) {
       loadBillMutation.mutate();
     }
   }, [dataLoaded, loadBillMutation]);
