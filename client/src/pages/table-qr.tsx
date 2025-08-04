@@ -1,102 +1,180 @@
-import { useState, useEffect } from 'react';
-import { QRCodeSVG } from 'qrcode.react';
-import { IoRestaurantOutline, IoQrCodeOutline } from 'react-icons/io5';
+import { useState, useEffect } from "react";
+import { generateQRCode } from "@/lib/qr-utils";
 
 export default function TableQR() {
-  const [currentUrl, setCurrentUrl] = useState('');
-  
+  const [qrCodeUrl, setQrCodeUrl] = useState("");
+  const [tableNumber, setTableNumber] = useState("12");
+  const [restaurantName, setRestaurantName] = useState("De Blauwe Kater");
+
   useEffect(() => {
-    // Generate a QR code URL that points to the app's scanning endpoint
-    // This simulates what a restaurant's table QR would contain
-    const baseUrl = window.location.origin;
-    const tableData = {
-      restaurant: "De Blauwe Kater",
-      table: "12",
-      billId: "De Blauwe Kater-12"
-    };
-    
-    // Create a URL that when scanned, will trigger the QR scan endpoint
-    const qrUrl = `${baseUrl}/?scan=${encodeURIComponent(JSON.stringify(tableData))}`;
-    setCurrentUrl(qrUrl);
+    // Generate QR code that points to the app homepage
+    const appUrl = window.location.origin;
+    generateQRCode(appUrl).then(setQrCodeUrl);
   }, []);
 
-  const handleTestScan = () => {
-    // Navigate to the main app with the scan parameter
-    const tableData = {
-      restaurant: "De Blauwe Kater", 
-      table: "12",
-      billId: "De Blauwe Kater-12"
-    };
-    const scanParam = encodeURIComponent(JSON.stringify(tableData));
-    window.location.href = `/?scan=${scanParam}`;
+  const handleRegenerateQR = () => {
+    const appUrl = window.location.origin;
+    generateQRCode(appUrl).then(setQrCodeUrl);
+  };
+
+  const handlePrint = () => {
+    window.print();
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white p-4">
-      <div className="max-w-md mx-auto">
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-8">
+      <div className="max-w-md w-full text-center space-y-8">
         {/* Header */}
-        <div className="text-center mb-8 pt-8">
-          <div className="w-16 h-16 rounded-full bg-orange-500 flex items-center justify-center mx-auto mb-4">
-            <IoRestaurantOutline className="text-2xl text-white" />
-          </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Tafel QR Simulator</h1>
-          <p className="text-gray-600">Test QR code voor Restaurant De Blauwe Kater, Tafel 12</p>
+        <div className="space-y-4">
+          <h1 className="text-3xl font-bold text-gray-900">Tafel QR-code</h1>
+          <p className="text-gray-600">
+            Scan deze QR-code om je rekening te splitten met PartiPay
+          </p>
         </div>
 
-        {/* QR Code Card */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
-          <div className="text-center mb-4">
-            <IoQrCodeOutline className="text-3xl text-orange-500 mx-auto mb-2" />
-            <h2 className="text-lg font-semibold text-gray-900">Scan deze QR-code</h2>
-            <p className="text-sm text-gray-600">Om de rekening te splitsen</p>
-          </div>
-          
-          {/* QR Code */}
-          <div className="bg-white p-4 rounded-xl border-2 border-gray-100 mb-4">
-            {currentUrl && (
-              <QRCodeSVG 
-                value={currentUrl}
-                size={200}
-                level="M"
-                includeMargin={true}
-                className="mx-auto"
+        {/* Restaurant Info */}
+        <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
+          <div className="space-y-4 mb-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Restaurant naam
+              </label>
+              <input
+                type="text"
+                value={restaurantName}
+                onChange={(e) => setRestaurantName(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-monarch-primary focus:border-transparent"
+                data-testid="input-restaurant-name"
               />
-            )}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Tafel nummer
+              </label>
+              <input
+                type="text"
+                value={tableNumber}
+                onChange={(e) => setTableNumber(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-monarch-primary focus:border-transparent"
+                data-testid="input-table-number"
+              />
+            </div>
           </div>
-          
-          {/* Restaurant Info */}
-          <div className="text-center text-sm text-gray-500 space-y-1">
-            <p className="font-medium">Restaurant De Blauwe Kater</p>
-            <p>Grote Markt 8, 9000 Gent</p>
-            <p>Tafel 12</p>
+
+          {/* QR Code Display */}
+          <div className="space-y-6">
+            <div className="bg-gray-50 rounded-xl p-8 border-2 border-dashed border-gray-300">
+              {qrCodeUrl ? (
+                <img 
+                  src={qrCodeUrl} 
+                  alt="Tafel QR Code" 
+                  className="w-48 h-48 mx-auto"
+                  data-testid="table-qr-code"
+                />
+              ) : (
+                <div className="w-48 h-48 bg-gray-200 rounded-lg mx-auto flex items-center justify-center">
+                  <div className="text-gray-500">QR-code laden...</div>
+                </div>
+              )}
+            </div>
+
+            {/* Table Info on QR */}
+            <div className="text-center space-y-2">
+              <h2 className="text-xl font-bold text-gray-900">{restaurantName}</h2>
+              <p className="text-lg font-semibold text-monarch-primary">Tafel {tableNumber}</p>
+              <p className="text-sm text-gray-600">
+                Scan om je rekening te splitten
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Test Button */}
-        <button
-          onClick={handleTestScan}
-          className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors flex items-center justify-center space-x-2"
-          data-testid="button-test-scan"
-        >
-          <IoQrCodeOutline className="text-lg" />
-          <span>Test QR Scan</span>
-        </button>
+        {/* Action Buttons */}
+        <div className="space-y-4">
+          <button
+            onClick={handleRegenerateQR}
+            className="w-full monarch-btn monarch-btn-secondary py-3"
+            data-testid="button-regenerate-qr"
+          >
+            QR-code vernieuwen
+          </button>
+          
+          <button
+            onClick={handlePrint}
+            className="w-full monarch-btn monarch-btn-primary py-3"
+            data-testid="button-print-qr"
+          >
+            Print QR-code
+          </button>
+        </div>
 
         {/* Instructions */}
-        <div className="mt-6 bg-blue-50 rounded-xl p-4">
-          <h3 className="font-semibold text-blue-900 mb-2">Hoe te gebruiken:</h3>
-          <ul className="text-sm text-blue-800 space-y-1">
-            <li>1. Scan de QR-code met je camera app</li>
-            <li>2. Of klik op "Test QR Scan" om direct te testen</li>
-            <li>3. De app zal automatisch de rekening laden</li>
-            <li>4. Begin met het splitsen van de rekening</li>
-          </ul>
+        <div className="bg-orange-50 rounded-xl p-4 border border-orange-200">
+          <div className="flex items-start space-x-3">
+            <i className="fas fa-info-circle text-orange-600 mt-1"></i>
+            <div className="text-left">
+              <h3 className="font-semibold text-orange-800 mb-2">Instructies:</h3>
+              <ul className="text-sm text-orange-700 space-y-1">
+                <li>• Print deze QR-code en plaats op de tafel</li>
+                <li>• Klanten scannen de code met hun telefoon</li>
+                <li>• Ze worden naar PartiPay geleid om rekeningen te splitten</li>
+              </ul>
+            </div>
+          </div>
         </div>
+      </div>
 
-        {/* Debug Info */}
-        <div className="mt-4 bg-gray-50 rounded-xl p-4">
-          <h3 className="font-semibold text-gray-700 mb-2">QR Code Data:</h3>
-          <p className="text-xs text-gray-600 font-mono break-all">{currentUrl}</p>
+      {/* Print Styles */}
+      <style jsx>{`
+        @media print {
+          body * {
+            visibility: hidden;
+          }
+          
+          .print-area, .print-area * {
+            visibility: visible;
+          }
+          
+          .print-area {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            text-align: center;
+            padding: 20px;
+          }
+          
+          @page {
+            margin: 0.5in;
+            size: A4;
+          }
+        }
+      `}</style>
+
+      {/* Hidden print area */}
+      <div className="print-area hidden print:block fixed inset-0 bg-white">
+        <div className="text-center space-y-6 pt-20">
+          <h1 className="text-4xl font-bold text-gray-900">{restaurantName}</h1>
+          <h2 className="text-2xl font-semibold text-monarch-primary">Tafel {tableNumber}</h2>
+          
+          {qrCodeUrl && (
+            <div className="flex justify-center">
+              <img 
+                src={qrCodeUrl} 
+                alt="Tafel QR Code" 
+                className="w-64 h-64"
+              />
+            </div>
+          )}
+          
+          <div className="space-y-2">
+            <p className="text-xl font-medium text-gray-800">
+              Scan om je rekening te splitten
+            </p>
+            <p className="text-lg text-gray-600">
+              Met PartiPay deel je eenvoudig je restaurantrekening
+            </p>
+          </div>
         </div>
       </div>
     </div>

@@ -5,8 +5,6 @@ import { storage } from "./storage";
 import { insertSessionSchema, insertParticipantSchema, insertItemClaimSchema } from "@shared/schema";
 import { z } from "zod";
 import { getIbanFromTink, exchangeCodeForToken } from "./tink-integration.js";
-import path from "path";
-import fs from "fs";
 
 interface WebSocketClient extends WebSocket {
   sessionId?: string;
@@ -66,22 +64,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     }
   }
-
-  // Serve QR code HTML files
-  app.get('/simple-qr.html', (req, res) => {
-    const filePath = path.join(process.cwd(), 'simple-qr.html');
-    res.sendFile(filePath);
-  });
-
-  app.get('/table-qr-code.html', (req, res) => {
-    const filePath = path.join(process.cwd(), 'table-qr-code.html');
-    res.sendFile(filePath);
-  });
-
-  app.get('/generate-qr-svg.html', (req, res) => {
-    const filePath = path.join(process.cwd(), 'generate-qr-svg.html');
-    res.sendFile(filePath);
-  });
 
   // Get client configuration
   app.get('/api/config', (req, res) => {
