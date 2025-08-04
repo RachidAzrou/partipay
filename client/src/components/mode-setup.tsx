@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { TbPlugConnected } from "react-icons/tb";
 import { MdOutlinePayment, MdCallSplit } from "react-icons/md";
+import { BiSolidSelectMultiple } from "react-icons/bi";
 
 interface BillItem {
   name: string;
@@ -204,10 +205,13 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
               <div className="monarch-widget">
                 <div className="text-center space-y-6">
                   <div className="w-20 h-20 bg-monarch-primary rounded-2xl flex items-center justify-center mx-auto">
-                    <MdCallSplit className="text-white text-3xl" />
+                    {splitMode === 'items' ? 
+                      <BiSolidSelectMultiple className="text-white text-3xl" /> : 
+                      <MdCallSplit className="text-white text-3xl" />
+                    }
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Split the Bill</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{splitMode === 'items' ? 'Pay your Part' : 'Split the Bill'}</h3>
                     <p className="monarch-body mb-4">
                       Automatisch je IBAN koppelen voor snelle betalingen van deelnemers.
                     </p>
@@ -227,10 +231,13 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
               <div className="monarch-widget bg-green-50 border-green-200">
                 <div className="text-center space-y-6">
                   <div className="w-20 h-20 bg-monarch-primary rounded-2xl flex items-center justify-center mx-auto">
-                    <MdCallSplit className="text-white text-3xl" />
+                    {splitMode === 'items' ? 
+                      <BiSolidSelectMultiple className="text-white text-3xl" /> : 
+                      <MdCallSplit className="text-white text-3xl" />
+                    }
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Split the Bill</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{splitMode === 'items' ? 'Pay your Part' : 'Split the Bill'}</h3>
                     <div className="bg-gray-50 rounded-lg p-3 mb-3 border border-gray-200">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center space-x-2">
