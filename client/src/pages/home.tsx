@@ -65,6 +65,7 @@ export default function Home() {
   });
 
   const createSessionMutation = useMutation({
+    mutationKey: ['create-session'], // Prevent duplicate calls
     mutationFn: async (sessionData: any) => {
       console.log('Creating session with data:', sessionData);
       console.log('Environment check:', {
@@ -74,8 +75,70 @@ export default function Home() {
         timestamp: new Date().toISOString()
       });
       
+      // In production, use direct fetch with aggressive timeout
+      if (!import.meta.env.DEV) {
+        console.log('🚀 Production mode: using direct fetch with timeout');
+        
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => {
+          console.log('⏰ Request timed out after 30 seconds');
+          controller.abort();
+        }, 30000);
+        
+        try {
+          const response = await fetch('/api/sessions', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(sessionData),
+            credentials: 'include',
+            signal: controller.signal
+          });
+          
+          clearTimeout(timeoutId);
+          
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`❌ Server responded with ${response.status}:`, errorText);
+            throw new Error(`Server error: ${response.status} ${errorText}`);
+          }
+          
+          const result = await response.json();
+          console.log('✅ Production session created:', result);
+          return result;
+        } catch (error) {
+          clearTimeout(timeoutId);
+          console.error('🔥 Production fetch error:', error);
+          
+          if (error instanceof Error && error.name === 'AbortError') {
+            // Try one more time with longer delay for cold starts
+            console.log('🔄 Timeout detected, trying one final attempt...');
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            
+            const retryResponse = await fetch('/api/sessions', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(sessionData),
+              credentials: 'include'
+            });
+            
+            if (retryResponse.ok) {
+              const result = await retryResponse.json();
+              console.log('✅ Retry after timeout succeeded:', result);
+              return result;
+            }
+            
+            throw new Error('Server cold start timeout. Probeer over enkele minuten opnieuw.');
+          }
+          throw error;
+        }
+      }
+      
+      // Development mode - use original apiRequest
       try {
-        // Use apiRequest but with additional error handling for production
         const res = await apiRequest('POST', '/api/sessions', sessionData);
         const result = await res.json();
         console.log('Session created successfully:', result);
@@ -199,6 +262,12 @@ export default function Home() {
   const handleContinueToSharing = (userData: { name: string; bankAccount?: string; participantCount?: number; selectedItems?: any[] }) => {
     console.log('handleContinueToSharing called with userData:', userData);
     
+    // Prevent double-clicks by checking if mutation is already pending
+    if (createSessionMutation.isPending) {
+      console.log('⚠️ Session creation already in progress, ignoring duplicate call');
+      return;
+    }
+    
     if (!billData || !splitMode) {
       console.error('Cannot continue: billData =', billData, 'splitMode =', splitMode);
       toast({
@@ -288,6 +357,7 @@ export default function Home() {
           billData={billData}
           onBack={() => setCurrentStep(1)}
           onContinue={handleContinueToSharing}
+          isLoading={createSessionMutation.isPending}
         />
       )}
       
