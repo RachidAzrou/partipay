@@ -12,7 +12,10 @@ export default function Session() {
   const [, navigate] = useLocation();
 
   const handleBack = () => {
-    navigate('/');
+    // Navigate back to home page, ideally to step 2 (mode setup)
+    // Since we can't restore the exact session state easily, 
+    // we go to home page where user can quickly recreate their session
+    navigate('/?step=2');
   };
 
 

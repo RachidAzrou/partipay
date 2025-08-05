@@ -20,11 +20,28 @@ interface BillData {
 export default function Home() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
-  const [currentStep, setCurrentStep] = useState(1);
+  
+  // Check URL for step parameter
+  const urlParams = new URLSearchParams(window.location.search);
+  const stepParam = urlParams.get('step');
+  const initialStep = stepParam ? parseInt(stepParam, 10) : 1;
+  
+  const [currentStep, setCurrentStep] = useState(initialStep);
   const [billData, setBillData] = useState<BillData | null>(null);
   const [billExpanded, setBillExpanded] = useState(false);
   const [splitMode, setSplitMode] = useState<'equal' | 'items' | null>(null);
   const [dataLoaded, setDataLoaded] = useState(false);
+
+  // Auto-load bill data and set defaults when starting at step 2
+  useEffect(() => {
+    if (initialStep === 2 && !billData && !loadBillMutation.isPending) {
+      loadBillMutation.mutate();
+      // Set a default split mode so the mode setup component can display
+      if (!splitMode) {
+        setSplitMode('equal');
+      }
+    }
+  }, [initialStep]);
 
   const loadBillMutation = useMutation({
     mutationFn: async () => {
