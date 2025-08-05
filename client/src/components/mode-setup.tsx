@@ -162,7 +162,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
         variant: "destructive"
       });
     }
-  };
+  }, [toast]);
 
   const handleBankAccountSelected = (accountData: { iban: string; accountHolder: string; bankName: string; logo: string }) => {
     setBankInfo({
@@ -461,7 +461,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
               <div className="flex justify-between items-center">
                 <span className="parti-heading-3">Jouw totaal:</span>
                 <span className="parti-amount-large parti-text-primary" data-testid="text-selected-total">
-                  € {calculateSelectedTotal()}
+                  € {calculateSelectedTotal}
                 </span>
               </div>
             </div>
