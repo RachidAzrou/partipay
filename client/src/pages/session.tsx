@@ -11,6 +11,10 @@ export default function Session() {
   const { id } = useParams();
   const [, navigate] = useLocation();
 
+  const handleBack = () => {
+    navigate('/');
+  };
+
 
 
   const { data: sessionData, isLoading, error } = useQuery({
@@ -39,7 +43,7 @@ export default function Session() {
   if (isLoading) {
     return (
       <div className="parti-container bg-background flex flex-col">
-        <ProgressBar currentStep={3} totalSteps={3} />
+        <ProgressBar currentStep={3} totalSteps={3} onBack={handleBack} />
         <div className="flex items-center justify-center min-h-[50vh]">
           <div className="text-center space-y-4">
             <div className="w-12 h-12 border-4 parti-bg-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
@@ -68,7 +72,7 @@ export default function Session() {
 
   return (
     <div className="parti-container bg-background flex flex-col">
-      <ProgressBar currentStep={3} totalSteps={3} />
+      <ProgressBar currentStep={3} totalSteps={3} onBack={handleBack} />
       <SharingDashboard sessionData={sessionData as any} />
     </div>
   );
