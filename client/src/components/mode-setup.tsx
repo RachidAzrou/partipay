@@ -485,6 +485,13 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
               }
             </span>
           </button>
+          
+          {/* Debug info for production troubleshooting */}
+          {!import.meta.env.DEV && (
+            <div className="mt-2 text-xs text-gray-500 text-center">
+              Debug: Bank {bankLinked ? '✓' : '✗'} | Info {bankInfo ? '✓' : '✗'} | Mode: {splitMode}
+            </div>
+          )}
         </div>
       </div>
       {/* BankSelector removed for simpler direct linking */}
