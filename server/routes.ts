@@ -80,6 +80,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get mock bill data from QR scan
+  // Health check endpoint for keep-alive
+  app.get('/api/health', (req, res) => {
+    res.json({ 
+      status: 'ok', 
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime()
+    });
+  });
+
   app.post('/api/scan-qr', async (req, res) => {
     try {
       const { tableNumber, restaurantName } = req.body;
