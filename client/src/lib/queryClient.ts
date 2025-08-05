@@ -47,14 +47,16 @@ export const queryClient = new QueryClient({
       queryFn: getQueryFn({ on401: "throw" }),
       refetchInterval: false,
       refetchOnWindowFocus: false,
-      staleTime: 5 * 60 * 1000, // 5 minutes for better performance
-      gcTime: 10 * 60 * 1000, // 10 minutes garbage collection
-      retry: 1, // Single retry for better reliability
-      retryDelay: 500, // Fast retry
+      staleTime: 0, // Always fresh data for real-time experience
+      gcTime: 2 * 60 * 1000, // 2 minutes garbage collection for speed
+      retry: 2, // Quick retries for reliability
+      retryDelay: (attemptIndex) => Math.min(100 * 2 ** attemptIndex, 500), // Exponential backoff starting at 100ms
+      networkMode: 'online',
     },
     mutations: {
-      retry: 1,
-      retryDelay: 300,
+      retry: 2,
+      retryDelay: 100, // Super fast retry for mutations
+      networkMode: 'online',
     },
   },
 });

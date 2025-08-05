@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback, useMemo, useTransition } from "react";
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,13 +39,17 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
   const [selectedItems, setSelectedItems] = useState<Record<number, number>>({});
   const [itemsExpanded, setItemsExpanded] = useState(true);
   const [showBankSelector, setShowBankSelector] = useState(false);
-  const [originalQuantities] = useState<Record<number, number>>(() => {
+  const [isPending, startTransition] = useTransition();
+  
+  // Memoize original quantities for performance
+  const originalQuantities = useMemo(() => {
     const initial: Record<number, number> = {};
     billData.items.forEach((item, index) => {
       initial[index] = item.quantity;
     });
     return initial;
-  });
+  }, [billData.items]);
+  
   const { toast } = useToast();
 
   // Check for bank linking success on component mount
@@ -109,27 +113,29 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
   }, [toast]);
 
 
-  const handleQuantityChange = (index: number, change: number) => {
-    const currentQuantity = selectedItems[index] || 0;
-    const originalQuantity = originalQuantities[index] || 0;
-    const newQuantity = Math.max(0, Math.min(originalQuantity, currentQuantity + change));
-    
-    setSelectedItems(prev => ({
-      ...prev,
-      [index]: newQuantity
-    }));
-  };
+  const handleQuantityChange = useCallback((index: number, change: number) => {
+    startTransition(() => {
+      const currentQuantity = selectedItems[index] || 0;
+      const originalQuantity = originalQuantities[index] || 0;
+      const newQuantity = Math.max(0, Math.min(originalQuantity, currentQuantity + change));
+      
+      setSelectedItems(prev => ({
+        ...prev,
+        [index]: newQuantity
+      }));
+    });
+  }, [selectedItems, originalQuantities]);
 
-  const calculateSelectedTotal = () => {
+  const calculateSelectedTotal = useMemo(() => {
     return billData.items.reduce((total, item, index) => {
       const selectedQuantity = selectedItems[index] || 0;
       return total + parseFloat(item.price) * selectedQuantity;
     }, 0).toFixed(2);
-  };
+  }, [billData.items, selectedItems]);
 
-  const handleLinkBank = async () => {
+  const handleLinkBank = useCallback(async () => {
     try {
-      // Directe simulatie - gewoon een realistische Belgische bankrekening koppelen
+      // Snelle simulatie voor instant feedback
       const mockBankData = {
         iban: 'BE68539007547034',
         accountHolder: 'Jan Peeters',
@@ -137,9 +143,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
         logo: '🔵'
       };
       
-      // Korte loading simulatie
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
+      // Supersnel - geen wachttijd
       setBankInfo(mockBankData);
       setBankLinked(true);
       
@@ -224,7 +228,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">{splitMode === 'items' ? 'Pay your Part' : 'Split the Bill'}</h3>
-                    <Label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 block parti-heading-3 mb-4 text-left">1) Koppel je bankrekening aan deze sessie</Label>
+                    <Label className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 block parti-heading-3 mb-4 text-left font-normal">1) Koppel je bankrekening aan deze sessie</Label>
                   </div>
                   
                   <button 
@@ -342,7 +346,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                   className="flex items-center justify-between cursor-pointer p-2 -m-2 rounded-lg hover:bg-gray-50 transition-colors"
                   onClick={() => setItemsExpanded(!itemsExpanded)}
                 >
-                  <h3 className="parti-heading-3">2) Selecteer je items</h3>
+                  <h3 className="parti-heading-3 font-normal">2) Selecteer je items</h3>
                   <ChevronDown 
                     className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${
                       itemsExpanded ? 'rotate-180' : ''

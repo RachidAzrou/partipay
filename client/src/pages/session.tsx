@@ -18,15 +18,24 @@ export default function Session() {
   const { data: sessionData, isLoading, error } = useQuery({
     queryKey: ['/api/sessions', id],
     enabled: !!id,
-    staleTime: 5 * 1000, // 5 seconds stale time for frequent updates
-    refetchInterval: false, // Disable polling, use WebSocket instead
+    staleTime: 0, // Always fresh for real-time experience
+    refetchInterval: false, // WebSocket handles updates
+    refetchOnMount: true,
+    refetchOnReconnect: true,
   });
 
   // WebSocket for real-time session updates at page level
   const { connected } = useWebSocket(id || '', (message) => {
-    // Force immediate refresh for any session-related updates
-    queryClient.invalidateQueries({ queryKey: ['/api/sessions', id] });
-    queryClient.refetchQueries({ queryKey: ['/api/sessions', id] });
+    // Instant cache update without network request
+    queryClient.setQueryData(['/api/sessions', id], (old: any) => {
+      if (!old) return old;
+      // Apply message updates directly to cache for instant UI updates
+      return { ...old, ...message, lastUpdated: Date.now() };
+    });
+    // Still invalidate for consistency but with lower priority
+    setTimeout(() => {
+      queryClient.invalidateQueries({ queryKey: ['/api/sessions', id] });
+    }, 50);
   });
 
   if (isLoading) {
