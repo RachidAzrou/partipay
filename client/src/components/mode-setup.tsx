@@ -224,7 +224,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">{splitMode === 'items' ? 'Pay your Part' : 'Split the Bill'}</h3>
-                    <Label className="block parti-heading-3 mb-4 text-left">1) Koppel je bankrekening aan deze sessie</Label>
+                    <Label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 block parti-heading-3 mb-4 text-left">1) Koppel je bankrekening aan deze sessie</Label>
                   </div>
                   
                   <button 
@@ -337,16 +337,18 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
             
           
             <div className="space-y-4">
-              <div 
-                className="flex items-center justify-between cursor-pointer p-2 -m-2 rounded-lg hover:bg-gray-50 transition-colors"
-                onClick={() => setItemsExpanded(!itemsExpanded)}
-              >
-                <h3 className="parti-heading-3">2) Selecteer je items</h3>
-                <ChevronDown 
-                  className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${
-                    itemsExpanded ? 'rotate-180' : ''
-                  }`}
-                />
+              <div className="parti-card">
+                <div 
+                  className="flex items-center justify-between cursor-pointer p-2 -m-2 rounded-lg hover:bg-gray-50 transition-colors"
+                  onClick={() => setItemsExpanded(!itemsExpanded)}
+                >
+                  <h3 className="parti-heading-3">2) Selecteer je items</h3>
+                  <ChevronDown 
+                    className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${
+                      itemsExpanded ? 'rotate-180' : ''
+                    }`}
+                  />
+                </div>
               </div>
               {itemsExpanded && billData.items.map((item, index) => {
                 const selectedQuantity = selectedItems[index] || 0;
