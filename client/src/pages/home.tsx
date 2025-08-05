@@ -83,45 +83,24 @@ export default function Home() {
       } catch (error) {
         console.error('Session creation error in mutationFn:', error);
         
-        // In production, try multiple fallback methods
+        // In production, try multiple fallback methods with exponential backoff
         if (!import.meta.env.DEV) {
-          console.log('🔄 Server 502 error detected, trying production fallbacks...');
+          console.log('🔄 Server 502/timeout detected, trying production fallbacks...');
           console.log('💡 This is normal for serverless deployments that need to wake up');
           
-          // First try: Direct fetch with relative URL (retry after 502)
-          try {
-            console.log('⏳ Fallback 1: Retrying after server wake-up delay...');
-            // Add delay for serverless cold start
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            
-            const directRes = await fetch('/api/sessions', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(sessionData),
-              credentials: 'include'
-            });
-            
-            if (directRes.ok) {
-              const result = await directRes.json();
-              console.log('✅ Direct fetch succeeded after retry:', result);
-              return result;
-            }
-            console.log(`❌ Direct fetch still failed: ${directRes.status}`);
-          } catch (e) {
-            console.log('Direct fetch (relative) error:', e);
-          }
+          // Show user feedback that we're retrying
+          toast({
+            title: "Server wordt opgestart...",
+            description: "Even geduld, de server wordt wakker gemaakt. Dit kan enkele seconden duren.",
+          });
           
-          // Second try: Absolute URL with longer delay
-          try {
-            console.log('⏳ Fallback 2: Longer delay + absolute URL...');
-            await new Promise(resolve => setTimeout(resolve, 3000));
+          // Helper function for retry with exponential backoff
+          const retryRequest = async (attempt: number): Promise<any> => {
+            const delay = Math.min(1000 * Math.pow(2, attempt), 10000); // Cap at 10 seconds
+            console.log(`⏳ Fallback ${attempt + 1}: Waiting ${delay}ms for server wake-up...`);
+            await new Promise(resolve => setTimeout(resolve, delay));
             
-            const absoluteUrl = `${window.location.origin}/api/sessions`;
-            console.log('🌐 Trying absolute URL:', absoluteUrl);
-            
-            const absoluteRes = await fetch(absoluteUrl, {
+            const response = await fetch('/api/sessions', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -130,17 +109,25 @@ export default function Home() {
               credentials: 'include'
             });
             
-            if (absoluteRes.ok) {
-              const result = await absoluteRes.json();
-              console.log('✅ Absolute URL fetch succeeded:', result);
+            if (response.ok) {
+              const result = await response.json();
+              console.log(`✅ Retry ${attempt + 1} succeeded:`, result);
               return result;
             }
-            console.log(`❌ Absolute URL also failed: ${absoluteRes.status}`);
-            const errorText = await absoluteRes.text();
-            throw new Error(`🚫 Server still not responding: ${absoluteRes.status} ${errorText}`);
-          } catch (absoluteError) {
-            console.error('All production fallbacks failed:', absoluteError);
-            throw absoluteError;
+            
+            console.log(`❌ Retry ${attempt + 1} failed: ${response.status}`);
+            if (attempt < 3) { // Try up to 4 times total (0, 1, 2, 3)
+              return retryRequest(attempt + 1);
+            }
+            
+            throw new Error(`Server still not responding after ${attempt + 1} attempts: ${response.status}`);
+          };
+          
+          try {
+            return await retryRequest(0);
+          } catch (retryError) {
+            console.error('All production retries failed:', retryError);
+            throw retryError;
           }
         }
         throw error;
