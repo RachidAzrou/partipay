@@ -292,7 +292,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
         {splitMode === 'equal' ? (
           <div className="space-y-6 animate-slide-up">
             <div className="parti-card">
-              <Label className="block parti-heading-3 mb-4">2) Kies het aantal deelnemers</Label>
+              <Label className="block parti-heading-3 mb-4 text-left">2) Kies het aantal deelnemers</Label>
               <div className="flex items-center space-x-6">
                 <button 
                   className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center touch-target hover:bg-muted/80 transition-colors"
@@ -341,7 +341,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                 className="flex items-center justify-between cursor-pointer p-2 -m-2 rounded-lg hover:bg-gray-50 transition-colors"
                 onClick={() => setItemsExpanded(!itemsExpanded)}
               >
-                <h3 className="parti-heading-3">Selecteer jouw items:</h3>
+                <h3 className="parti-heading-3">2) Selecteer je items</h3>
                 <ChevronDown 
                   className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${
                     itemsExpanded ? 'rotate-180' : ''
