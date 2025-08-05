@@ -1,0 +1,528 @@
+<html lang="nl" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PartiPay - Sharing Made Easy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'parti-orange': '#E5742A',
+                        'parti-orange-light': '#F59E0B',
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <meta name="theme-color" content="#E5742A">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+</head>
+<body class="h-full bg-gray-50 font-inter">
+    <!-- @COMPONENT: MobileContainer -->
+    <div class="max-w-sm mx-auto bg-white min-h-screen shadow-xl relative overflow-hidden">
+        
+        <!-- Progress Bar -->
+        <!-- @COMPONENT: ProgressBar [currentStep, totalSteps] -->
+        <div class="sticky top-0 z-50 bg-white border-b border-gray-100 px-4 py-3">
+            <div class="flex items-center justify-between mb-2">
+                <h1 class="text-lg font-semibold text-gray-900">PartiPay</h1>
+                <div class="w-6 h-6 bg-gradient-to-r from-parti-orange to-parti-orange-light rounded-full flex items-center justify-center">
+                    <span class="text-white text-xs font-bold">P</span>
+                </div>
+            </div>
+            <div class="flex space-x-2">
+                <div class="flex-1 h-2 bg-gradient-to-r from-parti-orange to-parti-orange-light rounded-full" data-bind="step >= 1"></div>
+                <div class="flex-1 h-2 bg-gray-200 rounded-full" data-bind="step >= 2" data-implementation="Active when step >= 2"></div>
+                <div class="flex-1 h-2 bg-gray-200 rounded-full" data-bind="step >= 3" data-implementation="Active when step >= 3"></div>
+            </div>
+            <p class="text-xs text-gray-600 mt-1">Stap 1 van 3</p>
+        </div>
+        <!-- @END_COMPONENT: ProgressBar -->
+
+        <!-- Screen 1: QR Code Scanner & Bill Display -->
+        <!-- @COMPONENT: QRScannerScreen [isActive] -->
+        <div class="screen-1 px-4 py-6 space-y-6" id="screen1" data-mock="true">
+            
+            <!-- QR Scanner Interface -->
+            <div class="text-center space-y-4">
+                <div class="w-20 h-20 bg-gradient-to-r from-parti-orange to-parti-orange-light rounded-full flex items-center justify-center mx-auto">
+                    <i class="fas fa-qrcode text-2xl text-white"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-900 mb-2">Scan QR-code aan je tafel</h2>
+                    <p class="text-sm text-gray-600">Scan de code om je rekening op te halen</p>
+                </div>
+            </div>
+
+            <!-- QR Scanner Viewfinder -->
+            <div class="relative">
+                <div class="aspect-square bg-gray-900 rounded-xl overflow-hidden relative" data-implementation="Camera viewfinder component">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-48 h-48 border-2 border-white rounded-lg relative">
+                            <div class="absolute -top-1 -left-1 w-6 h-6 border-l-4 border-t-4 border-parti-orange rounded-tl-lg"></div>
+                            <div class="absolute -top-1 -right-1 w-6 h-6 border-r-4 border-t-4 border-parti-orange rounded-tr-lg"></div>
+                            <div class="absolute -bottom-1 -left-1 w-6 h-6 border-l-4 border-b-4 border-parti-orange rounded-bl-lg"></div>
+                            <div class="absolute -bottom-1 -right-1 w-6 h-6 border-r-4 border-b-4 border-parti-orange rounded-br-lg"></div>
+                        </div>
+                    </div>
+                    <!-- Scanning Animation -->
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-48 h-0.5 bg-parti-orange animate-pulse" data-implementation="Scanning line animation"></div>
+                    </div>
+                </div>
+                <p class="text-center text-xs text-gray-500 mt-2">Plaats de QR-code in het midden van het scherm</p>
+            </div>
+
+            <!-- Simulated Success State -->
+            <div class="hidden" id="scanned-success" data-implementation="Show after successful QR scan">
+                <div class="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+                    <i class="fas fa-check-circle text-green-500 text-2xl mb-2"></i>
+                    <p class="text-green-800 font-medium">QR-code gescand!</p>
+                    <p class="text-green-600 text-sm">Restaurant De Gouden Leeuw, Tafel 7</p>
+                </div>
+            </div>
+
+            <!-- Expandable Bill Section -->
+            <!-- @COMPONENT: ExpandableBill [billData, isExpanded] -->
+            <div class="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm" data-mock="true">
+                <button class="w-full p-4 text-left flex items-center justify-between" data-event="click:toggleBillExpand">
+                    <div>
+                        <h3 class="font-semibold text-gray-900">Rekening #1247</h3>
+                        <p class="text-sm text-gray-600">Restaurant De Gouden Leeuw</p>
+                        <p class="text-lg font-bold text-parti-orange mt-1">€ 87,50</p>
+                    </div>
+                    <i class="fas fa-chevron-down text-gray-400 transition-transform duration-200" data-implementation="Rotate when expanded"></i>
+                </button>
+                
+                <!-- Expanded Content -->
+                <div class="hidden border-t border-gray-100 p-4 space-y-3" id="bill-details" data-implementation="Toggle visibility with expand button">
+                    <!-- @MAP: billItems.map(item => ( -->
+                    <div class="flex justify-between items-center py-2 border-b border-gray-50 last:border-b-0">
+                        <div>
+                            <span class="text-sm font-medium text-gray-900" data-bind="item.name">Margherita Pizza</span>
+                            <p class="text-xs text-gray-500">x<span data-bind="item.quantity">2</span></p>
+                        </div>
+                        <span class="text-sm font-semibold text-gray-900">€ <span data-bind="item.price">24,00</span></span>
+                    </div>
+                    <div class="flex justify-between items-center py-2 border-b border-gray-50 last:border-b-0">
+                        <div>
+                            <span class="text-sm font-medium text-gray-900" data-bind="item.name">Caesar Salade</span>
+                            <p class="text-xs text-gray-500">x<span data-bind="item.quantity">1</span></p>
+                        </div>
+                        <span class="text-sm font-semibold text-gray-900">€ <span data-bind="item.price">16,50</span></span>
+                    </div>
+                    <div class="flex justify-between items-center py-2 border-b border-gray-50 last:border-b-0">
+                        <div>
+                            <span class="text-sm font-medium text-gray-900" data-bind="item.name">Biefstuk medium</span>
+                            <p class="text-xs text-gray-500">x<span data-bind="item.quantity">1</span></p>
+                        </div>
+                        <span class="text-sm font-semibold text-gray-900">€ <span data-bind="item.price">28,50</span></span>
+                    </div>
+                    <div class="flex justify-between items-center py-2 border-b border-gray-50 last:border-b-0">
+                        <div>
+                            <span class="text-sm font-medium text-gray-900" data-bind="item.name">Wijn (glas)</span>
+                            <p class="text-xs text-gray-500">x<span data-bind="item.quantity">3</span></p>
+                        </div>
+                        <span class="text-sm font-semibold text-gray-900">€ <span data-bind="item.price">18,50</span></span>
+                    </div>
+                    <!-- @END_MAP )) -->
+                    <div class="pt-2 border-t border-gray-200">
+                        <div class="flex justify-between items-center font-semibold text-gray-900">
+                            <span>Totaal</span>
+                            <span>€ 87,50</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- @END_COMPONENT: ExpandableBill -->
+
+            <!-- Action Buttons -->
+            <div class="space-y-3">
+                <button class="w-full bg-gradient-to-r from-parti-orange to-parti-orange-light text-white font-semibold py-4 px-6 rounded-xl shadow-lg active:scale-98 transition-transform" data-event="click:selectSplitMode" data-implementation="Navigate to screen 2 with splitMode=equal">
+                    <i class="fas fa-users mr-3"></i>
+                    Split the Bill
+                    <p class="text-xs text-orange-100 mt-1">Verdeel gelijk over alle deelnemers</p>
+                </button>
+                
+                <button class="w-full bg-white border-2 border-parti-orange text-parti-orange font-semibold py-4 px-6 rounded-xl active:scale-98 transition-transform" data-event="click:selectPayMode" data-implementation="Navigate to screen 2 with splitMode=items">
+                    <i class="fas fa-receipt mr-3"></i>
+                    Pay Your Part
+                    <p class="text-xs text-parti-orange opacity-75 mt-1">Kies je eigen items van de rekening</p>
+                </button>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: QRScannerScreen -->
+
+        <!-- Screen 2: Mode Setup -->
+        <!-- @COMPONENT: ModeSetupScreen [splitMode, isActive] -->
+        <div class="screen-2 hidden px-4 py-6 space-y-6" id="screen2" data-mock="true">
+            
+            <!-- Header -->
+            <div class="text-center">
+                <button class="absolute left-4 top-20 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center" data-event="click:goBack">
+                    <i class="fas fa-arrow-left text-gray-600 text-sm"></i>
+                </button>
+                <h2 class="text-xl font-semibold text-gray-900">Jouw gegevens</h2>
+                <p class="text-sm text-gray-600 mt-1">Vul je naam in om deel te nemen</p>
+            </div>
+
+            <!-- User Information Form -->
+            <!-- @COMPONENT: UserForm [userData, onSubmit] -->
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Je naam *</label>
+                    <input type="text" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-parti-orange focus:border-transparent" placeholder="Voer je naam in" data-bind="user.name">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Bankrekening (optioneel)</label>
+                    <input type="text" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-parti-orange focus:border-transparent" placeholder="NL12 ABCD 0123 4567 89" data-bind="user.bankAccount">
+                    <p class="text-xs text-gray-500 mt-1">Voor simulatie doeleinden</p>
+                </div>
+            </div>
+            <!-- @END_COMPONENT: UserForm -->
+
+            <!-- Split Mode Specific Content -->
+            <!-- Split the Bill Mode -->
+            <div class="split-mode-content space-y-4" id="split-mode" data-implementation="Show when splitMode === 'equal'">
+                <div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                    <h3 class="font-semibold text-orange-900 mb-2">
+                        <i class="fas fa-users mr-2"></i>
+                        Split the Bill
+                    </h3>
+                    <p class="text-sm text-orange-800">De rekening wordt gelijk verdeeld over alle deelnemers.</p>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Aantal deelnemers</label>
+                    <div class="flex items-center space-x-4">
+                        <button class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center" data-event="click:decreaseParticipants">
+                            <i class="fas fa-minus text-gray-600"></i>
+                        </button>
+                        <div class="flex-1 text-center">
+                            <span class="text-2xl font-bold text-gray-900" data-bind="participantCount">4</span>
+                            <p class="text-xs text-gray-500">personen</p>
+                        </div>
+                        <button class="w-10 h-10 bg-parti-orange rounded-full flex items-center justify-center" data-event="click:increaseParticipants">
+                            <i class="fas fa-plus text-white"></i>
+                        </button>
+                    </div>
+                    <div class="flex justify-center mt-3">
+                        <div class="bg-gray-100 rounded-full px-3 py-1">
+                            <span class="text-sm font-semibold text-gray-700">€ <span data-bind="amountPerPerson">21,88</span> per persoon</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pay Your Part Mode -->
+            <div class="pay-mode-content hidden space-y-4" id="pay-mode" data-implementation="Show when splitMode === 'items'">
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <h3 class="font-semibold text-blue-900 mb-2">
+                        <i class="fas fa-receipt mr-2"></i>
+                        Pay Your Part
+                    </h3>
+                    <p class="text-sm text-blue-800">Selecteer de items die jij hebt besteld.</p>
+                </div>
+                
+                <!-- Item Selection -->
+                <div class="space-y-3">
+                    <h4 class="font-medium text-gray-900">Selecteer jouw items:</h4>
+                    <!-- @MAP: billItems.map(item => ( -->
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <input type="checkbox" class="w-5 h-5 text-parti-orange bg-gray-100 border-gray-300 rounded focus:ring-parti-orange focus:ring-2" data-bind="item.selected">
+                            <div>
+                                <span class="text-sm font-medium text-gray-900" data-bind="item.name">Margherita Pizza</span>
+                                <p class="text-xs text-gray-500">€ <span data-bind="item.price">24,00</span></p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs text-gray-500">x<span data-bind="item.quantity">2</span> beschikbaar</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <input type="checkbox" class="w-5 h-5 text-parti-orange bg-gray-100 border-gray-300 rounded focus:ring-parti-orange focus:ring-2" data-bind="item.selected">
+                            <div>
+                                <span class="text-sm font-medium text-gray-900" data-bind="item.name">Caesar Salade</span>
+                                <p class="text-xs text-gray-500">€ <span data-bind="item.price">16,50</span></p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs text-gray-500">x<span data-bind="item.quantity">1</span> beschikbaar</span>
+                        </div>
+                    </div>
+                    <!-- @END_MAP )) -->
+                </div>
+
+                <div class="bg-gray-100 rounded-lg p-3">
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium text-gray-900">Jouw totaal:</span>
+                        <span class="text-lg font-bold text-parti-orange">€ <span data-bind="selectedTotal">40,50</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Continue Button -->
+            <button class="w-full bg-gradient-to-r from-parti-orange to-parti-orange-light text-white font-semibold py-4 px-6 rounded-xl shadow-lg active:scale-98 transition-transform" data-event="click:continueToSharing" data-implementation="Validate form and navigate to screen 3">
+                <i class="fas fa-arrow-right mr-2"></i>
+                Verder naar delen
+            </button>
+        </div>
+        <!-- @END_COMPONENT: ModeSetupScreen -->
+
+        <!-- Screen 3: QR Sharing & Payment Dashboard -->
+        <!-- @COMPONENT: SharingDashboard [sessionData, participants, realTimeUpdates] -->
+        <div class="screen-3 hidden px-4 py-6 space-y-6" id="screen3" data-mock="true">
+            
+            <!-- Header -->
+            <div class="text-center">
+                <button class="absolute left-4 top-20 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center" data-event="click:goBack">
+                    <i class="fas fa-arrow-left text-gray-600 text-sm"></i>
+                </button>
+                <h2 class="text-xl font-semibold text-gray-900">Deel met je vrienden</h2>
+                <p class="text-sm text-gray-600 mt-1">Laat anderen deze QR-code scannen</p>
+            </div>
+
+            <!-- QR Code for Sharing -->
+            <div class="bg-white border border-gray-200 rounded-xl p-6 text-center shadow-sm">
+                <div class="w-48 h-48 bg-gray-100 rounded-lg mx-auto mb-4 flex items-center justify-center" data-implementation="Generate QR code with session URL">
+                    <div class="grid grid-cols-8 gap-1">
+                        <!-- QR Code Pattern Simulation -->
+                        <div class="w-3 h-3 bg-gray-900 rounded-sm"></div>
+                        <div class="w-3 h-3 bg-gray-900 rounded-sm"></div>
+                        <div class="w-3 h-3 bg-gray-300 rounded-sm"></div>
+                        <div class="w-3 h-3 bg-gray-900 rounded-sm"></div>
+                        <div class="w-3 h-3 bg-gray-300 rounded-sm"></div>
+                        <div class="w-3 h-3 bg-gray-900 rounded-sm"></div>
+                        <div class="w-3 h-3 bg-gray-900 rounded-sm"></div>
+                        <div class="w-3 h-3 bg-gray-900 rounded-sm"></div>
+                        <!-- More QR pattern rows would be here -->
+                    </div>
+                </div>
+                <p class="text-sm text-gray-600">Sessie: <span class="font-mono text-xs">PART-1247</span></p>
+                <button class="mt-3 px-4 py-2 bg-parti-orange text-white text-sm rounded-lg" data-event="click:shareQR">
+                    <i class="fas fa-share mr-2"></i>
+                    Deel QR-code
+                </button>
+            </div>
+
+            <!-- Real-time Participants Status -->
+            <!-- @COMPONENT: ParticipantsList [participants, realTimeUpdates] -->
+            <div class="space-y-4">
+                <h3 class="font-semibold text-gray-900">Deelnemers (3/4)</h3>
+                
+                <!-- @MAP: participants.map(participant => ( -->
+                <div class="bg-white border border-gray-200 rounded-lg p-4 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-gradient-to-r from-parti-orange to-parti-orange-light rounded-full flex items-center justify-center">
+                            <span class="text-white font-semibold text-sm" data-bind="participant.initials">JD</span>
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-900" data-bind="participant.name">John Doe</p>
+                            <p class="text-xs text-gray-500">Hoofdboeker • € <span data-bind="participant.amount">21,88</span></p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-2 h-2 bg-green-500 rounded-full" data-bind="participant.status === 'paid'"></div>
+                        <span class="text-sm font-medium text-green-600" data-bind="participant.status">Betaald</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white border border-gray-200 rounded-lg p-4 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-gradient-to-r from-parti-orange to-parti-orange-light rounded-full flex items-center justify-center">
+                            <span class="text-white font-semibold text-sm" data-bind="participant.initials">SM</span>
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-900" data-bind="participant.name">Sarah Miller</p>
+                            <p class="text-xs text-gray-500">€ <span data-bind="participant.amount">21,88</span></p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-2 h-2 bg-yellow-500 rounded-full animate-pulse" data-bind="participant.status === 'pending'"></div>
+                        <span class="text-sm font-medium text-yellow-600" data-bind="participant.status">Bezig...</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white border border-gray-200 rounded-lg p-4 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-gradient-to-r from-parti-orange to-parti-orange-light rounded-full flex items-center justify-center">
+                            <span class="text-white font-semibold text-sm" data-bind="participant.initials">MJ</span>
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-900" data-bind="participant.name">Mike Johnson</p>
+                            <p class="text-xs text-gray-500">€ <span data-bind="participant.amount">21,88</span></p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-2 h-2 bg-gray-400 rounded-full" data-bind="participant.status === 'waiting'"></div>
+                        <span class="text-sm font-medium text-gray-500" data-bind="participant.status">Wacht op deelname</span>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                    <i class="fas fa-user-plus text-gray-400 text-xl mb-2"></i>
+                    <p class="text-sm text-gray-500">Wacht op 1 deelnemer...</p>
+                </div>
+                <!-- @END_MAP )) -->
+            </div>
+            <!-- @END_COMPONENT: ParticipantsList -->
+
+            <!-- Payment Progress -->
+            <div class="bg-white border border-gray-200 rounded-xl p-4">
+                <div class="flex items-center justify-between mb-3">
+                    <h4 class="font-semibold text-gray-900">Betalingsvoortgang</h4>
+                    <span class="text-sm text-gray-600">€ 43,76 / € 87,50</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2 mb-3">
+                    <div class="bg-gradient-to-r from-parti-orange to-parti-orange-light h-2 rounded-full transition-all duration-500" style="width: 50%" data-bind="paymentProgress"></div>
+                </div>
+                <p class="text-xs text-gray-600 text-center">2 van 4 personen hebben betaald</p>
+            </div>
+
+            <!-- Pay Your Part Mode: Item Claims Status -->
+            <div class="hidden space-y-4" id="item-claims" data-implementation="Show when splitMode === 'items'">
+                <h4 class="font-semibold text-gray-900">Item Status</h4>
+                <!-- @MAP: billItems.map(item => ( -->
+                <div class="bg-white border border-gray-200 rounded-lg p-3">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-medium text-gray-900" data-bind="item.name">Margherita Pizza</span>
+                        <span class="text-sm text-gray-600">€ <span data-bind="item.price">24,00</span></span>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-gray-500">Geclaimd door:</span>
+                            <span class="text-green-600 font-medium" data-bind="item.claimedBy">John D., Sarah M.</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-1">
+                            <div class="bg-green-500 h-1 rounded-full" style="width: 100%" data-bind="item.claimProgress"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- @END_MAP )) -->
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="space-y-3">
+                <button class="w-full bg-gradient-to-r from-parti-orange to-parti-orange-light text-white font-semibold py-4 px-6 rounded-xl shadow-lg" data-event="click:sendReminder" data-implementation="Send reminder notification to pending participants">
+                    <i class="fas fa-bell mr-2"></i>
+                    Herinnering sturen
+                </button>
+                
+                <button class="w-full bg-white border border-gray-300 text-gray-700 font-semibold py-3 px-6 rounded-xl" data-event="click:closeBill" data-implementation="Close session and complete payments">
+                    <i class="fas fa-times mr-2"></i>
+                    Rekening sluiten
+                </button>
+            </div>
+
+            <!-- Success State (Hidden by default) -->
+            <div class="hidden bg-green-50 border border-green-200 rounded-xl p-6 text-center" id="success-state" data-implementation="Show when all payments completed">
+                <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-check text-white text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-green-900 mb-2">Alle betalingen voltooid!</h3>
+                <p class="text-sm text-green-800 mb-4">Bedankt voor het gebruik van PartiPay</p>
+                <button class="bg-green-600 text-white px-6 py-2 rounded-lg font-medium" data-event="click:newSession">
+                    Nieuwe rekening
+                </button>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: SharingDashboard -->
+
+        <!-- WebSocket Status Indicator -->
+        <div class="fixed bottom-4 right-4 w-3 h-3 bg-green-500 rounded-full shadow-lg" data-implementation="WebSocket connection status indicator" title="Verbonden"></div>
+    </div>
+    <!-- @END_COMPONENT: MobileContainer -->
+
+    <script>
+        // TODO: Implement business logic, API calls, and state management
+        
+        (function() {
+            // Mock screen navigation
+            let currentScreen = 1;
+            const screens = ['screen1', 'screen2', 'screen3'];
+            
+            // Mock bill expansion
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('[data-event*="toggleBillExpand"]')) {
+                    const billDetails = document.getElementById('bill-details');
+                    const chevron = e.target.closest('button').querySelector('.fa-chevron-down');
+                    
+                    billDetails.classList.toggle('hidden');
+                    chevron.style.transform = billDetails.classList.contains('hidden') 
+                        ? 'rotate(0deg)' 
+                        : 'rotate(180deg)';
+                }
+                
+                // Mock mode selection
+                if (e.target.closest('[data-event*="selectSplitMode"]') || e.target.closest('[data-event*="selectPayMode"]')) {
+                    // Simulate QR scan success first
+                    document.getElementById('scanned-success').classList.remove('hidden');
+                    setTimeout(() => {
+                        navigateToScreen(2);
+                    }, 1000);
+                }
+                
+                // Mock continue to sharing
+                if (e.target.closest('[data-event*="continueToSharing"]')) {
+                    navigateToScreen(3);
+                }
+            });
+            
+            function navigateToScreen(screenNumber) {
+                // Hide all screens
+                screens.forEach(screen => {
+                    document.getElementById(screen).classList.add('hidden');
+                });
+                
+                // Show target screen
+                document.getElementById(`screen${screenNumber}`).classList.remove('hidden');
+                
+                // Update progress bar
+                updateProgressBar(screenNumber);
+                currentScreen = screenNumber;
+            }
+            
+            function updateProgressBar(step) {
+                const progressBars = document.querySelectorAll('.sticky .flex.space-x-2 > div');
+                const stepText = document.querySelector('.sticky p');
+                
+                progressBars.forEach((bar, index) => {
+                    if (index < step) {
+                        bar.className = 'flex-1 h-2 bg-gradient-to-r from-parti-orange to-parti-orange-light rounded-full';
+                    } else {
+                        bar.className = 'flex-1 h-2 bg-gray-200 rounded-full';
+                    }
+                });
+                
+                stepText.textContent = `Stap ${step} van 3`;
+            }
+
+            // Mock real-time updates
+            function simulateRealTimeUpdates() {
+                if (currentScreen === 3) {
+                    // Simulate participant joining
+                    setTimeout(() => {
+                        // Mock WebSocket message processing
+                        console.log('Participant joined:', { name: 'Emma Wilson', amount: 21.88 });
+                    }, 3000);
+                }
+            }
+            
+            // Initialize
+            navigateToScreen(1);
+            simulateRealTimeUpdates();
+        })();
+    </script>
+</body>
+</html>
