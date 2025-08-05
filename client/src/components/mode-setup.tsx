@@ -224,7 +224,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">{splitMode === 'items' ? 'Pay your Part' : 'Split the Bill'}</h3>
-                    <p className="monarch-body mb-4 text-left text-[#1a212f] font-bold">1) Koppel je bankrekening aan deze sessie</p>
+                    <Label className="block parti-heading-3 mb-4">1) Koppel je bankrekening aan deze sessie</Label>
                   </div>
                   
                   <button 
