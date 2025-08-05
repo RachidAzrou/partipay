@@ -294,7 +294,7 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
         {splitMode === 'equal' ? (
           <div className="space-y-6 animate-slide-up">
             <div className="parti-card">
-              <Label className="block parti-heading-3 mb-4">Aantal deelnemers</Label>
+              <Label className="block parti-heading-3 mb-4">2) Kies het aantal deelnemers</Label>
               <div className="flex items-center space-x-6">
                 <button 
                   className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center touch-target hover:bg-muted/80 transition-colors"
@@ -483,7 +483,6 @@ export default function ModeSetup({ splitMode, billData, onBack, onContinue }: M
           </button>
         </div>
       </div>
-
       {/* BankSelector removed for simpler direct linking */}
     </div>
   );
